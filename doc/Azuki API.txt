@@ -1,0 +1,56 @@
+Azuki API
+
+== 概要 ==
+Azuki を使うプログラマがアクセスするのは
+主に AzukiControl と Document クラスです。
+AzukiControl クラスは UI 機能を担当し、
+表示関連機能にもアクセスできます。
+Document クラスは編集内容に関する機能を担当します。
+なお便利のため、AzukiControl
+からは編集内容に関する主な機能にもアクセスできます。
+
+== AzukiControl ==
+AzukiControl は System.Windows.Forms.Control を継承します。
+したがって Windows.Forms フレームワークの各コントロールと同様に操作可能です。
+
+主な機能を次に示します。
+
+- Document プロパティ
+	表示対象のドキュメントを設定
+- ColorScheme プロパティ
+	色設定
+- ViewType プロパティ
+	Propotional、WrappedPropotional のいずれか。
+	WrappedPropotional では折り返しなどはこれで。
+- ViewWidth プロパティ
+	折り返しはこの幅で。
+- SetKeyBind / ResetKeyBind メソッド
+	キーバインドを設定します。
+
+== Document ==
+主な機能を次に示します。
+- Replace メソッド
+	内容を変更
+- Undo 系メソッド＋プロパティ
+	編集を取り消したりやり直したりできます
+- GetSelection / SetSelection メソッド
+	選択およびキャレットの操作
+- Highlighter プロパティ
+	いろづけ
+
+=== 内容変更 ===
+あらゆる内容の変更は Replace メソッドで行います。
+【挿入は。削除は。】
+
+=== 選択変更 ===
+選択範囲は SetSelection メソッドで行います。
+キャレット移動は、選択幅 0 で移動先を選択。
+
+=== Undo ===
+- Undo / CanUndo / ClearUndo
+- Redo / CanRedo / ClearRedo
+- IsRecordingHistory
+
+== View ==
+- GetDesiredColumn / SetDesiredColumn メソッド
+	上下移動時にキャレットが「そこにいようと望む」桁位置

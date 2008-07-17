@@ -1,0 +1,104 @@
+# encoding: UTF-8
+# PukiWiki format
+Notes
+
+* optimizing
+- using Buffer.BlockCopy is not significantly faster than Array.Copy.
+
+* .NET Compact Framework problem(?)
+- Array<T>.Resize not exists.
+  --> create my own.
+- Graphics.FromHwnd not exists.
+  --> GTK uses Graphic Surface and Graphic Context. only FromHdc in GTK# is sufficient?
+
+* Notes about other engines
+
+** scroll and invalidation
+- nEdit:
+    nEdit uses ScrollWindowEx with SW_INVALIDATE and
+    redraw only invalidated area (double buffering).
+- Scintilla:
+    uses scroll API only when it's under CE and scrolling amount is 10 lines or less.
+    Otherwise, just redraw text.
+
+** abstraction of text rendering API
+- SharpDev:
+    using System.Windows.Forms.TextRenderer (not available in Compact Framework)
+- MonoDev:
+    using gedit (under a different license)
+- Scintilla:
+    using polymorphic "Surface" class which encapsulating platform dependent API.
+
+* Considering DrawString / MeasureString of System.Drawing.Graphics
+** problem
+System.Drawing.Graphics.DrawString / MeasureString automatically adds padding
+before drawing/measuring so I can not get exact drawing/calculation result from them.
+Although specifiying System.Drawing.StringFormat.GenericTypographic
+to them removes the padding, Compact Framework does not support GenericTypographic
+so I cannot use it.
+
+** test code
+using( Graphics g = CreateGraphics() )
+{
+    string[] strs = new string[]{"A", "i", "I", "l", "L", "|", "HOGE", ".", "あ"};
+    foreach( string str in strs )
+    {
+        Size s1 = Plat.Inst.MeasureText( g, str, Font ); // calling Win32API "GetTextExtents"
+        Size s2 = g.MeasureString( str, Font ).ToSize();
+        Size s3 = new Size();
+        StringFormat sf = StringFormat.GenericTypographic;
+        CharacterRange range = new CharacterRange( 0, str.Length );
+        sf.SetMeasurableCharacterRanges( new CharacterRange[]{range} );
+        Region[] regions = g.MeasureCharacterRanges( str, Font, new RectangleF(0,0,1000,1000), sf );
+        if( 0 < regions.Length )
+            s3 = regions[0].GetBounds(g).Size.ToSize();
+        
+        Console.WriteLine( "{0}, {1}\t{2}\t{3}", str, s1, s2, s3 );
+    }
+}
+
+** result (using "MS Gothic", Japanese fixed width font)
+A, {Width=10, Height=19}        {Width=15.84722, Height=21}     {Width=9.333333, Height=18.66667}
+ , {Width=10, Height=19}        {Width=6.222221, Height=21}     {Width=0, Height=0}
+|, {Width=10, Height=19}        {Width=15.84722, Height=21}     {Width=9.333333, Height=18.66667}
+HOGE, {Width=40, Height=19}     {Width=44.72222, Height=21}     {Width=37.33333, Height=18.66667}
+., {Width=10, Height=19}        {Width=15.84722, Height=21}     {Width=9.333333, Height=18.66667}
+あ, {Width=20, Height=19}       {Width=25.4388, Height=21}      {Width=18.66667, Height=18.66667}
+
+** conclusion
+There is no portable way to determine exact metric of drawn text in C#.
+Therefore I must use platform drawing APIs through P/Invoke.
+
+* Drawing selection
+There are two way to do it;
+
+1. simply draw selected text with specified color.
+2. invert the selected area.
+
+Firstly, I misunderstood that inverting is not heavier than drawing other color
+but actually, inverting process needs to calculate selection rectangle by
+retriving and measuring selected text once.
+So Azuki takes first choice.
+
+* Invalidation system in Windows.Forms GUI Toolkit
+For unknown reason, calling Control.Invalidate with invalid rectangle DOES NOT affect to the
+ClipBounds property of Graphics object given at Control.Paint method
+without enabling double buffering by using Control.SetStyle.
+Control.SetStyle is not included in Compact Framework
+so Azuki avoids to use framework's invalidation system.
+
+* overwriting window procedure
+Control.WndProc does not exist in Compact Framework so
+I overwrite window procedure by calling SetWindowLong API in CF build.
+On the other hand, in x64 Vista,
+overwriting window procedure of .NET Control windows by SetWindowLong
+with GWL_WNDPROC always fail for unknown reason as far as I tested.
+Therefore I override Control.WndProc in desktop build (not CF build).
+
+* Line height and line spacing
+Line height is calculated as height of '\x3000' [px].
+('\x3000' is full-width space char.)
+Line spacing is the distance between each lines.
+The underline for highlighting current line is drawn
+1px under the text so line spacing is larger than
+line height if highlighting is enabled.

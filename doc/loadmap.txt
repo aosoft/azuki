@@ -1,0 +1,42 @@
+Load Map
+
+== v0.8 (first release) ==
+- view logic
+-- special graphic for tab, space, full-width space (Japanese) and EOL codes
+-- basic text rendering
+-- line number
+-- highlight caret line
+
+- basic text editing function
+-- caret movement
+-- selection
+-- cut, copy, paste
+-- well Japanese word handling
+
+- inner design and implementation
+-- data structure
+-- undo stack
+-- highlighting
+-- bit-mapped text drawing
+-- key-binding
+
+== v0.9 ==
+- smart-indent
+- block-indent
+- overwrite mode
+- readonly mode
+- line wrapping
+
+== v1.0 ==
+- highlighter support
+-- built-in keyword based highlighter
+-- support for custom highlighter
+
+== v1.1 ==
+- multiple keyword set support for bulid-in keyword based highlighter
+- optimizing around internal buffer for performance
+
+== later ==
+- interface for GTK# on Linux or Mac OS X
+- folding
+- binary editing view

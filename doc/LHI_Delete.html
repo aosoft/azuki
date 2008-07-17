@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<meta name="DC.Creater" content="YAMAOMTO Suguru"/>
+	<meta name="DC.Date.Created" content="2008-01-03"/>
+	<meta name="DC.Date.Modified" content="2008-05-17"/>
+	<meta name="home" content="http://sgry.jp/"/>
+	<title>LHI_Delete example</title>
+<style type="text/css">
+<!--
+table.bordered {
+	border-collapse: collapse;
+	font-family: monospace;
+	border: 1px solid gray;
+}
+table.bordered td {
+	padding: 0 0.5em;
+	border-right: 1px solid gray;
+	text-align: center;
+}
+table.bordered th {
+	padding: 0 0.5em;
+	text-align: cetnter;
+	font-weight: normal;
+	border-right: 1px solid gray;
+	border-bottom: 1px solid gray;
+}
+em {
+	color: red;
+	font-style: normal;
+	font-weight: normal;
+}
+strong {
+	color: blue;
+	font-style: normal;
+	font-weight: normal;
+}
+-->
+</style>
+</head>
+<body>
+
+<h1>LHI_Delete example</h1>
+
+<h2>example</h2>
+
+<p>
+Let's think there is a data like next.
+</p>
+
+<table class="bordered">
+<tr>
+	<th></th>
+	<th>head</th>
+	<th>length</th>
+</tr>
+<tr>
+	<td style="text-align:left">&quot;keep_<em>it_as_simple_as_possible\r\n</em></td>
+	<td>0</td>
+	<td>32</td>
+</tr>
+<tr>
+	<td style="text-align:left"><em>\n</em></td>
+	<td>32</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td style="text-align:left"><em>but\n</em></td>
+	<td>33</td>
+	<td>4</td>
+</tr>
+<tr>
+	<td style="text-align:left"><em>\n</em></td>
+	<td>37</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td style="text-align:left"><em>n</em>ot_simpler.&quot;\n</td>
+	<td>38</td>
+	<td>14</td>
+</tr>
+<tr>
+	<td style="text-align:left">\r</td>
+	<td><strong>52</strong></td>
+	<td>1</td>
+</tr>
+<tr>
+	<td style="text-align:left">_-_Albert_Einstein</td>
+	<td><strong>53</strong></td>
+	<td>18</td>
+</tr>
+</table>
+
+<p>
+And we are to delete data at range <em>[6, 38]</em>.
+Data in this range is next.
+</p>
+
+<table class="bordered">
+<tr>
+	<th></th>
+	<th>head</th>
+	<th>length</th>
+</tr>
+<tr>
+	<td style="text-align:left">it_as_simple_as_possible\r\n</td>
+	<td>0</td>
+	<td><em>26</em></td>
+</tr>
+<tr>
+	<td style="text-align:left">\n</td>
+	<td>26</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td style="text-align:left">but\n</td>
+	<td>27</td>
+	<td>4</td>
+</tr>
+<tr>
+	<td style="text-align:left">\n</td>
+	<td>31</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td style="text-align:left">n</td>
+	<td>32</td>
+	<td><em>1</em></td>
+</tr>
+</table>
+
+<p>
+The length of the data to be inserted is <em>33</em>.
+The result of this operation should be next:
+</p>
+
+<table class="bordered">
+<tr>
+	<th></th>
+	<th>head</th>
+	<th>length</th>
+</tr>
+<tr>
+	<td style="text-align:left">&quot;keep_ot_simpler.&quot;\r</td>
+	<td>0</td>
+	<td>19</td>
+</tr>
+<tr>
+	<td style="text-align:left">\r</td>
+	<td>19 (<strong>52</strong>-<em>33</em>)</td>
+	<td>1</td>
+</tr>
+<tr>
+	<td style="text-align:left">_-_Albert_Einstein</td>
+	<td>20 (<strong>53</strong>-<em>33</em>)</td>
+	<td>18</td>
+</tr>
+</table>
+<p>
+This is an example used when implementing LHI_Delete.
+</p>
+
+</body>
+</html>
