@@ -418,13 +418,14 @@ main( int argc, char* argv[] )
 				"reinterpret_cast", "return", "short",
 				"signed", "sizeof", "static",
 				"interface", "goto", "while", "long", "new", "return", "<", ">"
-			});
+			}, CharClass.Keyword );
 			h.AddEnclosure( "'", "'", CharClass.String, '\\' );
 			h.AddEnclosure( "@\"", "\"", CharClass.String, '\"' );
 			h.AddEnclosure( "\"", "\"", CharClass.String, '\\' );
 			h.AddEnclosure( "/**", "*/", CharClass.Keyword );
 			h.AddEnclosure( "/*", "*/", CharClass.Comment );
 			h.AddLineHighlight( "//", CharClass.Comment );
+			h.AddLineHighlight( "#", (CharClass)99 );
 
 			return h;
 		}

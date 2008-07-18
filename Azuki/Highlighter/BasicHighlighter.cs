@@ -17,13 +17,13 @@ namespace Sgry.Azuki
 	/// </summary>
 	public class BasicHighlighter : HighlighterBase
 	{
-		/*class KeywordSet
-		{
-			public CharTreeNode root;
-			public CharClass klass;
-		}*/
-
 		#region Inner Types and Fields
+		class KeywordSet
+		{
+			public CharTreeNode root = new CharTreeNode();
+			public CharClass klass = CharClass.Normal;
+		}
+
 		class Enclosure
 		{
 			public string opener;
@@ -47,7 +47,7 @@ namespace Sgry.Azuki
 #			endif
 		}
 
-		CharTreeNode _Root = new CharTreeNode();
+		List<KeywordSet> _Keywords = new List<KeywordSet>();
 		List<Enclosure> _Enclosures = new List<Enclosure>();
 		List<Enclosure> _LineHighlights = new List<Enclosure>();
 #		if DEBUG
@@ -116,21 +116,32 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Sets keywords to be highlighted.
 		/// </summary>
-		public void SetKeywords( string[] keywords )
+		public void SetKeywords( string[] keywords, CharClass klass )
 		{
+			KeywordSet set = new KeywordSet();
+
+			// sort keywords at first
+double t = DebugUtl.GetCounterMsec();
 			Array.Sort<string>( keywords );
+Console.WriteLine( DebugUtl.GetCounterMsec() - t );
+
+			// parse and generate keyword tree
 			for( int i=0; i<keywords.Length; i++ )
 			{
 				if( i+1 < keywords.Length
 					&& keywords[i+1].IndexOf(keywords[i]) == 0 )
 				{
-					AddCharNode( keywords[i]+'\0', 0, _Root, 1 );
+					AddCharNode( keywords[i]+'\0', 0, set.root, 1 );
 				}
 				else
 				{
-					AddCharNode( keywords[i], 0, _Root, 1 );
+					AddCharNode( keywords[i], 0, set.root, 1 );
 				}
 			}
+			set.klass = klass;
+
+			// add to keyword list
+			_Keywords.Add( set );
 		}
 
 		void AddCharNode( string keyword, int index, CharTreeNode parent, int depth )
@@ -189,7 +200,7 @@ namespace Sgry.Azuki
 		/// </summary>
 		public void ClearKeywords()
 		{
-			_Root = new CharTreeNode();
+			_Keywords.Clear();
 		}
 		#endregion
 
@@ -241,7 +252,7 @@ namespace Sgry.Azuki
 				}
 
 				// highlight keyword if this token is a keyword
-				highlighted = TryHighlightKeyword( doc, _Root, index, end, out nextIndex );
+				highlighted = TryHighlightKeyword( doc, _Keywords, index, end, out nextIndex );
 				if( highlighted )
 				{
 					index = nextIndex;
@@ -339,7 +350,24 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Do keyword matching in [startIndex, endIndex) through keyword char-tree.
 		/// </summary>
-		static bool TryHighlightKeyword( Document doc, CharTreeNode root, int startIndex, int endIndex, out int nextSeekIndex )
+		static bool TryHighlightKeyword( Document doc, List<KeywordSet> keywords, int startIndex, int endIndex, out int nextSeekIndex )
+		{
+			bool highlighted = false;
+
+			nextSeekIndex = startIndex;
+			foreach( KeywordSet set in keywords )
+			{
+				highlighted = TryHighlightKeyword_One( doc, set, startIndex, endIndex, out nextSeekIndex );
+				if( highlighted )
+				{
+					break;
+				}
+			}
+
+			return highlighted;
+		}
+
+		static bool TryHighlightKeyword_One( Document doc, KeywordSet set, int startIndex, int endIndex, out int nextSeekIndex )
 		{
 			CharTreeNode node;
 			int index;
@@ -362,7 +390,7 @@ namespace Sgry.Azuki
 			//   root child node, root grandchild node and so on
 			// - if a node does not match, try next sibling
 			//   without advancing seek point of document
-			node = root.child;
+			node = set.root.child;
 			index = startIndex;
 			while( node != null && index < endIndex )
 			{
@@ -374,7 +402,7 @@ namespace Sgry.Azuki
 					{
 						// next node is null; reached to the end of keyword.
 						// highlight and exit
-						Utl.Highlight( doc, index, node );
+						Utl.Highlight( doc, index, node, set.klass );
 						nextSeekIndex = index + 1;
 						return true;
 					}
@@ -385,7 +413,7 @@ namespace Sgry.Azuki
 							|| (index+1 < doc.Length && !Char.IsLetterOrDigit(doc[index+1])) )
 						{
 							// keyword terminated by null-char in tree was matched.
-							Utl.Highlight( doc, index, node );
+							Utl.Highlight( doc, index, node, set.klass );
 							nextSeekIndex = index + 1;
 							return true;
 						}
@@ -673,11 +701,11 @@ namespace Sgry.Azuki
 				return WordLogic.PrevWordStartForMove( doc, index );
 			}
 
-			public static void Highlight( Document doc, int index, CharTreeNode node )
+			public static void Highlight( Document doc, int index, CharTreeNode node, CharClass klass )
 			{
 				for( int i=0; i<node.depth; i++ )
 				{
-					doc.SetCharClass( index-i, CharClass.Keyword );
+					doc.SetCharClass( index-i, klass );
 				}
 			}
 
@@ -766,47 +794,6 @@ namespace Sgry.Azuki
 				return -1;
 			}
 		}
-
-#		if DEBUG
-		public override string ToString()
-		{
-			StringBuilder buf = new StringBuilder();
-
-			bool indent = true;
-			ToString_Sub( _Root.child, buf, ref indent );
-
-			return buf.ToString();
-		}
-		
-		void ToString_Sub( CharTreeNode node, StringBuilder buf, ref bool indent )
-		{
-			while( node != null )
-			{
-				// write
-				if( indent )
-				{
-					for( int i=0; i<node.depth; i++ )
-						buf.Append( ' ' );
-					indent = false;
-				}
-				buf.Append( node.ch );
-
-				// dive into childs
-				if( node.child == null )
-				{
-					buf.Append( "\r\n" );
-					indent = true;
-				}
-				else
-				{
-					ToString_Sub( node.child, buf, ref indent );
-				}
-
-				// get sibling
-				node = node.sibling;
-			}
-		}
-#		endif
 		#endregion
 	}
 }

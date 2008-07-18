@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-07-13
+// update: 2008-07-18
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -20,9 +20,12 @@ namespace Sgry.Azuki.Windows
 	/// </summary>
 	public class AzukiControl : Control, IUserInterface
 	{
-		#region Fields
+		#region Types, Constants and Fields
 		const int DefaultCaretWidth = 2;
 		static int _ScrollBarWidth = 0;
+		
+		delegate void InvalidateProc1();
+		delegate void InvalidateProc2( Rectangle rect );
 		
 		UiImpl _Impl;
 		Size _CaretSize = new Size( DefaultCaretWidth, 10 );
@@ -32,7 +35,10 @@ namespace Sgry.Azuki.Windows
 #		if !PocketPC
 		bool _UseCtrlTabToMoveFocus = true;
 #		endif
-
+		
+		InvalidateProc1 _invalidateProc1 = null;
+		InvalidateProc2 _invalidateProc2 = null;
+		
 		IntPtr _OriginalWndProcObj = IntPtr.Zero;
 		WinApi.WNDPROC _CustomWndProcObj = null;
 		#endregion
@@ -437,6 +443,28 @@ namespace Sgry.Azuki.Windows
 				Refresh();
 				UpdateCaretGraphic();
 			}
+		}
+
+		/// <summary>
+		/// Invalidate and make 'dirty' whole area
+		/// (force to be redrawn by next paint event message).
+		/// </summary>
+		public new void Invalidate()
+		{
+			if( _invalidateProc1 == null )
+				_invalidateProc1 = base.Invalidate;
+			Invoke( _invalidateProc1 );
+		}
+
+		/// <summary>
+		/// Invalidate and make 'dirty' specified area
+		/// (force to be redrawn by next paint event message).
+		/// </summary>
+		public new void Invalidate( Rectangle rect )
+		{
+			if( _invalidateProc2 == null )
+				_invalidateProc2 = base.Invalidate;
+			Invoke( _invalidateProc2, new object[]{rect} );
 		}
 		#endregion
 		
