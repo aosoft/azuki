@@ -69,7 +69,7 @@ namespace Sgry.Azuki
 		internal View( IUserInterface ui )
 		{
 			_UI = ui;
-			_Gra = ui.GetGraphics();
+			_Gra = ui.GetIGraphics();
 		}
 
 		/// <summary>
@@ -80,7 +80,7 @@ namespace Sgry.Azuki
 		{
 			// inherit reference to the UI module
 			this._UI = other._UI;
-			this._Gra = _UI.GetGraphics();
+			this._Gra = _UI.GetIGraphics();
 
 			// inherit other parameters
 			this._AutoIndentHook = other._AutoIndentHook;

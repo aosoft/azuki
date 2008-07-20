@@ -32,18 +32,6 @@ echo.
 call clean > NUL
 
 
-echo     Creating source package as ..\Azuki-%ver%-src.zip
-echo -----------------------------------------------------------
-if exist Azuki-%ver%-src.zip (
-	del Azuki-%ver%-src.zip
-)
-pushd ..
-	echo (1/1) archiving solution sources...
-	7za a -mx=9 -tzip Azuki-%ver%-src.zip Azuki > NUL
-popd
-echo done.
-
-
 echo.
 echo     Creating binary package as ..\Azuki-%ver%.zip
 echo -----------------------------------------------------------

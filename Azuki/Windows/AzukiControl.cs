@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-07-18
+// update: 2008-07-20
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -43,22 +43,6 @@ namespace Sgry.Azuki.Windows
 		WinApi.WNDPROC _CustomWndProcObj = null;
 		#endregion
 		
-		/// <summary>
-		/// Gets a graphic interface.
-		/// </summary>
-		public IGraphics GetGraphics()
-		{
-			return Plat.Inst.GetGraphics( Handle );
-		}
-
-		/// <summary>
-		/// Gets the associated view object.
-		/// </summary>
-		public View View
-		{
-			get{ return _Impl.View; }
-		}
-
 		#region Init / Dispose
 		/// <summary>
 		/// Creates a new instance.
@@ -117,6 +101,22 @@ namespace Sgry.Azuki.Windows
 			WinApi.DestroyCaret();
 		}
 		#endregion
+
+		/// <summary>
+		/// Gets a graphic interface.
+		/// </summary>
+		public IGraphics GetIGraphics()
+		{
+			return Plat.Inst.GetGraphics( Handle );
+		}
+
+		/// <summary>
+		/// Gets the associated view object.
+		/// </summary>
+		public View View
+		{
+			get{ return _Impl.View; }
+		}
 
 		#region IUserInterface - Document and View Types
 		/// <summary>
@@ -415,6 +415,19 @@ namespace Sgry.Azuki.Windows
 		{
 			get{ return View.DrawsEolCode; }
 			set{ View.DrawsEolCode = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets tab width in count of space chars.
+		/// </summary>
+#		if !PocketPC
+		[Category("Drawing")]
+		[DefaultValue(4)]
+#		endif
+		public int TabWidth
+		{
+			get{ return View.TabWidth; }
+			set{ View.TabWidth = value; }
 		}
 
 		/// <summary>

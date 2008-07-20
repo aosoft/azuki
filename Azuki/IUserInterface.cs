@@ -2,7 +2,7 @@
 // brief: interface of user interface module (platform dependent)
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-13
+// update: 2008-07-20
 //=========================================================
 using System;
 using System.Drawing;
@@ -14,8 +14,10 @@ namespace Sgry.Azuki
 	/// </summary>
 	public interface IUserInterface
 	{
-		/// <summary>Gets a graphic interface.</summary>
-		IGraphics GetGraphics();
+		/// <summary>
+		/// Gets a graphic interface.
+		/// </summary>
+		IGraphics GetIGraphics();
 
 		#region Document and View Types
 		/// <summary>
