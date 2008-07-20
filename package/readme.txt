@@ -1,8 +1,8 @@
-readme note
-                                                 2008-07-05
+About contents of this package
+                                                 2008-07-20
                                             YAMAMOTO Suguru
+                      http://sourceforge.jp/projects/azuki/
 
-== Content of this package ==
 - Azuki.dll
 	.NET Framework version of Azuki.
 	To use Azuki in a desktop application,

@@ -1,8 +1,8 @@
-説明書
-                                                 2008-07-05
-                                            YAMAMOTO Suguru
+同梱物の説明
+                                                           2008-07-20
+                                                      YAMAMOTO Suguru
+                                         http://azuki.sourceforge.jp/
 
-== 同梱物 ==
 - Azuki.dll
 	.NET Framework 版の Azuki です。
 	デスクトップアプリケーションで Azuki を使う場合は
