@@ -1,4 +1,4 @@
-// 2008-07-03
+// 2008-07-20
 // encoding: UTF-8
 using System;
 using System.Drawing;
@@ -406,8 +406,10 @@ main( int argc, char* argv[] )
 		{
 			BasicHighlighter h = new BasicHighlighter();
 
+			CharClass ppKlass = new CharClass( 10, "Preprocessor Macro" );
+			doc.RegisterCharClass( ppKlass, Color.Purple );
+
 			h.SetKeywords( new string[] {
-//				"#define", "#elif", "#elif", "#endif", "#error", "#if", "#include", "#line", "#pragma", "#undef",
 				"__FILE__", "__declspec",
 				"asm", "auto",
 				"bool", "break", "case", "catch", "char", "class", "const", "const_cast",
@@ -417,15 +419,20 @@ main( int argc, char* argv[] )
 				"new", "operator", "private", "protected", "public",
 				"reinterpret_cast", "return", "short",
 				"signed", "sizeof", "static",
-				"interface", "goto", "while", "long", "new", "return", "<", ">"
+				"interface", "goto", "while", "long", "new", "return"
 			}, CharClass.Keyword );
+			
+			h.SetKeywords( new string[] {
+				"#define", "#elif", "#elif", "#endif", "#error", "#if", "#include", "#line", "#pragma", "#undef",
+				"__FILE__", "__declspec",
+			}, ppKlass );
+
 			h.AddEnclosure( "'", "'", CharClass.String, '\\' );
 			h.AddEnclosure( "@\"", "\"", CharClass.String, '\"' );
 			h.AddEnclosure( "\"", "\"", CharClass.String, '\\' );
 			h.AddEnclosure( "/**", "*/", CharClass.Keyword );
 			h.AddEnclosure( "/*", "*/", CharClass.Comment );
 			h.AddLineHighlight( "//", CharClass.Comment );
-			h.AddLineHighlight( "#", (CharClass)99 );
 
 			return h;
 		}

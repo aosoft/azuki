@@ -38,7 +38,7 @@ namespace Sgry.Azuki
 		}
 		#endregion
 
-		#region Keybind
+		#region KeyBind
 		/// <summary>
 		/// Reset keybind to default.
 		/// </summary>

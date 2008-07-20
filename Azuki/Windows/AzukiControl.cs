@@ -150,7 +150,7 @@ namespace Sgry.Azuki.Windows
 		}
 		#endregion
 
-		#region IUserInterface - Keybind
+		#region IUserInterface - KeyBind
 		/// <summary>
 		/// Reset keybind to default.
 		/// </summary>
@@ -1025,23 +1025,17 @@ namespace Sgry.Azuki.Windows
 		{
 			get
 			{
-				if( _Impl.View != null )
-					return _Impl.View.ColorScheme.ForeColor;
+				if( View != null )
+					return View.ColorScheme.ForeColor;
 				else
 					return base.ForeColor;
 			}
 			set
 			{
-				if( _Impl.View != null )
-				{
-					ColorScheme scheme = _Impl.View.ColorScheme;
-					scheme.ForeColor = value;
-					_Impl.View.ColorScheme = scheme;
-				}
+				if( View != null )
+					View.ColorScheme.ForeColor = value;
 				else
-				{
 					base.ForeColor = value;
-				}
 			}
 		}
 
@@ -1052,23 +1046,17 @@ namespace Sgry.Azuki.Windows
 		{
 			get
 			{
-				if( _Impl.View != null )
-					return _Impl.View.ColorScheme.BackColor;
+				if( View != null )
+					return View.ColorScheme.BackColor;
 				else
 					return base.BackColor;
 			}
 			set
 			{
-				if( _Impl.View != null )
-				{
-					ColorScheme scheme = _Impl.View.ColorScheme;
-					scheme.BackColor = value;
-					_Impl.View.ColorScheme = scheme;
-				}
+				if( View != null )
+					View.ColorScheme.BackColor = value;
 				else
-				{
 					base.BackColor = value;
-				}
 			}
 		}
 		

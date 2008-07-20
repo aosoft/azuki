@@ -2,12 +2,13 @@
 // brief: Document of Azuki engine.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-05
+// update: 2008-07-20
 //=========================================================
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Color = System.Drawing.Color;
 using Debug = System.Diagnostics.Debug;
 
 namespace Sgry.Azuki
@@ -21,6 +22,7 @@ namespace Sgry.Azuki
 		TextBuffer _Buffer = new TextBuffer();
 		SplitArray<int> _LHI = new SplitArray<int>( 64, 32 ); // line head indexes
 		EditHistory _History = new EditHistory();
+		ColorScheme _ColorScheme = ColorScheme.Default;
 		int _CaretIndex = 0;
 		int _AnchorIndex = 0;
 		bool _IsRecordingHistory = true;
@@ -42,24 +44,6 @@ namespace Sgry.Azuki
 			_Highlighter = new DummyHighlighter();
 		}
 		#endregion
-
-		/// <summary>
-		/// Gets or sets highlighter for this document.
-		/// Note that setting null will disable highlighting.
-		/// </summary>
-		public IHighlighter Highlighter
-		{
-			get{ return _Highlighter; }
-			set
-			{
-				if( value == null )
-					value = new DummyHighlighter();
-
-				// associate with new highlighter object and highlight whole content
-				_Highlighter = value;
-				_Highlighter.Highlight( this );
-			}
-		}
 
 		#region Selection
 		/// <summary>
@@ -637,6 +621,65 @@ namespace Sgry.Azuki
 
 			//return LineLogic.GetCharIndexFromLineColumnIndex( _Buffer, _LHI, lineIndex, columnIndex );
 			return LineLogic.GetCharIndexFromLineColumnIndex( _Buffer, _LHI, lineIndex, columnIndex );
+		}
+		#endregion
+
+		#region Highlighter and Character classes
+		/// <summary>
+		/// Gets or sets highlighter for this document.
+		/// Note that setting null will disable highlighting.
+		/// </summary>
+		public IHighlighter Highlighter
+		{
+			get{ return _Highlighter; }
+			set
+			{
+				if( value == null )
+					value = new DummyHighlighter();
+
+				// associate with new highlighter object and highlight whole content
+				_Highlighter = value;
+				_Highlighter.Highlight( this );
+			}
+		}
+
+		/// <summary>
+		/// Color scheme for this document.
+		/// </summary>
+		public ColorScheme ColorScheme
+		{
+			get{ return _ColorScheme; }
+			set
+			{
+				if( value == null )
+					throw new InvalidOperationException( "ColorScheme must not be null." );
+				_ColorScheme = value;
+			}
+		}
+
+		/// <summary>
+		/// Registers a new character class used in this document.
+		/// </summary>
+		/// <param name="klass">New character class to be registered.</param>
+		/// <param name="fore">Foreground color to draw characters of this class.</param>
+		public void RegisterCharClass( CharClass klass, Color fore )
+		{
+			if( klass.Id < 10 )
+				throw new ArgumentException( "ID of a user defined char-class must be larger than 10." );
+			_ColorScheme[klass] = new ColorPair( fore, _ColorScheme.BackColor );
+		}
+
+		/// <summary>
+		/// Registers a new character class used in this document.
+		/// </summary>
+		/// <param name="klass">New character class to be registered.</param>
+		/// <param name="fore">Foreground color to draw characters of this class.</param>
+		/// <param name="back">Background color to draw characters of this class.</param>
+		public void RegisterCharClass( CharClass klass, Color fore, Color back )
+		{
+			if( klass.Id < 10 )
+				throw new ArgumentException( "ID of a user defined char-class must be larger than 10." );
+			_ColorScheme[klass] = new ColorPair( fore, _ColorScheme.BackColor );
 		}
 		#endregion
 

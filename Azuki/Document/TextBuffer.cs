@@ -2,7 +2,7 @@
 // brief: Specialized SplitArray for char with text search feature without copying content.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-06-28
+// update: 2008-07-20
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace Sgry.Azuki
 	public class TextBuffer : SplitArray<Char>
 	{
 		#region Fields
-		SplitArray<ushort> _Classes;
+		SplitArray<CharClass> _Classes;
 		#endregion
 
 		#region Init / Dispose
@@ -35,7 +35,7 @@ namespace Sgry.Azuki
 		public TextBuffer( int initGapSize, int growSize )
 			: base( initGapSize, growSize )
 		{
-			_Classes = new SplitArray<ushort>( initGapSize, growSize );
+			_Classes = new SplitArray<CharClass>( initGapSize, growSize );
 		}
 		#endregion
 
@@ -44,7 +44,7 @@ namespace Sgry.Azuki
 		/// </summary>
 		public CharClass GetCharClassAt( int index )
 		{
-			return (CharClass)_Classes[ index ];
+			return _Classes[ index ];
 		}
 
 		/// <summary>
@@ -52,7 +52,7 @@ namespace Sgry.Azuki
 		/// </summary>
 		public void SetCharClassAt( int index, CharClass klass )
 		{
-			_Classes[ index ] = (ushort)klass;
+			_Classes[ index ] = klass;
 		}
 
 		#region Content Access
@@ -63,7 +63,7 @@ namespace Sgry.Azuki
 		public override void Insert( int index, char value )
 		{
 			base.Insert( index, value );
-			_Classes.Insert( index, (ushort)CharClass.Normal );
+			_Classes.Insert( index, CharClass.Normal );
 		}
 		
 		/// <summary>
@@ -76,7 +76,7 @@ namespace Sgry.Azuki
 		public override void Insert<S>( int insertIndex, S[] values, Converter<S, char> converter )
 		{
 			base.Insert( insertIndex, values, converter );
-			_Classes.Insert( insertIndex, new ushort[values.Length] );
+			_Classes.Insert( insertIndex, new CharClass[values.Length] );
 		}
 
 		/// <summary>
@@ -90,7 +90,7 @@ namespace Sgry.Azuki
 		public override void Insert( int insertIndex, char[] values, int valueBegin, int valueEnd )
 		{
 			base.Insert( insertIndex, values, valueBegin, valueEnd );
-			_Classes.Insert( insertIndex, new ushort[ valueEnd - valueBegin ] );
+			_Classes.Insert( insertIndex, new CharClass[ valueEnd - valueBegin ] );
 		}
 
 		/// <summary>
@@ -99,7 +99,7 @@ namespace Sgry.Azuki
 		public override void Replace( int replaceIndex, char[] values, int valueBegin, int valueEnd )
 		{
 			base.Replace( replaceIndex, values, valueBegin, valueEnd );
-			_Classes.Replace( replaceIndex, new ushort[values.Length], valueBegin, valueEnd );
+			_Classes.Replace( replaceIndex, new CharClass[values.Length], valueBegin, valueEnd );
 		}
 
 		/// <summary>

@@ -1,7 +1,7 @@
 ﻿// file: View.cs
 // brief: Platform independent view implementation of Azuki engine.
 // author: YAMAMOTO Suguru
-// update: 2008-07-13
+// update: 2008-07-20
 //=========================================================
 using System;
 using System.Drawing;
@@ -41,7 +41,6 @@ namespace Sgry.Azuki
 
 		//--- for drawing ---
 		Size _VisibleSize = new Size( 300, 300 );
-		ColorScheme _ColorScheme = ColorScheme.Default;
 
 		/// <summary>Interface to draw graphic.</summary>
 		protected IGraphics _Gra = null;
@@ -84,7 +83,6 @@ namespace Sgry.Azuki
 
 			// inherit other parameters
 			this._AutoIndentHook = other._AutoIndentHook;
-			this._ColorScheme = other._ColorScheme;
 			this._DrawSpecialCharFlag = other._DrawSpecialCharFlag;
 			this._FirstVisibleLine = other._FirstVisibleLine;
 			this._HighlightCurrentLine = other._HighlightCurrentLine;
@@ -322,8 +320,8 @@ namespace Sgry.Azuki
 		/// </summary>
 		public ColorScheme ColorScheme
 		{
-			get{ return _ColorScheme; }
-			set{ _ColorScheme = value; }
+			get{ return Document.ColorScheme; }
+			set{ Document.ColorScheme = value; }
 		}
 
 		/// <summary>

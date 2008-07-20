@@ -115,15 +115,17 @@ namespace Sgry.Azuki
 
 		/// <summary>
 		/// Sets keywords to be highlighted.
+		/// Note that 'keywords' parameter must be sorted alphabetically
+		/// otherwise highlighting will not work properly.
 		/// </summary>
+		/// <param name="keywords">Sorted array of keywords.</param>
+		/// <param name="klass">Char-class to be applied to the keyword set.</param>
 		public void SetKeywords( string[] keywords, CharClass klass )
 		{
 			KeywordSet set = new KeywordSet();
 
 			// sort keywords at first
-double t = DebugUtl.GetCounterMsec();
-			Array.Sort<string>( keywords );
-Console.WriteLine( DebugUtl.GetCounterMsec() - t );
+			//Array.Sort<string>( keywords );
 
 			// parse and generate keyword tree
 			for( int i=0; i<keywords.Length; i++ )

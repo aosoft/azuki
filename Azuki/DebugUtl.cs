@@ -1,6 +1,6 @@
 // file: DebugUtl.cs
 // brief: Sgry's utilities for debug
-// update: 2008-07-01
+// update: 2008-07-20
 //=========================================================
 using System;
 using System.IO;
@@ -188,7 +188,8 @@ namespace Sgry
 		{
 			using( StreamWriter file = new StreamWriter(DebugUtl.LogFilePath, true) )
 			{
-				file.WriteLine(  _Buf.ToString() );
+				file.Write( _Buf.ToString() );
+				file.WriteLine();
 			}
 		}
 
@@ -197,6 +198,7 @@ namespace Sgry
 		/// </summary>
 		public void WriteLine( string format, params object[] p )
 		{
+			Console.Error.WriteLine( format, p );
 			try
 			{
 				DateTime now = DateTime.Now;

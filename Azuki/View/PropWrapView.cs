@@ -2,7 +2,7 @@
 // brief: Platform independent view (propotional, line-wrap).
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-13
+// update: 2008-07-20
 //=========================================================
 //DEBUG//#define PLHI_DEBUG
 //DEBUG//#define DRAW_SLOWLY
@@ -639,9 +639,9 @@ namespace Sgry.Azuki
 				// fill right area and shrink clip rect
 				int bottom;
 				bottom = Math.Min( clipRect.Bottom, (LineCount - FirstVisibleLine)*LineSpacing );
-				_Gra.BackColor = ColorScheme.LineNumberBackColor;
+				_Gra.BackColor = ColorScheme.LineNumberBack;
 				_Gra.FillRectangle( physTextAreaRight+1, clipRect.Top, clipRect.Right-physTextAreaRight-1, bottom-clipRect.Top );
-				_Gra.ForeColor = ColorScheme.LineNumberColor;
+				_Gra.ForeColor = ColorScheme.LineNumberFore;
 				_Gra.DrawLine( physTextAreaRight, clipRect.Top, physTextAreaRight, bottom );
 				clipRect.Width = physTextAreaRight - clipRect.X;
 			}

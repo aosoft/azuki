@@ -2,7 +2,7 @@
 // brief: Common painting logic
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-05
+// update: 2008-07-20
 //=========================================================
 //DEBUG//#define DRAW_SLOWLY
 using System;
@@ -35,7 +35,7 @@ namespace Sgry.Azuki
 			Color fore, back;
 
 			// get fore/back color for the class
-			Utl.ColorFromCharClass( _ColorScheme, klass, out fore, out back );
+			Utl.ColorFromCharClass( ColorScheme, klass, out fore, out back );
 			_Gra.BackColor = back;
 
 			//--- draw graphic ---
@@ -48,7 +48,7 @@ namespace Sgry.Azuki
 				// draw foreground graphic
 				if( DrawsSpace )
 				{
-					_Gra.ForeColor = _ColorScheme.WhiteSpaceColor;
+					_Gra.ForeColor = ColorScheme.WhiteSpaceColor;
 					_Gra.DrawRectangle(
 							tokenPos.X + (_SpaceWidth >> 1) - 1,
 							tokenPos.Y + (_LineHeight >> 1),
@@ -75,7 +75,7 @@ namespace Sgry.Azuki
 				// draw foreground
 				if( DrawsFullWidthSpace )
 				{
-					_Gra.ForeColor = _ColorScheme.WhiteSpaceColor;
+					_Gra.ForeColor = ColorScheme.WhiteSpaceColor;
 					_Gra.DrawRectangle( graLeft, graTop, graWidth, graBottom-graTop );
 				}
 				return;
@@ -106,7 +106,7 @@ namespace Sgry.Azuki
 				// draw foreground
 				if( DrawsTab )
 				{
-					_Gra.ForeColor = _ColorScheme.WhiteSpaceColor;
+					_Gra.ForeColor = ColorScheme.WhiteSpaceColor;
 					_Gra.DrawLine( fgLeft, fgBottom, fgRight, fgBottom );
 					_Gra.DrawLine( fgRight, fgBottom, fgRight, fgTop );
 				}
@@ -118,7 +118,7 @@ namespace Sgry.Azuki
 				// before to draw background,
 				// change bgcolor to normal if it's not selected
 				if( klass != CharClass.Selection )
-					_Gra.BackColor = _ColorScheme.BackColor;
+					_Gra.BackColor = ColorScheme.BackColor;
 
 				// draw background
 				_Gra.FillRectangle( tokenPos.X, tokenPos.Y, _LineHeight>>1, LineSpacing );
@@ -136,7 +136,7 @@ namespace Sgry.Azuki
 				int bottom = y_middle + (width >> 1);
 
 				// draw EOL char's graphic
-				_Gra.ForeColor = _ColorScheme.EolColor;
+				_Gra.ForeColor = ColorScheme.EolColor;
 				if( token == "\r" ) // CR (left arrow)
 				{
 					_Gra.DrawLine( left, y_middle, left+halfSpaceWidth, y_middle-halfSpaceWidth );
@@ -193,9 +193,9 @@ namespace Sgry.Azuki
 			Point pos = new Point( 0, lineTopY );
 			
 			// fill line number area
-			_Gra.BackColor = _ColorScheme.LineNumberBackColor;
+			_Gra.BackColor = ColorScheme.LineNumberBack;
 			_Gra.FillRectangle( 0, pos.Y, _LineNumWidth+2, LineSpacing );
-			_Gra.BackColor = _ColorScheme.BackColor;
+			_Gra.BackColor = ColorScheme.BackColor;
 			_Gra.FillRectangle( _LineNumWidth+2, pos.Y, 2, LineSpacing );
 			
 			// draw line number text
@@ -203,13 +203,13 @@ namespace Sgry.Azuki
 			{
 				string lineNumText = lineNumber.ToString();
 				pos.X = _LineNumWidth - _Gra.MeasureText( lineNumText ).Width;
-				_Gra.ForeColor = _ColorScheme.LineNumberColor;
-				_Gra.DrawText( lineNumText, ref pos, _ColorScheme.LineNumberColor );
+				_Gra.ForeColor = ColorScheme.LineNumberFore;
+				_Gra.DrawText( lineNumText, ref pos, ColorScheme.LineNumberFore );
 			}
 
 			// draw margin between the line number and content
 			pos.X = TextAreaX - 2;
-			_Gra.ForeColor = _ColorScheme.LineNumberColor;
+			_Gra.ForeColor = ColorScheme.LineNumberFore;
 			_Gra.DrawLine( pos.X, pos.Y, pos.X, pos.Y+LineSpacing+1 );
 		}
 
@@ -445,35 +445,23 @@ namespace Sgry.Azuki
 			/// </summary>
 			public static void ColorFromCharClass( ColorScheme cs, CharClass klass, out Color fore, out Color back )
 			{
-				if( klass == CharClass.Keyword )
+				if( klass == CharClass.Selection )
 				{
-					fore = cs.KeywordForeColor;
-					back = cs.KeywordBackColor;
+					fore = cs.SelectionFore;
+					back = cs.SelectionBack;
+					return;
 				}
-				else if( klass == CharClass.String )
+
+				try
 				{
-					fore = cs.StringForeColor;
-					back = cs.StringBackColor;
+					ColorPair pair = cs[ klass ];
+					fore = pair.Fore;
+					back = pair.Back;
 				}
-				else if( klass == CharClass.Comment )
+				catch( KeyNotFoundException )
 				{
-					fore = cs.CommentForeColor;
-					back = cs.CommentBackColor;
-				}
-				else if( klass == CharClass.Number )
-				{
-					fore = cs.NumberForeColor;
-					back = cs.NumberBackColor;
-				}
-				else if( klass == CharClass.Selection )
-				{
-					fore = cs.SelectionForeColor;
-					back = cs.SelectionBackColor;
-				}
-				else
-				{
-					fore = cs.ForeColor;
-					back = cs.BackColor;
+					fore = cs.BackColor;
+					back = cs.ForeColor;
 				}
 			}
 
