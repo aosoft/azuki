@@ -2,7 +2,7 @@
 // brief: Platform independent view (propotional, line-wrap).
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-20
+// update: 2008-07-21
 //=========================================================
 //DEBUG//#define PLHI_DEBUG
 //DEBUG//#define DRAW_SLOWLY
@@ -508,8 +508,6 @@ namespace Sgry.Azuki
 				// get next segment
 				string str = doc.GetTextInRange( begin, end );
 				x = MeasureTokenEndX( str, x, TextAreaWidth, out drawableLen );
-				if( drawableLen == 0 )
-					break; // ?
 
 				// can this segment be written in this physical line?
 				if( drawableLen < str.Length

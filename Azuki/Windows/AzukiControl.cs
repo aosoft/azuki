@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-07-20
+// update: 2008-07-21
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -143,10 +143,7 @@ namespace Sgry.Azuki.Windows
 		public ViewType ViewType
 		{
 			get{ return _Impl.ViewType; }
-			set
-			{
-				_Impl.ViewType = value;
-			}
+			set{ _Impl.ViewType = value; }
 		}
 		#endregion
 
