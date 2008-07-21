@@ -2,7 +2,7 @@
 // brief: color set record
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-20
+// update: 2008-07-21
 //=========================================================
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,16 +14,15 @@ namespace Sgry.Azuki
 	/// </summary>
 	public class ColorPair
 	{
-		/// <summary>
-		/// Foreground color.
-		/// </summary>
+		#region Fields
+		/// <summary>Foreground color.</summary>
 		public Color Fore;
 
-		/// <summary>
-		/// Background color.
-		/// </summary>
+		/// <summary>Background color.</summary>
 		public Color Back;
-		
+		#endregion
+
+		#region Init / Dispose
 		/// <summary>
 		/// Creates a new instance.
 		/// </summary>
@@ -39,6 +38,7 @@ namespace Sgry.Azuki
 			Fore = fore;
 			Back = back;
 		}
+		#endregion
 	}
 
 	/// <summary>
@@ -48,23 +48,85 @@ namespace Sgry.Azuki
 	{
 		Dictionary< CharClass, ColorPair > _Colors = new Dictionary< CharClass, ColorPair >();
 
+		#region Init / Dispose
+		/// <summary>
+		/// Creates a new instance.
+		/// </summary>
+		public ColorScheme()
+		{
+			SetDefault();
+		}
+		#endregion
+
+		#region Operations
 		/// <summary>
 		/// Gets or sets color pair associated with given char-class.
 		/// </summary>
 		public ColorPair this[ CharClass klass ]
 		{
 			get{ return _Colors[klass]; }
-			set
+			set{ SetColor(klass, value); }
+		}
+
+		/// <summary>
+		/// Sets color pair for a char-class.
+		/// </summary>
+		public void SetColor( CharClass klass, ColorPair colorPair )
+		{
+			_Colors[klass] = colorPair;
+			if( klass == CharClass.Normal )
 			{
-				_Colors[klass] = value;
-				if( klass == CharClass.Normal )
-				{
-					ForeColor = value.Fore;
-					BackColor = value.Back;
-				}
+				ForeColor = colorPair.Fore;
+				BackColor = colorPair.Back;
+			}
+		}
+		/// <summary>
+		/// Gets default color scheme.
+		/// </summary>
+		public static ColorScheme Default
+		{
+			get
+			{
+				ColorScheme scheme = new ColorScheme();
+				scheme.SetDefault();
+				return scheme;
 			}
 		}
 
+		/*/// <summary>
+		/// Gets high contrast color scheme.
+		/// </summary>
+		public static ColorScheme HighContrast
+		{
+			get
+			{
+			}
+		}*/
+
+		void SetDefault()
+		{
+			Color bgcolor = Color.FromArgb( 0xff, 0xfa, 0xf0 );
+			Color azuki = Color.FromArgb( 0x92, 0x62, 0x57 ); // azuki iro
+			Color shin_bashi = Color.FromArgb( 0x74, 0xa9, 0xd6 ); // shin-bashi iro (japanese)
+			Color hana_asagi = Color.FromArgb( 0x1b, 0x77, 0x92 ); // hana-asagi iro (japanese)
+
+			this[ CharClass.Normal ] = new ColorPair( Color.Black, bgcolor );
+			this[ CharClass.Number ] = new ColorPair( Color.Black, bgcolor );
+			this[ CharClass.String ] = new ColorPair( Color.Teal, bgcolor );
+			this[ CharClass.Keyword ] = new ColorPair( Color.Blue, bgcolor );
+			this[ CharClass.Comment ] = new ColorPair( Color.Green, bgcolor );
+
+			this.SelectionFore = Color.White;
+			this.SelectionBack = azuki;
+			this.WhiteSpaceColor = Color.Silver;
+			this.EolColor = shin_bashi;
+			this.HighlightColor = azuki;
+			this.LineNumberFore = hana_asagi;
+			this.LineNumberBack = Color.FromArgb( 0xef, 0xef, 0xff );
+		}
+		#endregion
+
+		#region Properties
 		/// <summary>
 		/// Foreground color of normal text.
 		/// </summary>
@@ -109,46 +171,6 @@ namespace Sgry.Azuki
 		/// Background color of the line number text.
 		/// </summary>
 		public Color LineNumberBack;
-
-		/// <summary>
-		/// Gets default color scheme.
-		/// </summary>
-		public static ColorScheme Default
-		{
-			get
-			{
-				ColorScheme scheme = new ColorScheme();
-				Color bgcolor = Color.FromArgb( 0xff, 0xfa, 0xf0 );
-				Color azuki = Color.FromArgb( 0x92, 0x62, 0x57 ); // azuki iro
-				Color shin_bashi = Color.FromArgb( 0x74, 0xa9, 0xd6 ); // shin-bashi iro (japanese)
-				Color hana_asagi = Color.FromArgb( 0x1b, 0x77, 0x92 ); // hana-asagi iro (japanese)
-
-				scheme[ CharClass.Normal ] = new ColorPair( Color.Black, bgcolor );
-				scheme[ CharClass.Number ] = new ColorPair( Color.Black, bgcolor );
-				scheme[ CharClass.String ] = new ColorPair( Color.Teal, bgcolor );
-				scheme[ CharClass.Keyword ] = new ColorPair( Color.Blue, bgcolor );
-				scheme[ CharClass.Comment ] = new ColorPair( Color.Green, bgcolor );
-
-				scheme.SelectionFore = Color.White;
-				scheme.SelectionBack = azuki;
-				scheme.WhiteSpaceColor = Color.Silver;
-				scheme.EolColor = shin_bashi;
-				scheme.HighlightColor = azuki;
-				scheme.LineNumberFore = hana_asagi;
-				scheme.LineNumberBack = Color.FromArgb( 0xef, 0xef, 0xff );
-
-				return scheme;
-			}
-		}
-
-		/*/// <summary>
-		/// Gets high contrast color scheme.
-		/// </summary>
-		public static ColorScheme HighContrast
-		{
-			get
-			{
-			}
-		}*/
+		#endregion
 	}
 }
