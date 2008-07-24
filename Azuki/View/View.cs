@@ -1,7 +1,7 @@
 ﻿// file: View.cs
 // brief: Platform independent view implementation of Azuki engine.
 // author: YAMAMOTO Suguru
-// update: 2008-07-20
+// update: 2008-07-24
 //=========================================================
 using System;
 using System.Drawing;
@@ -204,21 +204,26 @@ namespace Sgry.Azuki
 				_Font = value;
 				_Gra.Font = value;
 
-				// re-calc tab width (in px)
-				StringBuilder buf = new StringBuilder();
-				for( int i=0; i<_TabWidth; i++ )
-					buf.Append( ' ' );
-				_TabWidthInPx = _Gra.MeasureText( buf.ToString() ).Width;
-
 				// update font metrics
-				_LineNumWidth = _Gra.MeasureText( "0000" ).Width;
-				_SpaceWidth = _Gra.MeasureText( " " ).Width;
-				_LCharWidth = _Gra.MeasureText( "l" ).Width;
-				_FullSpaceWidth = _Gra.MeasureText( "\x3000" ).Width;
-				_LineHeight = _Gra.MeasureText( "Mp" ).Height;
-
+				UpdateMetrics();
 				Invalidate();
 			}
+		}
+
+		void UpdateMetrics()
+		{
+			// re-calc tab width (in px)
+			StringBuilder buf = new StringBuilder();
+			for( int i=0; i<_TabWidth; i++ )
+				buf.Append( ' ' );
+			_TabWidthInPx = _Gra.MeasureText( buf.ToString() ).Width;
+
+			// update font metrics
+			_LineNumWidth = _Gra.MeasureText( "0000" ).Width;
+			_SpaceWidth = _Gra.MeasureText( " " ).Width;
+			_LCharWidth = _Gra.MeasureText( "l" ).Width;
+			_FullSpaceWidth = _Gra.MeasureText( "\x3000" ).Width;
+			_LineHeight = _Gra.MeasureText( "Mp" ).Height;
 		}
 
 		/// <summary>
@@ -330,7 +335,15 @@ namespace Sgry.Azuki
 		public int TabWidth
 		{
 			get{ return _TabWidth; }
-			set{ _TabWidth = value; }
+			set
+			{
+				if( value <= 0 )
+					throw new InvalidOperationException( "View.TabWidth must be a positive integer." );
+
+				_TabWidth = value;
+				UpdateMetrics();
+				Invalidate();
+			}
 		}
 		
 		/// <summary>
