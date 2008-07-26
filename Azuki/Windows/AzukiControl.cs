@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-07-21
+// update: 2008-07-26
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -505,8 +505,8 @@ namespace Sgry.Azuki.Windows
 #		endif
 		public bool IsOverwriteMode
 		{
-			get{ return View.IsOverwriteMode; }
-			set{ View.IsOverwriteMode = value; }
+			get{ return _Impl.IsOverwriteMode; }
+			set{ _Impl.IsOverwriteMode = value; }
 		}
 
 		/// <summary>
@@ -519,8 +519,8 @@ namespace Sgry.Azuki.Windows
 #		endif
 		public AutoIndentHook AutoIndentHook
 		{
-			get{ return View.AutoIndentHook; }
-			set{ View.AutoIndentHook = value; }
+			get{ return _Impl.AutoIndentHook; }
+			set{ _Impl.AutoIndentHook = value; }
 		}
 
 		/// <summary>
@@ -616,7 +616,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 		public void Cut()
 		{
-			Actions.Cut( View );
+			Actions.Cut( this );
 		}
 		
 		/// <summary>
@@ -624,7 +624,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 		public void Copy()
 		{
-			Actions.Copy( View );
+			Actions.Copy( this );
 		}
 		
 		/// <summary>
@@ -632,7 +632,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 		public void Paste()
 		{
-			Actions.Paste( View );
+			Actions.Paste( this );
 		}
 
 		/// <summary>
@@ -640,7 +640,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 		public void Delete()
 		{
-			Actions.Delete( View );
+			Actions.Delete( this );
 		}
 		#endregion
 
@@ -683,7 +683,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 		public void SelectAll()
 		{
-			Actions.SelectAll( View );
+			Actions.SelectAll( this );
 		}
 		#endregion
 
@@ -994,16 +994,16 @@ namespace Sgry.Azuki.Windows
 				if( selBeginL != selEndL )
 				{
 					if( WinApi.IsKeyDown(Keys.ShiftKey) )
-						Actions.BlockUnIndent( View );
+						Actions.BlockUnIndent( this );
 					else
-						Actions.BlockIndent( View );
+						Actions.BlockIndent( this );
 					e.Handled = true;
 					return;
 				}
 			}
 
 			// otherwise, handle key-char event normally
-			View.HandleKeyPress( e.KeyChar );
+			_Impl.HandleKeyPress( e.KeyChar );
 			e.Handled = true;
 		}
 

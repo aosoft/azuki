@@ -1,7 +1,7 @@
 ﻿// file: UiImpl.cs
 // brief: Implementation of user interface logic
 // author: YAMAMOTO Suguru
-// update: 2008-07-13
+// update: 2008-07-26
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,8 @@ namespace Sgry.Azuki
 		IUserInterface _UI;
 
 		IDictionary< int, ActionProc > _KeyMap = new Dictionary< int, ActionProc >( 32 );
+		AutoIndentHook _AutoIndentHook = null;
+		bool _IsOverwriteMode = false;
 
 		View _View = null;
 		ViewType _ViewType = ViewType.Propotional;
@@ -86,7 +88,7 @@ namespace Sgry.Azuki
 			get{ return _View; }
 			set{ _View = value; }
 		}
-
+		
 		/// <summary>
 		/// Gets or sets type of the view.
 		/// View type determine how to render text content.
@@ -134,6 +136,33 @@ namespace Sgry.Azuki
 			}
 		}
 
+		#region Behavior
+		/// <summary>
+		/// Gets or sets whether the input character overwrites the character at where the caret is on.
+		/// </summary>
+		public bool IsOverwriteMode
+		{
+			get{ return _IsOverwriteMode; }
+			set
+			{
+				_IsOverwriteMode = value;
+				_UI.UpdateCaretGraphic();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets hook delegate to execute auto-indentation.
+		/// If null, auto-indentation will not be performed.
+		/// </summary>
+		/// <seealso cref="AutoIndentLogic"/>
+		public AutoIndentHook AutoIndentHook
+		{
+			get{ return _AutoIndentHook; }
+			set{ _AutoIndentHook = value; }
+		}
+		#endregion
+
+		#region Key Handling
 		public void SetKeyBind( int keyCode, ActionProc action )
 		{
 			// remove specified key code from dictionary anyway
@@ -155,6 +184,64 @@ namespace Sgry.Azuki
 		{
 			_KeyMap.Clear();
 		}
+
+		/// <summary>
+		/// Handles translated character input event.
+		/// </summary>
+		internal void HandleKeyPress( char ch )
+		{
+			string str = null;
+			int newCaretIndex;
+			Document doc = Document;
+			int selBegin, selEnd;
+
+			// just notify and return if in read only mode
+			if( Document.IsReadOnly )
+			{
+				Plat.Inst.MessageBeep();
+				return;
+			}
+
+			// try to use hook delegate
+			if( _AutoIndentHook != null
+				&& _AutoIndentHook(Document, ch) == true )
+			{
+				goto update;
+			}
+
+			// make string to be inserted
+			if( LineLogic.IsEolChar(ch) )
+			{
+				str = doc.EolCode;
+			}
+			else
+			{
+				str = ch.ToString();
+			}
+			newCaretIndex = Math.Min( doc.AnchorIndex, doc.CaretIndex ) + str.Length;
+
+			// calc replacement target range
+			doc.GetSelection( out selBegin, out selEnd );
+			if( IsOverwriteMode
+				&& selBegin == selEnd && selEnd+1 < doc.Length
+				&& LineLogic.IsEolChar(doc[selBegin]) != true )
+			{
+				selEnd++;
+			}
+
+			// replace selection to input char
+			doc.Replace( str, selBegin, selEnd );
+			doc.SetSelection( newCaretIndex, newCaretIndex );
+
+			// set desired column
+		update:
+			_View.SetDesiredColumn();
+
+			// update graphic
+			_View.ScrollToCaret();
+			//NO_NEED//_View.Invalidate( xxx ); // Doc_ContentChanged will do invalidation well.
+		}
+		#endregion
 
 		#region Highlight Thread
 		void HighlighterThreadProc()
@@ -201,7 +288,8 @@ namespace Sgry.Azuki
 		{
 			try
 			{
-				_KeyMap[ keyData ]( View );
+				ActionProc action = _KeyMap[ keyData ];
+				action( _UI );
 			}
 			catch( KeyNotFoundException )
 			{}
@@ -274,7 +362,7 @@ namespace Sgry.Azuki
 			{
 				int xOffset = Math.Abs( pos.X - _MouseDownPos.X );
 				int yOffset = Math.Abs( pos.Y - _MouseDownPos.Y );
-				if( View.DrawgThresh < xOffset || View.DrawgThresh < yOffset )
+				if( View.DragThresh < xOffset || View.DragThresh < yOffset )
 				{
 					_MouseDragging = true;
 				}

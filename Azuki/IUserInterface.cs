@@ -2,7 +2,7 @@
 // brief: interface of user interface module (platform dependent)
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-20
+// update: 2008-07-27
 //=========================================================
 using System;
 using System.Drawing;
@@ -19,13 +19,21 @@ namespace Sgry.Azuki
 		/// </summary>
 		IGraphics GetIGraphics();
 
-		#region Document and View Types
+		#region Associated View and Document
 		/// <summary>
 		/// Gets or sets the document which is the current editing target.
 		/// </summary>
 		Document Document
 		{
 			get; set;
+		}
+
+		/// <summary>
+		/// Gets the associated view object.
+		/// </summary>
+		View View
+		{
+			get;
 		}
 
 		/// <summary>

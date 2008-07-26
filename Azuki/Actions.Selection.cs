@@ -2,7 +2,7 @@
 // brief: Actions for Azuki engine (actions to change selection).
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-05
+// update: 2008-07-26
 //=========================================================
 using System;
 using System.Drawing;
@@ -18,8 +18,9 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Move caret to right.
 		/// </summary>
-		public static void MoveRight( View view )
+		public static void MoveRight( IUserInterface ui )
 		{
+			View view = ui.View;
 			int selBegin, selEnd;
 
 			// if there are something selected,
@@ -42,8 +43,9 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Move caret to left.
 		/// </summary>
-		public static void MoveLeft( View view )
+		public static void MoveLeft( IUserInterface ui )
 		{
+			View view = ui.View;
 			int selBegin, selEnd;
 
 			// if there are something selected,
@@ -66,75 +68,76 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Move caret down.
 		/// </summary>
-		public static void MoveDown( View view )
+		public static void MoveDown( IUserInterface ui )
 		{
 			// move caret
-			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_Down, view );
+			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_Down, ui.View );
 		}
 
 		/// <summary>
 		/// Move caret up.
 		/// </summary>
-		public static void MoveUp( View view )
+		public static void MoveUp( IUserInterface ui )
 		{
 			// move caret
-			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_Up, view );
+			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_Up, ui.View );
 		}
 
 		/// <summary>
 		/// Move caret to next word.
 		/// </summary>
-		public static void MoveToNextWord( View view )
+		public static void MoveToNextWord( IUserInterface ui )
 		{
 			// move caret
-			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_NextWord, view );
+			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_NextWord, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Move caret to previous word.
 		/// </summary>
-		public static void MoveToPrevWord( View view )
+		public static void MoveToPrevWord( IUserInterface ui )
 		{
 			// move caret
-			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_PrevWord, view );
+			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_PrevWord, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Move caret to line head.
 		/// </summary>
-		public static void MoveToLineHead( View view )
+		public static void MoveToLineHead( IUserInterface ui )
 		{
 			// move caret
-			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_LineHead, view );
+			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_LineHead, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Move caret to line end.
 		/// </summary>
-		public static void MoveToLineEnd( View view )
+		public static void MoveToLineEnd( IUserInterface ui )
 		{
 			// move caret
-			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_LineEnd, view );
+			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_LineEnd, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Move caret to one page after.
 		/// </summary>
-		public static void MovePageDown( View view )
+		public static void MovePageDown( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
+			View view = ui.View;
 			Point pt;
 			int nextIndex;
 			int diff = (view.VisibleSize.Height / view.LineSpacing);
@@ -161,9 +164,10 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Move caret to one page before.
 		/// </summary>
-		public static void MovePageUp( View view )
+		public static void MovePageUp( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
+			View view = ui.View;
 			Point pt;
 			int nextIndex;
 			int diff = (view.VisibleSize.Height / view.LineSpacing);
@@ -189,25 +193,25 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Move caret to file head.
 		/// </summary>
-		public static void MoveToFileHead( View view )
+		public static void MoveToFileHead( IUserInterface ui )
 		{
 			// move caret
-			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_FileHead, view );
+			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_FileHead, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Move caret to file end.
 		/// </summary>
-		public static void MoveToFileEnd( View view )
+		public static void MoveToFileEnd( IUserInterface ui )
 		{
 			// move caret
-			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_FileEnd, view );
+			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_FileEnd, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 		#endregion
 
@@ -215,99 +219,100 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Expand selection to right.
 		/// </summary>
-		public static void SelectToRight( View view )
+		public static void SelectToRight( IUserInterface ui )
 		{
 			// change selection
-			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_Right, view );
+			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_Right, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Expand selection to left.
 		/// </summary>
-		public static void SelectToLeft( View view )
+		public static void SelectToLeft( IUserInterface ui )
 		{
 			// change selection
-			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_Left, view );
+			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_Left, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Expand selection down.
 		/// </summary>
-		public static void SelectToDown( View view )
+		public static void SelectToDown( IUserInterface ui )
 		{
 			// change selection
-			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_Down, view );
+			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_Down, ui.View );
 		}
 
 		/// <summary>
 		/// Expand selection up.
 		/// </summary>
-		public static void SelectToUp( View view )
+		public static void SelectToUp( IUserInterface ui )
 		{
 			// change selection
-			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_Up, view );
+			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_Up, ui.View );
 		}
 
 		/// <summary>
 		/// Expand selection to next word begin.
 		/// </summary>
-		public static void SelectToNextWord( View view )
+		public static void SelectToNextWord( IUserInterface ui )
 		{
 			// change selection
-			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_NextWord, view );
+			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_NextWord, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Expand selection to previous word begin.
 		/// </summary>
-		public static void SelectToPrevWord( View view )
+		public static void SelectToPrevWord( IUserInterface ui )
 		{
 			// change selection
-			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_PrevWord, view );
+			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_PrevWord, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Expand selection to line head.
 		/// </summary>
-		public static void SelectToLineHead( View view )
+		public static void SelectToLineHead( IUserInterface ui )
 		{
 			// change selection
-			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_LineHead, view );
+			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_LineHead, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Expand selection to line end.
 		/// </summary>
-		public static void SelectToLineEnd( View view )
+		public static void SelectToLineEnd( IUserInterface ui )
 		{
 			// change selection
-			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_LineEnd, view );
+			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_LineEnd, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Expand selection to one page after.
 		/// </summary>
-		public static void SelectToPageDown( View view )
+		public static void SelectToPageDown( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
+			View view = ui.View;
 			Point pt;
 			int nextIndex;
 			int diff = (view.VisibleSize.Height / view.LineSpacing);
@@ -334,9 +339,10 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Expand selection to one page before.
 		/// </summary>
-		public static void SelectToPageUp( View view )
+		public static void SelectToPageUp( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
+			View view = ui.View;
 			Point pt;
 			int nextIndex;
 			int diff = (view.VisibleSize.Height / view.LineSpacing);
@@ -362,33 +368,34 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Expand selection to file head.
 		/// </summary>
-		public static void SelectToFileHead( View view )
+		public static void SelectToFileHead( IUserInterface ui )
 		{
 			// change selection
-			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_FileHead, view );
+			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_FileHead, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Expand selection to file end.
 		/// </summary>
-		public static void SelectToFileEnd( View view )
+		public static void SelectToFileEnd( IUserInterface ui )
 		{
 			// change selection
-			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_FileEnd, view );
+			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_FileEnd, ui.View );
 
 			// update desired column
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Select all text.
 		/// </summary>
-		public static void SelectAll( View view )
+		public static void SelectAll( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
+			View view = ui.View;
 			
 			// set parameters
 			doc.SetSelection( 0, doc.Length );

@@ -1,7 +1,7 @@
 ﻿// file: View.cs
 // brief: Platform independent view implementation of Azuki engine.
 // author: YAMAMOTO Suguru
-// update: 2008-07-24
+// update: 2008-07-26
 //=========================================================
 using System;
 using System.Drawing;
@@ -33,8 +33,6 @@ namespace Sgry.Azuki
 		bool _ShowLineNumber = true;
 		bool _HighlightCurrentLine = true;
 		int _TextAreaWidth = 300;
-		bool _IsOverwriteMode = false;
-		AutoIndentHook _AutoIndentHook = null;
 
 		/// <summary>when the caret moves up or down, Azuki tries to set next caret's column index to this value.</summary>
 		int _DesiredColumn = 0;
@@ -82,11 +80,9 @@ namespace Sgry.Azuki
 			this._Gra = _UI.GetIGraphics();
 
 			// inherit other parameters
-			this._AutoIndentHook = other._AutoIndentHook;
 			this._DrawSpecialCharFlag = other._DrawSpecialCharFlag;
 			this._FirstVisibleLine = other._FirstVisibleLine;
 			this._HighlightCurrentLine = other._HighlightCurrentLine;
-			this._IsOverwriteMode = other._IsOverwriteMode;
 			this._ScrollPosX = other._ScrollPosX;
 			this._ShowLineNumber = other._ShowLineNumber;
 			this._TabWidth = other._TabWidth;
@@ -354,31 +350,7 @@ namespace Sgry.Azuki
 			get{ return _TabWidthInPx; }
 		}
 
-		/// <summary>
-		/// Gets or sets whether the input character overwrites the character at where the caret is on.
-		/// </summary>
-		public bool IsOverwriteMode
-		{
-			get{ return _IsOverwriteMode; }
-			set
-			{
-				_IsOverwriteMode = value;
-				_UI.UpdateCaretGraphic();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets hook delegate to execute auto-indentation.
-		/// If null, auto-indentation will not be performed.
-		/// </summary>
-		/// <seealso cref="AutoIndentLogic"/>
-		public AutoIndentHook AutoIndentHook
-		{
-			get{ return _AutoIndentHook; }
-			set{ _AutoIndentHook = value; }
-		}
-
-		internal int DrawgThresh
+		internal int DragThresh
 		{
 			get{ return _LCharWidth; }
 		}
@@ -677,63 +649,6 @@ namespace Sgry.Azuki
 		{
 //DEBUG//_Gra.ForeColor=Color.Red;_Gra.DrawLine(rect.Left,rect.Top,rect.Right,rect.Bottom);_Gra.DrawLine(rect.Left,rect.Bottom,rect.Right,rect.Top);DebugUtl.Sleep(400);
 			_UI.Invalidate( rect );
-		}
-
-		/// <summary>
-		/// Handles translated character input event.
-		/// </summary>
-		internal void HandleKeyPress( char ch )
-		{
-			string str = null;
-			int newCaretIndex;
-			Document doc = _Document;
-			int selBegin, selEnd;
-
-			// just notify and return if in read only mode
-			if( Document.IsReadOnly )
-			{
-				Plat.Inst.MessageBeep();
-				return;
-			}
-
-			// try to use hook delegate
-			if( _AutoIndentHook != null
-				&& _AutoIndentHook(Document, ch) == true )
-			{
-				goto update;
-			}
-
-			// make string to be inserted
-			if( LineLogic.IsEolChar(ch) )
-			{
-				str = doc.EolCode;
-			}
-			else
-			{
-				str = ch.ToString();
-			}
-			newCaretIndex = Math.Min( doc.AnchorIndex, doc.CaretIndex ) + str.Length;
-
-			// calc replacement target range
-			doc.GetSelection( out selBegin, out selEnd );
-			if( IsOverwriteMode
-				&& selBegin == selEnd && selEnd+1 < doc.Length
-				&& LineLogic.IsEolChar(doc[selBegin]) != true )
-			{
-				selEnd++;
-			}
-
-			// replace selection to input char
-			doc.Replace( str, selBegin, selEnd );
-			doc.SetSelection( newCaretIndex, newCaretIndex );
-
-			// set desired column
-		update:
-			SetDesiredColumn();
-
-			// update graphic
-			ScrollToCaret();
-			//NO_NEED//Invalidate( xxx ); // Doc_ContentChanged will do invalidation well.
 		}
 		#endregion
 

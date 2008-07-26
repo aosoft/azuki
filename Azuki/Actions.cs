@@ -2,7 +2,7 @@
 // brief: Actions for Azuki engine.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-05
+// update: 2008-07-26
 //=========================================================
 using System;
 
@@ -11,7 +11,7 @@ namespace Sgry.Azuki
 	/// <summary>
 	/// Common interface of actions of Azuki engine
 	/// </summary>
-	public delegate void ActionProc( View view );
+	public delegate void ActionProc( IUserInterface ui );
 
 	/// <summary>
 	/// A static class containing predefined actions for Azuki.
@@ -22,9 +22,10 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Deletes one character before caret if nothing was selected, otherwise delete selection.
 		/// </summary>
-		public static void BackSpace( View view )
+		public static void BackSpace( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
+			View view = ui.View;
 
 			// nothing selected?
 			if( doc.AnchorIndex == doc.CaretIndex )
@@ -67,9 +68,10 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Deletes one word before caret if nothing was selected, otherwise delete selection.
 		/// </summary>
-		public static void BackSpaceWord( View view )
+		public static void BackSpaceWord( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
+			View view = ui.View;
 
 			if( doc.IsReadOnly )
 			{
@@ -103,9 +105,10 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Deletes one character after caret if nothing was selected, otherwise delete selection.
 		/// </summary>
-		public static void Delete( View view )
+		public static void Delete( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
+			View view = ui.View;
 
 			if( doc.IsReadOnly )
 			{
@@ -153,9 +156,10 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Deletes one word after caret if nothing was selected, otherwise delete selection.
 		/// </summary>
-		public static void DeleteWord( View view )
+		public static void DeleteWord( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
+			View view = ui.View;
 
 			if( doc.IsReadOnly )
 			{
@@ -191,9 +195,9 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Cuts current selection to clipboard.
 		/// </summary>
-		public static void Cut( View view )
+		public static void Cut( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
 			string text;
 			int begin, end;
 			
@@ -236,15 +240,16 @@ namespace Sgry.Azuki
 				doc.Replace( String.Empty, lineHeadIndex, nextLineHeadIndex );
 			}
 			
-			view.SetDesiredColumn();
+			ui.View.SetDesiredColumn();
 		}
 
 		/// <summary>
 		/// Copies current selection to clipboard.
 		/// </summary>
-		public static void Copy( View view )
+		public static void Copy( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
+			View view = ui.View;
 			string text;
 			int begin, end;
 			
@@ -278,9 +283,9 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Pastes clipboard content at where the caret is at.
 		/// </summary>
-		public static void Paste( View view )
+		public static void Paste( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
 			string text;
 			bool isLineObj;
 			int begin, end;
@@ -321,8 +326,8 @@ namespace Sgry.Azuki
 			}
 
 			// move caret
-			view.SetDesiredColumn();
-			view.ScrollToCaret();
+			ui.View.SetDesiredColumn();
+			ui.View.ScrollToCaret();
 		}
 		#endregion
 
@@ -330,8 +335,9 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Undos an action.
 		/// </summary>
-		public static void Undo( View view )
+		public static void Undo( IUserInterface ui )
 		{
+			View view = ui.View;
 			if( view.Document.CanUndo == false
 				|| view.Document.IsReadOnly )
 			{
@@ -346,8 +352,9 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Redos an action.
 		/// </summary>
-		public static void Redo( View view )
+		public static void Redo( IUserInterface ui )
 		{
+			View view = ui.View;
 			if( view.Document.CanRedo == false
 				|| view.Document.IsReadOnly )
 			{
@@ -362,25 +369,25 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Toggles overwrite mode.
 		/// </summary>
-		public static void ToggleOverwriteMode( View view )
+		public static void ToggleOverwriteMode( IUserInterface ui )
 		{
-			view.IsOverwriteMode = !view.IsOverwriteMode;
+			ui.IsOverwriteMode = !ui.IsOverwriteMode;
 		}
 
 		/// <summary>
 		/// Refreshs view and force to redraw text area.
 		/// </summary>
-		public static void Refresh( View view )
+		public static void Refresh( IUserInterface ui )
 		{
-			view.Invalidate();
+			ui.Invalidate();
 		}
 
 		/// <summary>
 		/// Indent selected lines.
 		/// </summary>
-		public static void BlockIndent( View view )
+		public static void BlockIndent( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
 			int begin, end;
 			int beginL, endL;
 
@@ -409,9 +416,9 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Unindent selected lines.
 		/// </summary>
-		public static void BlockUnIndent( View view )
+		public static void BlockUnIndent( IUserInterface ui )
 		{
-			Document doc = view.Document;
+			Document doc = ui.Document;
 			int begin, end;
 			int beginL, endL;
 
@@ -443,7 +450,7 @@ namespace Sgry.Azuki
 					// there is a space.
 					// remove them until the count reaches to the tab-width
 					int n = 0;
-					while( doc[lineHead] == ' ' && n < view.TabWidth )
+					while( doc[lineHead] == ' ' && n < ui.View.TabWidth )
 					{
 						doc.Replace( String.Empty, lineHead, lineHead+1 );
 
@@ -461,17 +468,17 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Scrolls down one line.
 		/// </summary>
-		public static void ScrollDown( View view )
+		public static void ScrollDown( IUserInterface ui )
 		{
-			view.Scroll( 1 );
+			ui.View.Scroll( 1 );
 		}
 		
 		/// <summary>
 		/// Scrolls up one line.
 		/// </summary>
-		public static void ScrollUp( View view )
+		public static void ScrollUp( IUserInterface ui )
 		{
-			view.Scroll( -1 );
+			ui.View.Scroll( -1 );
 		}
 		#endregion
 	}

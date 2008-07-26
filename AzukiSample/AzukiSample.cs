@@ -223,7 +223,7 @@ main( int argc, char* argv[] )
 #			endif
 
 			// setup event handler
-			azuki.CaretMoved += delegate( object sender, EventArgs e ) {
+			azuki.CaretMoved += delegate {
 				string ch;
 				int pLine, pColumn;
 				int lLine, lColumn;
@@ -255,16 +255,16 @@ main( int argc, char* argv[] )
 
 			// setup keybinds for debug
 			azuki.SetKeyBind( Keys.F12,
-				delegate( View view ){ azuki.ShowLineNumber = !azuki.ShowLineNumber; }
+				delegate( IUserInterface ui ){ ui.ShowLineNumber = !ui.ShowLineNumber; }
 			);
 			azuki.SetKeyBind( Keys.H | Keys.Control,
-				delegate( View view ){ azuki.ShowHScrollBar = !azuki.ShowHScrollBar; }
+				delegate( IUserInterface ui ){ ui.ShowHScrollBar = !ui.ShowHScrollBar; }
 			);
 			azuki.SetKeyBind( Keys.R | Keys.Control,
-				delegate( View view ){ azuki.Invalidate(); }
+				delegate( IUserInterface ui ){ ui.Invalidate(); }
 			);
 			azuki.SetKeyBind( Keys.Scroll,
-				delegate( View view ){ System.GC.Collect(); Plat.Inst.MessageBeep(); }
+				delegate( IUserInterface ui ){ System.GC.Collect(); Plat.Inst.MessageBeep(); }
 			);
 
 			// run test application
