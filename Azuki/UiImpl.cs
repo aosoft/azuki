@@ -1,7 +1,7 @@
 ﻿// file: UiImpl.cs
 // brief: Implementation of user interface logic
 // author: YAMAMOTO Suguru
-// update: 2008-07-26
+// update: 2008-07-27
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -14,13 +14,14 @@ namespace Sgry.Azuki
 	{
 		#region Fields
 		IUserInterface _UI;
+		View _View = null;
+		ViewType _ViewType = ViewType.Propotional;
 
 		IDictionary< int, ActionProc > _KeyMap = new Dictionary< int, ActionProc >( 32 );
 		AutoIndentHook _AutoIndentHook = null;
 		bool _IsOverwriteMode = false;
-
-		View _View = null;
-		ViewType _ViewType = ViewType.Propotional;
+		bool _ConvertsTabToSpaces = false;
+		bool _ConvertsFullWidthSpaceToSpace = false;
 
 		Point _MouseDownPos = new Point( -1, 0 ); // this X coordinate also be used as a flag to determine whether the mouse button is down or not
 		bool _MouseDragging = false;
@@ -54,6 +55,7 @@ namespace Sgry.Azuki
 		}
 		#endregion
 
+		#region View and Document
 		public Document Document
 		{
 			get{ return View.Document; }
@@ -135,6 +137,7 @@ namespace Sgry.Azuki
 				}
 			}
 		}
+		#endregion
 
 		#region Behavior
 		/// <summary>
@@ -148,6 +151,26 @@ namespace Sgry.Azuki
 				_IsOverwriteMode = value;
 				_UI.UpdateCaretGraphic();
 			}
+		}
+
+		/// <summary>
+		/// Gets or sets whether to automatically convert
+		/// an input tab character to equivalent amount of spaces.
+		/// </summary>
+		public bool ConvertsTabToSpaces
+		{
+			get{ return _ConvertsTabToSpaces; }
+			set{ _ConvertsTabToSpaces = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets whether to automatically convert
+		/// an input full-width space to a space.
+		/// </summary>
+		public bool ConvertsFullWidthSpaceToSpace
+		{
+			get{ return _ConvertsFullWidthSpaceToSpace; }
+			set{ _ConvertsFullWidthSpaceToSpace = value; }
 		}
 
 		/// <summary>
@@ -210,18 +233,31 @@ namespace Sgry.Azuki
 			}
 
 			// make string to be inserted
+			doc.GetSelection( out selBegin, out selEnd );
 			if( LineLogic.IsEolChar(ch) )
 			{
 				str = doc.EolCode;
+			}
+			else if( ch == '\t' && _ConvertsTabToSpaces )
+			{
+				int spaceCount = NextTabStop( selBegin ) - selBegin;
+				str = String.Empty;
+				for( int i=0; i<spaceCount; i++ )
+				{
+					str += ' ';
+				}
+			}
+			else if( ch == '\x3000' && _ConvertsFullWidthSpaceToSpace )
+			{
+				str = "\x0020";
 			}
 			else
 			{
 				str = ch.ToString();
 			}
-			newCaretIndex = Math.Min( doc.AnchorIndex, doc.CaretIndex ) + str.Length;
+			newCaretIndex = selBegin + str.Length;
 
 			// calc replacement target range
-			doc.GetSelection( out selBegin, out selEnd );
 			if( IsOverwriteMode
 				&& selBegin == selEnd && selEnd+1 < doc.Length
 				&& LineLogic.IsEolChar(doc[selBegin]) != true )
@@ -233,8 +269,8 @@ namespace Sgry.Azuki
 			doc.Replace( str, selBegin, selEnd );
 			doc.SetSelection( newCaretIndex, newCaretIndex );
 
-			// set desired column
 		update:
+			// set desired column
 			_View.SetDesiredColumn();
 
 			// update graphic
@@ -422,5 +458,10 @@ namespace Sgry.Azuki
 			_ShouldBeHighlighted = true;
 		}
 		#endregion
+
+		int NextTabStop( int index )
+		{
+			return ((index / _View.TabWidth) + 1) * _View.TabWidth;
+		}
 	}
 }

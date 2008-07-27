@@ -186,6 +186,24 @@ namespace Sgry.Azuki
 		{
 			get; set;
 		}
+
+		/// <summary>
+		/// Gets or sets whether to automatically convert
+		/// an input tab character to equivalent amount of spaces.
+		/// </summary>
+		bool ConvertsTabToSpaces
+		{
+			get; set;
+		}
+
+		/// <summary>
+		/// Gets or sets whether to automatically convert
+		/// an input full-width space to a space.
+		/// </summary>
+		bool ConvertsFullWidthSpaceToSpace
+		{
+			get; set;
+		}
 		#endregion
 
 		#region Edit Actions

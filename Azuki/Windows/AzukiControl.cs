@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-07-26
+// update: 2008-07-27
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -110,15 +110,7 @@ namespace Sgry.Azuki.Windows
 			return Plat.Inst.GetGraphics( Handle );
 		}
 
-		/// <summary>
-		/// Gets the associated view object.
-		/// </summary>
-		public View View
-		{
-			get{ return _Impl.View; }
-		}
-
-		#region IUserInterface - Document and View Types
+		#region IUserInterface - Associated View and Document
 		/// <summary>
 		/// Gets or sets the document which is the current editing target.
 		/// </summary>
@@ -130,6 +122,14 @@ namespace Sgry.Azuki.Windows
 		{
 			get{ return _Impl.Document; }
 			set{ _Impl.Document = value; }
+		}
+
+		/// <summary>
+		/// Gets the associated view object.
+		/// </summary>
+		public View View
+		{
+			get{ return _Impl.View; }
 		}
 
 		/// <summary>
@@ -524,7 +524,38 @@ namespace Sgry.Azuki.Windows
 		}
 
 		/// <summary>
-		/// If this is true, treats Enter key as an input and prevent pressing dialog default button.
+		/// Gets or sets whether to automatically convert
+		/// an input tab character to equivalent amount of spaces.
+		/// </summary>
+#		if !PocketPC
+		[Category("Behavior")]
+		[DefaultValue(false)]
+		[Description("If true, an input tab character will be automatically converted into equivalent amount of spaces.")]
+#		endif
+		public bool ConvertsTabToSpaces
+		{
+			get{ return _Impl.ConvertsTabToSpaces; }
+			set{ _Impl.ConvertsTabToSpaces = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets whether to automatically convert
+		/// an input full-width space to a space.
+		/// </summary>
+#		if !PocketPC
+		[Category("Behavior")]
+		[DefaultValue(false)]
+		[Description("If true, an input full-width space will be automatically converted to a half-width space.")]
+#		endif
+		public bool ConvertsFullWidthSpaceToSpace
+		{
+			get{ return _Impl.ConvertsFullWidthSpaceToSpace; }
+			set{ _Impl.ConvertsFullWidthSpaceToSpace = value; }
+		}
+
+		/// <summary>
+		/// If this is true, treats Enter key as an input and
+		/// prevent pressing dialog default button.
 		/// </summary>
 #		if !PocketPC
 		[Category("Behavior")]
@@ -538,7 +569,8 @@ namespace Sgry.Azuki.Windows
 		}
 
 		/// <summary>
-		/// If this is true, treats Tab key as an input and prevent moving focus to other control in a dialog.
+		/// If this is true, treats Tab key as an input and
+		/// prevent moving focus to other control in a dialog.
 		/// </summary>
 #		if !PocketPC
 		[Category("Behavior")]
