@@ -1,4 +1,4 @@
-// 2008-07-20
+// 2008-07-31
 // encoding: UTF-8
 using System;
 using System.Drawing;
@@ -415,11 +415,11 @@ main( int argc, char* argv[] )
 				"bool", "break", "case", "catch", "char", "class", "const", "const_cast",
 				"continue", "default", "delete", "do", "double", "dynamic_cast", "else",
 				"enum", "explicit", "extern", "false", "float",
-				"for", "friend", "goto", "if", "inline", "int", "long", "namespace",
+				"for", "friend", "goto", "if", "inline", "int", "interface", "long", "namespace",
 				"new", "operator", "private", "protected", "public",
 				"reinterpret_cast", "return", "short",
 				"signed", "sizeof", "static",
-				"interface", "goto", "while", "long", "new", "return"
+				"while", "return"
 			}, CharClass.Keyword );
 			
 			h.SetKeywords( new string[] {
