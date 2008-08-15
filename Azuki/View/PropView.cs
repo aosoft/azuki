@@ -2,8 +2,9 @@
 // brief: Platform independent view (propotional).
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-13
+// update: 2008-08-03
 //=========================================================
+//#define DRAW_SLOWLY
 using System;
 using System.Drawing;
 using System.Diagnostics;
@@ -469,8 +470,8 @@ namespace Sgry.Azuki
 			Point pos = new Point();
 
 			// prepare off-screen buffer
-#			if !DRAW_SLOWLY
-//			_Gra.BeginPaint( clipRect );
+#			if !DRAW_SLOWLY && !PocketPC
+			_Gra.BeginPaint( clipRect );
 #			endif
 
 			// draw all lines
@@ -492,8 +493,8 @@ namespace Sgry.Azuki
 
 			// flush drawing results BEFORE updating current line highlight
 			// because the highlight graphic is never limited to clipping rect
-#			if !DRAW_SLOWLY
-//			_Gra.EndPaint();
+#			if !DRAW_SLOWLY && !PocketPC
+			_Gra.EndPaint();
 #			endif
 
 			// draw underline to highlight current line if there is no selection

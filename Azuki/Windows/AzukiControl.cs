@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-07-27
+// update: 2008-08-14
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -241,6 +241,8 @@ namespace Sgry.Azuki.Windows
 			if( DesignMode )
 				return;
 #			endif
+			if( Focused == false )
+				return;
 
 			// calculate caret size
 			_CaretSize.Width = Utl.CalcOverwriteCaretWidth( Document, View, CaretIndex, IsOverwriteMode );

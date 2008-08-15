@@ -2,7 +2,7 @@
 // brief: Platform independent view (propotional, line-wrap).
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-21
+// update: 2008-08-15
 //=========================================================
 //DEBUG//#define PLHI_DEBUG
 //DEBUG//#define DRAW_SLOWLY
@@ -51,6 +51,27 @@ namespace Sgry.Azuki
 		#endregion
 
 		#region Properties
+		/// <summary>
+		/// Gets or sets the document displayed in this view.
+		/// </summary>
+		public override Document Document
+		{
+			//get{ return base.Document; }
+			set
+			{
+				base.Document = value;
+
+				// update PLHI
+				// (document was changed so line-wrapping state must be refreshed.
+				// Note that this property may be set by View.ctor.
+				// In that case, do not calculate because _PLHI was not prepared yet so calculation must fail.)
+				if( 0 < _PLHI.Count )
+				{
+					Doc_ContentChanged( value, new ContentChangedEventArgs(0, String.Empty, value.Text) );
+				}
+			}
+		}
+
 		/// <summary>
 		/// Font to be used for displaying text.
 		/// </summary>
@@ -411,9 +432,14 @@ namespace Sgry.Azuki
 			int replaceEnd;
 			int preTargetEndL;
 
+			int firstDirtyLineIndex = LineLogic.GetLineIndexFromCharIndex( _PLHI, index );
+			if( firstDirtyLineIndex < 0 )
+			{
+				Debug.Fail( "unexpected error" );
+				return;
+			}
+
 			// [phase 3] calculate range of indexes to be deleted
-			int firstDirtyLineIndex;
-			firstDirtyLineIndex = LineLogic.GetLineIndexFromCharIndex( _PLHI, index );
 			delBeginL = firstDirtyLineIndex + 1;
 			int lastDirtyLogLineIndex = doc.GetLineIndexFromCharIndex( index + newText.Length );
 			if( lastDirtyLogLineIndex+1 < doc.LineCount )
@@ -544,7 +570,7 @@ namespace Sgry.Azuki
 			Point pos = new Point();
 
 			// prepare off-screen buffer
-#			if !DRAW_SLOWLY
+#			if !DRAW_SLOWLY && !PocketPC
 			_Gra.BeginPaint( clipRect );
 #			endif
 
@@ -568,7 +594,7 @@ namespace Sgry.Azuki
 
 			// flush drawing results BEFORE updating current line highlight
 			// because the highlight graphic is never limited to clipping rect
-#			if !DRAW_SLOWLY
+#			if !DRAW_SLOWLY && !PocketPC
 			_Gra.EndPaint();
 #			endif
 

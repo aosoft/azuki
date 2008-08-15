@@ -2,7 +2,7 @@
 // brief: interface of user interface module (platform dependent)
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-27
+// update: 2008-08-14
 //=========================================================
 using System;
 using System.Drawing;
@@ -10,7 +10,7 @@ using System.Drawing;
 namespace Sgry.Azuki
 {
 	/// <summary>
-	/// Interface of user interface module
+	/// Interface of user interface module.
 	/// </summary>
 	public interface IUserInterface
 	{
@@ -329,6 +329,14 @@ namespace Sgry.Azuki
 			get;
 		}
 		#endregion
+
+		/// <summary>
+		/// Gets this component is focused by user or not.
+		/// </summary>
+		bool Focused
+		{
+			get;
+		}
 
 		#region Position / Index Conversion
 		/// <summary>

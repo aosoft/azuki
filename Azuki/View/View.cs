@@ -1,7 +1,7 @@
 ﻿// file: View.cs
 // brief: Platform independent view implementation of Azuki engine.
 // author: YAMAMOTO Suguru
-// update: 2008-07-26
+// update: 2008-08-14
 //=========================================================
 using System;
 using System.Drawing;
@@ -124,9 +124,9 @@ namespace Sgry.Azuki
 
 		#region Properties
 		/// <summary>
-		/// The document displayed in this view.
+		/// Gets or sets the document displayed in this view.
 		/// </summary>
-		public Document Document
+		public virtual Document Document
 		{
 			get{ return _Document; }
 			set
