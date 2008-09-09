@@ -2,7 +2,7 @@
 // brief: Implementation of caret movement.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-06-15
+// update: 2008-09-09
 //=========================================================
 using System;
 using System.Drawing;
@@ -205,6 +205,27 @@ namespace Sgry.Azuki
 			return view.GetLineHeadIndexFromCharIndex(
 					view.Document.CaretIndex
 				);
+		};
+
+		/// <summary>
+		/// Calculate index of the first non-whitespace char of the line where caret is at.
+		/// </summary>
+		public static CalcMethod Calc_LineHeadSmart
+			= delegate( View view )
+		{
+			int lineHeadIndex, firstNonSpaceIndex;
+			Document doc = view.Document;
+
+			lineHeadIndex = view.GetLineHeadIndexFromCharIndex( doc.CaretIndex );
+
+			firstNonSpaceIndex = lineHeadIndex;
+			while( firstNonSpaceIndex < doc.Length
+				&& Char.IsWhiteSpace(doc[firstNonSpaceIndex]) )
+			{
+				firstNonSpaceIndex++;
+			}
+
+			return (firstNonSpaceIndex == doc.CaretIndex) ? lineHeadIndex : firstNonSpaceIndex;
 		};
 
 		/// <summary>

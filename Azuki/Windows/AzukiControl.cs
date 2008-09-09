@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-08-14
+// update: 2008-09-09
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -161,7 +161,7 @@ namespace Sgry.Azuki.Windows
 			SetKeyBind( Keys.Up, Actions.MoveUp );
 			SetKeyBind( Keys.Right|Keys.Control, Actions.MoveToNextWord );
 			SetKeyBind( Keys.Left|Keys.Control, Actions.MoveToPrevWord );
-			SetKeyBind( Keys.Home, Actions.MoveToLineHead );
+			SetKeyBind( Keys.Home, Actions.MoveToLineHeadSmart );
 			SetKeyBind( Keys.End, Actions.MoveToLineEnd );
 			SetKeyBind( Keys.PageDown, Actions.MovePageDown );
 			SetKeyBind( Keys.PageUp, Actions.MovePageUp );
@@ -174,7 +174,7 @@ namespace Sgry.Azuki.Windows
 			SetKeyBind( Keys.Up|Keys.Shift, Actions.SelectToUp );
 			SetKeyBind( Keys.Right|Keys.Shift|Keys.Control, Actions.SelectToNextWord );
 			SetKeyBind( Keys.Left|Keys.Shift|Keys.Control, Actions.SelectToPrevWord );
-			SetKeyBind( Keys.Home|Keys.Shift, Actions.SelectToLineHead );
+			SetKeyBind( Keys.Home|Keys.Shift, Actions.SelectToLineHeadSmart );
 			SetKeyBind( Keys.End|Keys.Shift, Actions.SelectToLineEnd );
 			SetKeyBind( Keys.PageDown|Keys.Shift, Actions.SelectToPageDown );
 			SetKeyBind( Keys.PageUp|Keys.Shift, Actions.SelectToPageUp );

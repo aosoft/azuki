@@ -2,7 +2,7 @@
 // brief: Actions for Azuki engine (actions to change selection).
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-26
+// update: 2008-09-09
 //=========================================================
 using System;
 using System.Drawing;
@@ -114,6 +114,18 @@ namespace Sgry.Azuki
 		{
 			// move caret
 			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_LineHead, ui.View );
+
+			// update desired column
+			ui.View.SetDesiredColumn();
+		}
+
+		/// <summary>
+		/// Move caret to the first non-whitespace char at the line.
+		/// </summary>
+		public static void MoveToLineHeadSmart( IUserInterface ui )
+		{
+			// move caret
+			CaretMoveLogic.MoveCaret( CaretMoveLogic.Calc_LineHeadSmart, ui.View );
 
 			// update desired column
 			ui.View.SetDesiredColumn();
@@ -289,6 +301,18 @@ namespace Sgry.Azuki
 		{
 			// change selection
 			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_LineHead, ui.View );
+
+			// update desired column
+			ui.View.SetDesiredColumn();
+		}
+
+		/// <summary>
+		/// Expand selection to the first non-whitespace char at the line.
+		/// </summary>
+		public static void SelectToLineHeadSmart( IUserInterface ui )
+		{
+			// change selection
+			CaretMoveLogic.SelectTo( CaretMoveLogic.Calc_LineHeadSmart, ui.View );
 
 			// update desired column
 			ui.View.SetDesiredColumn();
