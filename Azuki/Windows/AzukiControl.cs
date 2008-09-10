@@ -216,6 +216,16 @@ namespace Sgry.Azuki.Windows
 		}
 
 		/// <summary>
+		/// Gets an action which is already associated with given key.
+		/// If no action was associate with given key, returns null.
+		/// </summary>
+		/// <param name="keyCode">key code</param>
+		public ActionProc GetKeyBind( Keys keyCode )
+		{
+			return _Impl.GetKeyBind( (int)keyCode );
+		}
+
+		/// <summary>
 		/// Sets or removes key-bind entry.
 		/// Note that giving null to action will remove the key-bind.
 		/// </summary>
