@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-09-09
+// update: 2008-09-10
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -203,6 +203,16 @@ namespace Sgry.Azuki.Windows
 			SetKeyBind( Keys.Up|Keys.Control, Actions.MovePageUp );
 			SetKeyBind( Keys.Down|Keys.Control, Actions.MovePageDown );
 #			endif
+		}
+
+		/// <summary>
+		/// Gets an action which is already associated with given key.
+		/// If no action was associate with given key, returns null.
+		/// </summary>
+		/// <param name="keyCode">key code</param>
+		public ActionProc GetKeyBind( int keyCode )
+		{
+			return _Impl.GetKeyBind( keyCode );
 		}
 
 		/// <summary>

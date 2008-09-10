@@ -2,7 +2,7 @@
 // brief: interface of user interface module (platform dependent)
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-08-14
+// update: 2008-09-10
 //=========================================================
 using System;
 using System.Drawing;
@@ -51,6 +51,13 @@ namespace Sgry.Azuki
 		/// Reset keybind to default.
 		/// </summary>
 		void ResetKeyBind();
+
+		/// <summary>
+		/// Gets an action which is already associated with given key.
+		/// If no action was associate with given key, returns null.
+		/// </summary>
+		/// <param name="keyCode">key code</param>
+		ActionProc GetKeyBind( int keyCode );
 
 		/// <summary>
 		/// Sets or removes key-bind entry.

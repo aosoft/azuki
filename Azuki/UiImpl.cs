@@ -1,7 +1,7 @@
 ﻿// file: UiImpl.cs
 // brief: Implementation of user interface logic
 // author: YAMAMOTO Suguru
-// update: 2008-07-27
+// update: 2008-09-10
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -186,6 +186,11 @@ namespace Sgry.Azuki
 		#endregion
 
 		#region Key Handling
+		public ActionProc GetKeyBind( int keyCode )
+		{
+			return _KeyMap[ keyCode ];
+		}
+
 		public void SetKeyBind( int keyCode, ActionProc action )
 		{
 			// remove specified key code from dictionary anyway
