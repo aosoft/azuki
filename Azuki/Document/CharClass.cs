@@ -1,8 +1,7 @@
 ﻿// file: CharClass.cs
 // brief: Indicator for class of characters.
 // author: YAMAMOTO Suguru
-// encoding: UTF-8
-// update: 2008-07-20
+// update: 2008-09-10
 //=========================================================
 
 namespace Sgry.Azuki
@@ -13,13 +12,16 @@ namespace Sgry.Azuki
 	public struct CharClass
 	{
 		#region Fields
-		static CharClass _Normal = new CharClass( 0, "Normal" );
-		static CharClass _Number = new CharClass( 1, "Number" );
-		static CharClass _String = new CharClass( 2, "String" );
-		static CharClass _Comment = new CharClass( 3, "Comment" );
-		static CharClass _DocComment = new CharClass( 4, "DocComment" );
-		static CharClass _Keyword = new CharClass( 5, "Keyword 1" );
-		static CharClass _Selection = new CharClass( 0xff, "Normal" );
+		static CharClass _Normal		= new CharClass( 0, "Normal" );
+		static CharClass _Number		= new CharClass( 1, "Number" );
+		static CharClass _String		= new CharClass( 2, "String" );
+		static CharClass _Comment		= new CharClass( 3, "Comment" );
+		static CharClass _DocComment	= new CharClass( 4, "DocComment" );
+		static CharClass _Keyword		= new CharClass( 5, "Keyword" );
+		static CharClass _Keyword2		= new CharClass( 6, "Keyword 2" );
+		static CharClass _Keyword3		= new CharClass( 7, "Keyword 3" );
+		static CharClass _PreProcessor	= new CharClass( 8, "PreProcessor" );
+		static CharClass _Selection		= new CharClass( 0xff, "Selection" );
 
 		byte _Id;
 		string _Name;
@@ -29,7 +31,7 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Creates a new instance.
 		/// </summary>
-		public CharClass( byte id, string name )
+		CharClass( byte id, string name )
 		{
 			_Id = id;
 			_Name = name;
@@ -44,6 +46,15 @@ namespace Sgry.Azuki
 		{
 			get{ return _Id; }
 			set{ _Id = value; }
+		}
+
+		/// <summary>
+		/// Name of this char-class.
+		/// </summary>
+		public string Name
+		{
+			get{ return _Name; }
+			set{ _Name = value; }
 		}
 		#endregion
 
@@ -138,6 +149,30 @@ namespace Sgry.Azuki
 		public static CharClass Keyword
 		{
 			get{ return _Keyword; }
+		}
+
+		/// <summary>
+		/// Indicates keyword type 2.
+		/// </summary>
+		public static CharClass Keyword2
+		{
+			get{ return _Keyword2; }
+		}
+
+		/// <summary>
+		/// Indicates keyword type 3.
+		/// </summary>
+		public static CharClass Keyword3
+		{
+			get{ return _Keyword3; }
+		}
+
+		/// <summary>
+		/// Indicates pre-processor macro.
+		/// </summary>
+		public static CharClass PreProcessor
+		{
+			get{ return _PreProcessor; }
 		}
 		
 		/// <summary>

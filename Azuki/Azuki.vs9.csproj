@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9910474A-AA51-4DFF-8499-CB661216B200}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -75,38 +75,40 @@
     <Compile Include="AutoIndentLogic.cs" />
     <Compile Include="CaretMoveLogic.cs" />
     <Compile Include="DebugUtl.cs" />
-    <Compile Include="Document\CharClass.cs" />
-    <Compile Include="Document\Document.cs" />
-    <Compile Include="Document\TextBuffer.cs" />
-    <Compile Include="Highlighter\BasicHighlighter.cs" />
-    <Compile Include="Highlighter\DummyHighlighter.cs" />
-    <Compile Include="Highlighter\IHighlighter.cs" />
-    <Compile Include="Test\BasicHighlighterTest.cs" />
+    <Compile Include="Highlighter\HighlighterFactory.cs" />
     <Compile Include="UiImpl.cs" />
-    <Compile Include="View\ColorScheme.cs" />
     <Compile Include="IUserInterface.cs" />
     <Compile Include="LineLogic.cs" />
     <Compile Include="Platform.cs" />
-    <Compile Include="View\PropView.cs" />
+    <Compile Include="UserPref.cs" />
+    <Compile Include="WordLogic.cs" />
+    <Compile Include="Document\CharClass.cs" />
+    <Compile Include="Document\Document.cs" />
+    <Compile Include="Document\TextBuffer.cs" />
+    <Compile Include="Document\EditAction.cs" />
+    <Compile Include="Document\EditHistory.cs" />
     <Compile Include="Document\SplitArray.cs" />
+    <Compile Include="Highlighter\BasicHighlighter.cs" />
+    <Compile Include="Highlighter\CppHighlighter.cs" />
+    <Compile Include="Highlighter\DummyHighlighter.cs" />
+    <Compile Include="Highlighter\IHighlighter.cs" />
     <Compile Include="Test\EditHistoryTest.cs" />
     <Compile Include="Test\LineLogicTest.cs" />
     <Compile Include="Test\SplitArrayTest.cs" />
-    <Compile Include="Document\EditAction.cs" />
-    <Compile Include="Document\EditHistory.cs" />
     <Compile Include="Test\TestDriver.cs" />
-    <Compile Include="UserPref.cs" />
+    <Compile Include="Test\BasicHighlighterTest.cs" />
+    <Compile Include="Test\DocumentTest.cs" />
+    <Compile Include="View\ColorScheme.cs" />
+    <Compile Include="View\PropView.cs" />
     <Compile Include="View\PropWrapView.cs" />
     <Compile Include="View\View.cs" />
     <Compile Include="View\View.Paint.cs" />
     <Compile Include="View\ViewType.cs" />
+    <Compile Include="Windows\PlatWin.cs" />
+    <Compile Include="Windows\WinApi.cs" />
     <Compile Include="Windows\AzukiControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Windows\PlatWin.cs" />
-    <Compile Include="Windows\WinApi.cs" />
-    <Compile Include="Test\DocumentTest.cs" />
-    <Compile Include="WordLogic.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

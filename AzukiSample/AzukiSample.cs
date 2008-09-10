@@ -1,5 +1,4 @@
-// 2008-07-31
-// encoding: UTF-8
+// 2008-09-09
 using System;
 using System.Drawing;
 using System.IO;
@@ -175,7 +174,7 @@ main( int argc, char* argv[] )
 //			azuki.DrawsEolCode = false;
 			azuki.Document.EolCode = "\r\n";
 			azuki.AutoIndentHook = AutoIndentLogic.CHook;
-			azuki.Document.Highlighter = CreateCHighlighter( azuki.Document );
+			azuki.Document.Highlighter = HighlighterFactory.Create( "C/C++" );
 			azuki.Resize += delegate {
 				if( WrapTextAtWindowBorder )
 				{
@@ -401,41 +400,6 @@ main( int argc, char* argv[] )
 		}
 
 		static bool WrapTextAtWindowBorder = false;
-
-		static IHighlighter CreateCHighlighter( Document doc )
-		{
-			BasicHighlighter h = new BasicHighlighter();
-
-			CharClass ppKlass = new CharClass( 10, "Preprocessor Macro" );
-			doc.RegisterCharClass( ppKlass, Color.Purple );
-
-			h.SetKeywords( new string[] {
-				"__FILE__", "__declspec",
-				"asm", "auto",
-				"bool", "break", "case", "catch", "char", "class", "const", "const_cast",
-				"continue", "default", "delete", "do", "double", "dynamic_cast", "else",
-				"enum", "explicit", "extern", "false", "float",
-				"for", "friend", "goto", "if", "inline", "int", "interface", "long", "namespace",
-				"new", "operator", "private", "protected", "public",
-				"reinterpret_cast", "return", "short",
-				"signed", "sizeof", "static",
-				"while", "return"
-			}, CharClass.Keyword );
-			
-			h.SetKeywords( new string[] {
-				"#define", "#elif", "#elif", "#endif", "#error", "#if", "#include", "#line", "#pragma", "#undef",
-				"__FILE__", "__declspec",
-			}, ppKlass );
-
-			h.AddEnclosure( "'", "'", CharClass.String, '\\' );
-			h.AddEnclosure( "@\"", "\"", CharClass.String, '\"' );
-			h.AddEnclosure( "\"", "\"", CharClass.String, '\\' );
-			h.AddEnclosure( "/**", "*/", CharClass.Keyword );
-			h.AddEnclosure( "/*", "*/", CharClass.Comment );
-			h.AddLineHighlight( "//", CharClass.Comment );
-
-			return h;
-		}
 	}
 #	endif
 }

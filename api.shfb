@@ -6,6 +6,7 @@
         <namespaceSummaryItem name="" isDocumented="False" />
         <namespaceSummaryItem name="Sgry" isDocumented="True" />
         <namespaceSummaryItem name="Sgry.Azuki" isDocumented="True">This namespace contains platform-independent classes of Azuki.</namespaceSummaryItem>
+        <namespaceSummaryItem name="Sgry.Azuki.Highlighter" isDocumented="True" />
         <namespaceSummaryItem name="Sgry.Azuki.Windows" isDocumented="True">This namespace contains Windows specific classes.</namespaceSummaryItem>
     </namespaceSummaries>
     <apiFilter>
@@ -31,7 +32,7 @@
     <Preliminary>False</Preliminary>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <RootNamespaceTitle />
-    <HelpTitle>Azuki 1.1 API Reference</HelpTitle>
+    <HelpTitle>Azuki 1.2 API Reference</HelpTitle>
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <CopyrightHref>http://azuki.sourceforge.jp/</CopyrightHref>

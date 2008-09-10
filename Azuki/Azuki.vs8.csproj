@@ -50,12 +50,23 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="AutoIndentLogic.cs" />
     <Compile Include="CaretMoveLogic.cs" />
+    <Compile Include="UserPref.cs" />
+    <Compile Include="DebugUtl.cs" />
+    <Compile Include="LineLogic.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="Platform.cs" />
+    <Compile Include="WordLogic.cs" />
+    
     <Compile Include="Document\CharData.cs" />
     <Compile Include="Document\Document.cs" />
     <Compile Include="Document\EditAction.cs" />
     <Compile Include="Document\EditHistory.cs" />
     <Compile Include="Document\SplitArray.cs" />
-    <Compile Include="Parser.cs" />
+    <Compile Include="Highlighter\BasicHighlighter.cs" />
+    <Compile Include="Highlighter\HighlighterFactory.cs" />
+    <Compile Include="Highlighter\CppHighlighter.cs" />
+    <Compile Include="Highlighter\DummyHighlighter.cs" />
+    <Compile Include="Highlighter\IHighlighter.cs" />
     <Compile Include="Test\DocumentTest.cs" />
     <Compile Include="Test\EditHistoryTest.cs" />
     <Compile Include="Test\LineLogicTest.cs" />
@@ -67,18 +78,13 @@
     <Compile Include="View\PropWrapView.cs" />
     <Compile Include="View\SpecialChar.cs" />
     <Compile Include="View\View.cs" />
+    <Compile Include="View\View.Paint.cs" />
     <Compile Include="View\ViewType.cs" />
     <Compile Include="Windows\PlatWin.cs" />
-    <Compile Include="UserPref.cs" />
-    <Compile Include="View\View.Paint.cs" />
+    <Compile Include="Windows\WinApi.cs" />
     <Compile Include="Windows\AzukiControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DebugUtl.cs" />
-    <Compile Include="LineLogic.cs" />
-    <Compile Include="Windows\WinApi.cs" />
-    <Compile Include="Platform.cs" />
-    <Compile Include="WordLogic.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
