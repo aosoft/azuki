@@ -2,7 +2,7 @@
 // brief: Document of Azuki engine.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-20
+// update: 2008-09-11
 //=========================================================
 using System;
 using System.Collections;
@@ -179,6 +179,26 @@ namespace Sgry.Azuki
 				throw new ArgumentOutOfRangeException( "index", "Invalid index was given (index:"+index+", this.Length:"+Length+")." );
 
 			return _Buffer[ index ];
+		}
+
+		/// <summary>
+		/// Gets a word at specified index.
+		/// </summary>
+		/// <exception cref="ArgumentOutOfRangeException">Specified index was invalid.</exception>
+		public string GetWordAt( int index )
+		{
+			if( index < 0 || _Buffer.Count < index )
+				throw new ArgumentOutOfRangeException( "index", "Invalid index was given (index:"+index+", this.Length:"+Length+")." );
+
+			int begin, end;
+
+			WordLogic.GetWordAt( _Buffer, index, out begin, out end );
+			if( begin < 0 || end < 0 || end <= begin )
+			{
+				return String.Empty;
+			}
+
+			return GetTextInRange( begin, end );
 		}
 
 		/// <summary>
