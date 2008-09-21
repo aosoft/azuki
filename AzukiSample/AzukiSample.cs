@@ -1,4 +1,4 @@
-// 2008-09-09
+// 2008-09-19
 using System;
 using System.Drawing;
 using System.IO;
@@ -254,10 +254,10 @@ main( int argc, char* argv[] )
 
 			// setup keybinds for debug
 			azuki.SetKeyBind( Keys.F12,
-				delegate( IUserInterface ui ){ ui.ShowLineNumber = !ui.ShowLineNumber; }
+				delegate( IUserInterface ui ){ ui.ShowsLineNumber = !ui.ShowsLineNumber; }
 			);
 			azuki.SetKeyBind( Keys.H | Keys.Control,
-				delegate( IUserInterface ui ){ ui.ShowHScrollBar = !ui.ShowHScrollBar; }
+				delegate( IUserInterface ui ){ ui.ShowsHScrollBar = !ui.ShowsHScrollBar; }
 			);
 			azuki.SetKeyBind( Keys.R | Keys.Control,
 				delegate( IUserInterface ui ){ ui.Invalidate(); }
@@ -325,7 +325,7 @@ main( int argc, char* argv[] )
 			miLN.Text = "Show line &number";
 			miLN.Click += delegate {
 				miLN.Checked = !miLN.Checked;
-				azuki.ShowLineNumber = miLN.Checked;
+				azuki.ShowsLineNumber = miLN.Checked;
 			};
 			miLN.Checked = true;
 			miView.MenuItems.Add( miLN );

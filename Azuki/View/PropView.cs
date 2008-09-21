@@ -195,7 +195,7 @@ namespace Sgry.Azuki
 			if( e.OldAnchor == e.OldCaret
 				&& anchor == caret )
 			{
-				if( HighlightCurrentLine
+				if( HighlightsCurrentLine
 					&& _PrevCaretLine != caretLine )
 				{
 					Doc_SelectionChanged_UpdateCaretHighlight( _PrevCaretLine, caretLine );
@@ -211,7 +211,7 @@ namespace Sgry.Azuki
 			else
 			{
 				// if this is the beginning of selection, remove current line heighlight (underline)
-				if( HighlightCurrentLine && e.OldCaret == e.OldAnchor )
+				if( HighlightsCurrentLine && e.OldCaret == e.OldAnchor )
 				{
 					int y = GetVirPosFromIndex( e.OldCaret ).Y - (FirstVisibleLine * LineSpacing);
 					Invalidate(
@@ -499,7 +499,7 @@ namespace Sgry.Azuki
 
 			// draw underline to highlight current line if there is no selection
 			Document.GetSelection( out selBegin, out selEnd );
-			if( HighlightCurrentLine && selBegin == selEnd )
+			if( HighlightsCurrentLine && selBegin == selEnd )
 			{
 				int caretLine, caretPosY;
 

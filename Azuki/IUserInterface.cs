@@ -2,7 +2,7 @@
 // brief: interface of user interface module (platform dependent)
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-09-10
+// update: 2008-09-19
 //=========================================================
 using System;
 using System.Drawing;
@@ -93,7 +93,7 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Whether to show line number or not.
 		/// </summary>
-		bool ShowLineNumber
+		bool ShowsLineNumber
 		{
 			get; set;
 		}
@@ -101,7 +101,7 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Whether to show horizontal scroll bar or not.
 		/// </summary>
-		bool ShowHScrollBar
+		bool ShowsHScrollBar
 		{
 			get; set;
 		}
@@ -109,7 +109,7 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Whether the current line would be drawn with underline or not.
 		/// </summary>
-		bool HighlightCurrentLine
+		bool HighlightsCurrentLine
 		{
 			get; set;
 		}

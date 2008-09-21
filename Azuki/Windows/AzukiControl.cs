@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-09-10
+// update: 2008-09-19
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace Sgry.Azuki.Windows
 		Size _CaretSize = new Size( DefaultCaretWidth, 10 );
 		bool _AcceptsReturn = true;
 		bool _AcceptsTab = true;
-		bool _ShowHScrollBar = true;
+		bool _ShowsHScrollBar = true;
 #		if !PocketPC
 		bool _UseCtrlTabToMoveFocus = true;
 #		endif
@@ -327,7 +327,7 @@ namespace Sgry.Azuki.Windows
 		[Category("Drawing")]
 		[DefaultValue(true)]
 #		endif
-		public bool ShowLineNumber
+		public bool ShowsLineNumber
 		{
 			get{ return View.ShowLineNumber; }
 			set
@@ -348,18 +348,18 @@ namespace Sgry.Azuki.Windows
 		[DefaultValue(true)]
 		[Description("If true, horizontal scrollbar will appear.")]
 #		endif
-		public bool ShowHScrollBar
+		public bool ShowsHScrollBar
 		{
-			get{ return _ShowHScrollBar; }
+			get{ return _ShowsHScrollBar; }
 			set
 			{
 				const int SWP_FRAMECHANGED = 0x0020;
 
-				_ShowHScrollBar = value;
+				_ShowsHScrollBar = value;
 
 				// make new style bits
 				long style = WinApi.GetWindowLong( Handle, WinApi.GWL_STYLE ).ToInt64();
-				if( _ShowHScrollBar )
+				if( _ShowsHScrollBar )
 					style |= WinApi.WS_HSCROLL;
 				else
 					style &= ~(WinApi.WS_HSCROLL);
@@ -378,10 +378,10 @@ namespace Sgry.Azuki.Windows
 		[Category("Drawing")]
 		[DefaultValue(true)]
 #		endif
-		public bool HighlightCurrentLine
+		public bool HighlightsCurrentLine
 		{
-			get{ return View.HighlightCurrentLine; }
-			set{ View.HighlightCurrentLine = value; }
+			get{ return View.HighlightsCurrentLine; }
+			set{ View.HighlightsCurrentLine = value; }
 		}
 
 		/// <summary>
@@ -923,7 +923,7 @@ namespace Sgry.Azuki.Windows
 			WinApi.SetScrollRange( Handle, false, 0, vRange );
 			
 			// update the range of horizontal scrollbar
-			if( ShowHScrollBar == false )
+			if( ShowsHScrollBar == false )
 				WinApi.SetScrollRange( Handle, true, 0, 0 ); // bar will be hidden
 			else
 				WinApi.SetScrollRange( Handle, true, 0, hRange );

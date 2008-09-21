@@ -188,7 +188,14 @@ namespace Sgry.Azuki
 		#region Key Handling
 		public ActionProc GetKeyBind( int keyCode )
 		{
-			return _KeyMap[ keyCode ];
+			try
+			{
+				return _KeyMap[ keyCode ];
+			}
+			catch( KeyNotFoundException )
+			{
+				return null;
+			}
 		}
 
 		public void SetKeyBind( int keyCode, ActionProc action )

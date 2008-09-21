@@ -600,7 +600,7 @@ namespace Sgry.Azuki
 
 			// draw underline to highlight current line if there is no selection
 			Document.GetSelection( out selBegin, out selEnd );
-			if( HighlightCurrentLine && selBegin == selEnd )
+			if( HighlightsCurrentLine && selBegin == selEnd )
 			{
 				int caretLine, caretPosY;
 

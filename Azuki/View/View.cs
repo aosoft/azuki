@@ -225,7 +225,7 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Gets or sets whether the current line would be drawn with underline or not.
 		/// </summary>
-		public bool HighlightCurrentLine
+		public bool HighlightsCurrentLine
 		{
 			get{ return _HighlightCurrentLine; }
 			set
