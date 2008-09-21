@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-09-19
+// update: 2008-09-21
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -612,7 +612,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 		public void Undo()
 		{
-			View.Document.Undo();
+			Actions.Undo( this );
 		}
 
 		/// <summary>
@@ -651,7 +651,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 		public void Redo()
 		{
-			View.Document.Redo();
+			Actions.Redo( this );
 		}
 
 		/// <summary>
