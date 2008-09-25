@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-09-21
+// update: 2008-09-25
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -210,7 +210,7 @@ namespace Sgry.Azuki.Windows
 		/// If no action was associate with given key, returns null.
 		/// </summary>
 		/// <param name="keyCode">key code</param>
-		public ActionProc GetKeyBind( int keyCode )
+		public ActionProc GetKeyBind( uint keyCode )
 		{
 			return _Impl.GetKeyBind( keyCode );
 		}
@@ -222,7 +222,7 @@ namespace Sgry.Azuki.Windows
 		/// <param name="keyCode">key code</param>
 		public ActionProc GetKeyBind( Keys keyCode )
 		{
-			return _Impl.GetKeyBind( (int)keyCode );
+			return _Impl.GetKeyBind( (uint)keyCode );
 		}
 
 		/// <summary>
@@ -231,7 +231,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 		/// <param name="keyCode">key code to set/remove new action</param>
 		/// <param name="action">action to be associated or null in case of removing key-bind.</param>
-		public void SetKeyBind( int keyCode, ActionProc action )
+		public void SetKeyBind( uint keyCode, ActionProc action )
 		{
 			_Impl.SetKeyBind( keyCode, action );
 		}
@@ -244,7 +244,7 @@ namespace Sgry.Azuki.Windows
 		/// <param name="action">action to be associated or null in case of removing key-bind.</param>
 		public void SetKeyBind( Keys keyCode, ActionProc action )
 		{
-			SetKeyBind( (int)keyCode, action );
+			SetKeyBind( (uint)keyCode, action );
 		}
 		#endregion
 
@@ -1022,7 +1022,7 @@ namespace Sgry.Azuki.Windows
 
 		void Control_KeyDown( object sender, KeyEventArgs e )
 		{
-			_Impl.HandleKeyDown( (int)e.KeyData );
+			_Impl.HandleKeyDown( (uint)e.KeyData );
 		}
 
 		void Control_KeyPress( object sender, KeyPressEventArgs e )
@@ -1137,7 +1137,7 @@ namespace Sgry.Azuki.Windows
 		protected override bool IsInputKey( Keys keyData )
 		{
 			// is there an action associted with that key?
-			if( _Impl.IsKeyBindDefined((int)keyData) )
+			if( _Impl.IsKeyBindDefined((uint)keyData) )
 			{
 				return true;
 			}

@@ -1,7 +1,7 @@
 ﻿// file: UiImpl.cs
 // brief: Implementation of user interface logic
 // author: YAMAMOTO Suguru
-// update: 2008-09-10
+// update: 2008-09-25
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace Sgry.Azuki
 		View _View = null;
 		ViewType _ViewType = ViewType.Propotional;
 
-		IDictionary< int, ActionProc > _KeyMap = new Dictionary< int, ActionProc >( 32 );
+		IDictionary< uint, ActionProc > _KeyMap = new Dictionary< uint, ActionProc >( 32 );
 		AutoIndentHook _AutoIndentHook = null;
 		bool _IsOverwriteMode = false;
 		bool _ConvertsTabToSpaces = false;
@@ -186,7 +186,7 @@ namespace Sgry.Azuki
 		#endregion
 
 		#region Key Handling
-		public ActionProc GetKeyBind( int keyCode )
+		public ActionProc GetKeyBind( uint keyCode )
 		{
 			try
 			{
@@ -198,7 +198,7 @@ namespace Sgry.Azuki
 			}
 		}
 
-		public void SetKeyBind( int keyCode, ActionProc action )
+		public void SetKeyBind( uint keyCode, ActionProc action )
 		{
 			// remove specified key code from dictionary anyway
 			_KeyMap.Remove( keyCode );
@@ -210,7 +210,7 @@ namespace Sgry.Azuki
 			}
 		}
 
-		internal bool IsKeyBindDefined( int keyCode )
+		internal bool IsKeyBindDefined( uint keyCode )
 		{
 			return _KeyMap.ContainsKey( keyCode );
 		}
@@ -332,15 +332,13 @@ namespace Sgry.Azuki
 		#endregion
 
 		#region UI Event
-		public void HandleKeyDown( int keyData )
+		public void HandleKeyDown( uint keyData )
 		{
-			try
+			ActionProc action = GetKeyBind( keyData );
+			if( action != null )
 			{
-				ActionProc action = _KeyMap[ keyData ];
 				action( _UI );
 			}
-			catch( KeyNotFoundException )
-			{}
 		}
 
 		public void HandlePaint( Rectangle clipRect )

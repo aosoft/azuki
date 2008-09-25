@@ -2,7 +2,7 @@
 // brief: interface of user interface module (platform dependent)
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-09-19
+// update: 2008-09-25
 //=========================================================
 using System;
 using System.Drawing;
@@ -57,7 +57,7 @@ namespace Sgry.Azuki
 		/// If no action was associate with given key, returns null.
 		/// </summary>
 		/// <param name="keyCode">key code</param>
-		ActionProc GetKeyBind( int keyCode );
+		ActionProc GetKeyBind( uint keyCode );
 
 		/// <summary>
 		/// Sets or removes key-bind entry.
@@ -65,7 +65,7 @@ namespace Sgry.Azuki
 		/// </summary>
 		/// <param name="keyCode">key code to set/remove new action</param>
 		/// <param name="action">action to be associated or null in case of removing key-bind.</param>
-		void SetKeyBind( int keyCode, ActionProc action );
+		void SetKeyBind( uint keyCode, ActionProc action );
 		#endregion
 
 		#region Appearance

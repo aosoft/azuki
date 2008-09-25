@@ -5,7 +5,7 @@
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2A084F07-8BE9-4175-833F-25D1347755E2}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
     <RootNamespace>Sgry.Azuki</RootNamespace>
