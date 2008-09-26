@@ -2,7 +2,7 @@
 // brief: Logics to manipulate line/column in a string.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-06-10
+// update: 2008-09-26
 //=========================================================
 using System;
 using System.Collections;
@@ -37,7 +37,7 @@ namespace Sgry.Azuki
 				}
 				else
 				{
-					throw new ArgumentException( String.Format("specified column index was too large (given:{0} actual line length:{1})", columnIndex, lineLength) );
+					throw new ArgumentOutOfRangeException( String.Format("specified column index was too large (given:{0} actual line length:{1})", columnIndex, lineLength) );
 				}
 			}
 #			endif

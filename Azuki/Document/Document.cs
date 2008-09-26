@@ -2,7 +2,7 @@
 // brief: Document of Azuki engine.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-09-11
+// update: 2008-09-26
 //=========================================================
 using System;
 using System.Collections;
@@ -599,7 +599,6 @@ namespace Sgry.Azuki
 			if( charIndex < 0 || _Buffer.Count < charIndex )
 				throw new ArgumentOutOfRangeException( "charIndex", "Invalid index was given (charIndex:"+charIndex+", this.Length:"+Length+")." );
 
-			//return LineLogic.GetLineHeadIndexFromCharIndex( _Buffer, _LHI, charIndex );
 			return LineLogic.GetLineHeadIndexFromCharIndex( _Buffer, _LHI, charIndex );
 		}
 
@@ -624,7 +623,6 @@ namespace Sgry.Azuki
 			if( charIndex < 0 || _Buffer.Count < charIndex )
 				throw new ArgumentOutOfRangeException( "charIndex", "Invalid index was given (charIndex:"+charIndex+", this.Length:"+Length+")." );
 
-			//LineLogic.GetLineColumnIndexFromCharIndex( _Buffer, _LHI, charIndex, out lineIndex, out columnIndex );
 			LineLogic.GetLineColumnIndexFromCharIndex( _Buffer, _LHI, charIndex, out lineIndex, out columnIndex );
 		}
 
@@ -639,7 +637,6 @@ namespace Sgry.Azuki
 			if( columnIndex < 0 )
 				throw new ArgumentOutOfRangeException( "columnIndex", "Invalid index was given (columnIndex:"+columnIndex+")." );
 
-			//return LineLogic.GetCharIndexFromLineColumnIndex( _Buffer, _LHI, lineIndex, columnIndex );
 			return LineLogic.GetCharIndexFromLineColumnIndex( _Buffer, _LHI, lineIndex, columnIndex );
 		}
 		#endregion
