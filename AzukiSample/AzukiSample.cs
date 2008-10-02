@@ -263,7 +263,9 @@ main( int argc, char* argv[] )
 				delegate( IUserInterface ui ){ ui.Invalidate(); }
 			);
 			azuki.SetKeyBind( Keys.Scroll,
-				delegate( IUserInterface ui ){ System.GC.Collect(); Plat.Inst.MessageBeep(); }
+				delegate( IUserInterface ui ){
+					System.GC.Collect(); Plat.Inst.MessageBeep();
+				}
 			);
 
 			// run test application

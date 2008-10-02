@@ -2,7 +2,7 @@
 // brief: Word detection logic for well Japanese handling
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-06-15
+// update: 2008-10-02
 //=========================================================
 using System;
 using System.Text;
@@ -280,7 +280,7 @@ namespace Sgry.Azuki
 			index = startIndex;
 			if( text.Count <= index )
 			{
-				return text.Count - 1;
+				return text.Count;
 			}
 			else if( index < 0 )
 			{
