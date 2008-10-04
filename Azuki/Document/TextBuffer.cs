@@ -2,7 +2,7 @@
 // brief: Specialized SplitArray for char with text search feature without copying content.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-20
+// update: 2008-10-04
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -38,6 +38,17 @@ namespace Sgry.Azuki
 			_Classes = new SplitArray<CharClass>( initGapSize, growSize );
 		}
 		#endregion
+
+		/// <summary>
+		/// Clears class information from all characters.
+		/// </summary>
+		public void ClearCharClasses()
+		{
+			for( int i=0; i<_Classes.Count; i++ )
+			{
+				_Classes[i] = CharClass.Normal;
+			}
+		}
 
 		/// <summary>
 		/// Gets class of the character at specified index.

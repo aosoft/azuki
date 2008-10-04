@@ -2,7 +2,7 @@
 // brief: Document of Azuki engine.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-09-26
+// update: 2008-10-04
 //=========================================================
 using System;
 using System.Collections;
@@ -644,8 +644,11 @@ namespace Sgry.Azuki
 		#region Highlighter and Character classes
 		/// <summary>
 		/// Gets or sets highlighter for this document.
-		/// Note that setting null will disable highlighting.
+		/// Setting null to thie property will disable highlighting.
+		/// Note that setting new value to this property will not invalidate graphics.
+		/// To update graphic, set value via IUserInterface.Highlighter.
 		/// </summary>
+		/// <seealso cref="IUserInterface.Highlighter"/>
 		public IHighlighter Highlighter
 		{
 			get{ return _Highlighter; }
@@ -653,6 +656,9 @@ namespace Sgry.Azuki
 			{
 				if( value == null )
 					value = new DummyHighlighter();
+
+				// clear all highlight information
+				_Buffer.ClearCharClasses();
 
 				// associate with new highlighter object and highlight whole content
 				_Highlighter = value;

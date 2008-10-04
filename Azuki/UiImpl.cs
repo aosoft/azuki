@@ -1,7 +1,7 @@
 ﻿// file: UiImpl.cs
-// brief: Implementation of user interface logic
+// brief: User interface logic that independent from platform.
 // author: YAMAMOTO Suguru
-// update: 2008-09-25
+// update: 2008-10-04
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,9 @@ using System.Threading;
 
 namespace Sgry.Azuki
 {
+	/// <summary>
+	/// User inteface logic that independent from platform.
+	/// </summary>
 	class UiImpl : IDisposable
 	{
 		#region Fields
@@ -291,7 +294,33 @@ namespace Sgry.Azuki
 		}
 		#endregion
 
-		#region Highlight Thread
+		#region Highlighter
+		/// <summary>
+		/// Gets or sets highlighter for currently active document.
+		/// Setting null to this property will disable highlighting.
+		/// </summary>
+		public IHighlighter Highlighter
+		{
+			get
+			{
+				if( Document == null )
+					return null;
+				else
+					return Document.Highlighter;
+			}
+			set
+			{
+				if( Document == null )
+					return;
+				
+				// switch document's highlighter
+				Document.Highlighter = value;
+
+				// then, invalidate view's whole area
+				_View.Invalidate();
+			}
+		}
+
 		void HighlighterThreadProc()
 		{
 			int invalidBegin, invalidEnd;
@@ -309,7 +338,7 @@ namespace Sgry.Azuki
 
 				// wait a moment and begin highlight
 				Thread.Sleep( 500 );
-				if( _ShouldBeHighlighted != false || _UI.Document == null )
+				if( _ShouldBeHighlighted != false || Document == null )
 				{
 					continue; // flag was set up while this thread are sleeping... skip this time.
 				}
@@ -469,9 +498,11 @@ namespace Sgry.Azuki
 		}
 		#endregion
 
+		#region Utilitites
 		int NextTabStop( int index )
 		{
 			return ((index / _View.TabWidth) + 1) * _View.TabWidth;
 		}
+		#endregion
 	}
 }

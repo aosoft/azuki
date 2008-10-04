@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-09-25
+// update: 2008-10-04
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -101,14 +101,6 @@ namespace Sgry.Azuki.Windows
 			WinApi.DestroyCaret();
 		}
 		#endregion
-
-		/// <summary>
-		/// Gets a graphic interface.
-		/// </summary>
-		public IGraphics GetIGraphics()
-		{
-			return Plat.Inst.GetGraphics( Handle );
-		}
 
 		#region IUserInterface - Associated View and Document
 		/// <summary>
@@ -927,6 +919,26 @@ namespace Sgry.Azuki.Windows
 				WinApi.SetScrollRange( Handle, true, 0, 0 ); // bar will be hidden
 			else
 				WinApi.SetScrollRange( Handle, true, 0, hRange );
+		}
+		#endregion
+
+		#region IUserInterface - Others
+		/// <summary>
+		/// Gets a graphic interface.
+		/// </summary>
+		public IGraphics GetIGraphics()
+		{
+			return Plat.Inst.GetGraphics( Handle );
+		}
+
+		/// <summary>
+		/// Gets or sets highlighter for currently active document.
+		/// Setting null to this property will disable highlighting.
+		/// </summary>
+		public IHighlighter Highlighter
+		{
+			get{ return _Impl.Highlighter; }
+			set{ _Impl.Highlighter = value; }
 		}
 		#endregion
 

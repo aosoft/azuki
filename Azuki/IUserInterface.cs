@@ -2,7 +2,7 @@
 // brief: interface of user interface module (platform dependent)
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-09-25
+// update: 2008-10-04
 //=========================================================
 using System;
 using System.Drawing;
@@ -14,11 +14,6 @@ namespace Sgry.Azuki
 	/// </summary>
 	public interface IUserInterface
 	{
-		/// <summary>
-		/// Gets a graphic interface.
-		/// </summary>
-		IGraphics GetIGraphics();
-
 		#region Associated View and Document
 		/// <summary>
 		/// Gets or sets the document which is the current editing target.
@@ -334,6 +329,22 @@ namespace Sgry.Azuki
 		int LineCount
 		{
 			get;
+		}
+		#endregion
+
+		#region Others
+		/// <summary>
+		/// Gets a graphic interface.
+		/// </summary>
+		IGraphics GetIGraphics();
+
+		/// <summary>
+		/// Gets or sets highlighter for currently active document.
+		/// Setting null to this property will disable highlighting.
+		/// </summary>
+		IHighlighter Highlighter
+		{
+			get; set;
 		}
 		#endregion
 
