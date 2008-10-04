@@ -28,6 +28,7 @@ namespace Sgry.Azuki
 		bool _IsRecordingHistory = true;
 		string _EolCode = "\r\n";
 		bool _IsReadOnly = false;
+		bool _IsDirty = false;
 		IHighlighter _Highlighter;
 		#endregion
 
@@ -42,6 +43,63 @@ namespace Sgry.Azuki
 			_LHI.Add( 0 );
 			
 			_Highlighter = new DummyHighlighter();
+		}
+		#endregion
+
+		#region States
+		/// <summary>
+		/// Gets whether modifications for this document which is not saved yet exists or not.
+		/// Note that although any changes sets this flag true automatically,
+		/// setting this flag false never be done because Document has no 'save' feature.
+		/// Thus the application is responsible to setting this flag back to false after saving content.
+		/// </summary>
+		public bool IsDirty
+		{
+			get{ return _IsDirty; }
+			set
+			{
+				bool valueChanged = (_IsDirty != value);
+				
+				_IsDirty = value;
+				if( valueChanged )
+				{
+					InvokeDirtyStateChanged();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets whether this document is recording edit actions or not.
+		/// </summary>
+		public bool IsRecordingHistory
+		{
+			get{ return _IsRecordingHistory; }
+			set{ _IsRecordingHistory = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets whether this document is read-only or not.
+		/// </summary>
+		public bool IsReadOnly
+		{
+			get{ return _IsReadOnly; }
+			set{ _IsReadOnly = value; }
+		}
+
+		/// <summary>
+		/// Gets whether an available undo action exists or not.
+		/// </summary>
+		public bool CanUndo
+		{
+			get{ return _History.CanUndo; }
+		}
+
+		/// <summary>
+		/// Gets whether an available REDO action exists or not.
+		/// </summary>
+		public bool CanRedo
+		{
+			get{ return _History.CanRedo; }
 		}
 		#endregion
 
@@ -378,9 +436,7 @@ namespace Sgry.Azuki
 
 			_Buffer.SetCharClassAt( index, klass );
 		}
-		#endregion
 
-		#region Content Modification
 		/// <summary>
 		/// Replaces current selection.
 		/// </summary>
@@ -485,12 +541,17 @@ namespace Sgry.Azuki
 			Debug.Assert( begin <= Length );
 
 			// cast event
+			if( _IsDirty == false )
+			{
+				_IsDirty = true;
+				InvokeDirtyStateChanged();
+			}
 			InvokeContentChanged( begin, oldText, text );
 			InvokeSelectionChanged( oldAnchor, oldCaret );
 		}
 		#endregion
 
-		#region Edit Actions and Modes
+		#region Editing Behavior
 		/// <summary>
 		/// Executes UNDO.
 		/// </summary>
@@ -501,14 +562,6 @@ namespace Sgry.Azuki
 				EditAction action = _History.GetUndoAction();
 				action.Undo();
 			}
-		}
-
-		/// <summary>
-		/// Gets whether an available undo action exists or not.
-		/// </summary>
-		public bool CanUndo
-		{
-			get{ return _History.CanUndo; }
 		}
 
 		/// <summary>
@@ -532,16 +585,8 @@ namespace Sgry.Azuki
 		}
 
 		/// <summary>
-		/// Gets whether an available REDO action exists or not.
-		/// </summary>
-		public bool CanRedo
-		{
-			get{ return _History.CanRedo; }
-		}
-
-		/// <summary>
 		/// Gets or sets EOL Code used in this document.
-		/// Note that setting this property do nothing to the content.
+		/// Note that setting this property does nothing to the content.
 		/// This is provided for other classes to determine EOL code to be used;
 		/// for example, choosing EOL code to be input with Enter key,
 		/// setting/getting by engine's client for any usage.
@@ -555,24 +600,6 @@ namespace Sgry.Azuki
 					throw new InvalidOperationException( "invalid EOL code was set." );
 				_EolCode = value;
 			}
-		}
-
-		/// <summary>
-		/// Gets or sets whether this document is recording edit actions or not.
-		/// </summary>
-		public bool IsRecordingHistory
-		{
-			get{ return _IsRecordingHistory; }
-			set{ _IsRecordingHistory = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets whether this document is read-only or not.
-		/// </summary>
-		public bool IsReadOnly
-		{
-			get{ return _IsReadOnly; }
-			set{ _IsReadOnly = value; }
 		}
 		#endregion
 
@@ -641,7 +668,7 @@ namespace Sgry.Azuki
 		}
 		#endregion
 
-		#region Highlighter and Character classes
+		#region Highlighter
 		/// <summary>
 		/// Gets or sets highlighter for this document.
 		/// Setting null to thie property will disable highlighting.
@@ -733,6 +760,16 @@ namespace Sgry.Azuki
 			if( ContentChanged != null )
 				ContentChanged( this, new ContentChangedEventArgs(index, oldText, newText) );
 		}
+
+		/// <summary>
+		/// Occurs when IsDirty property has changed.
+		/// </summary>
+		public event EventHandler DirtyStateChanged;
+		void InvokeDirtyStateChanged()
+		{
+			if( DirtyStateChanged != null )
+				DirtyStateChanged( this, EventArgs.Empty );
+		}
 		#endregion
 
 		#region Utilities
@@ -811,12 +848,11 @@ namespace Sgry.Azuki
 					}
 				}
 			}
-
 		}
 		#endregion
 	}
 
-	#region Events for Documents
+	#region Types for Events
 	/// <summary>
 	/// Event handler for SelectionChanged event.
 	/// </summary>
