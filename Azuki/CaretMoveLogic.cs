@@ -1,8 +1,7 @@
 // file: CaretMoveLogic.cs
 // brief: Implementation of caret movement.
 // author: YAMAMOTO Suguru
-// encoding: UTF-8
-// update: 2008-09-09
+// update: 2008-10-11
 //=========================================================
 using System;
 using System.Drawing;
@@ -220,7 +219,7 @@ namespace Sgry.Azuki
 
 			firstNonSpaceIndex = lineHeadIndex;
 			while( firstNonSpaceIndex < doc.Length
-				&& Char.IsWhiteSpace(doc[firstNonSpaceIndex]) )
+				&& Utl.IsWhiteSpace(doc[firstNonSpaceIndex]) )
 			{
 				firstNonSpaceIndex++;
 			}
@@ -271,6 +270,21 @@ namespace Sgry.Azuki
 		{
 			return view.Document.Length;
 		};
+		#endregion
+
+		#region Utilities
+		static class Utl
+		{
+			public static bool IsWhiteSpace( char ch )
+			{
+				if( ch == ' '
+					|| ch == '\t'
+					|| ch == '\x3000' )
+					return true;
+
+				return false;
+			}
+		}
 		#endregion
 	}
 }
