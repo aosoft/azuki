@@ -2,7 +2,7 @@
 // brief: Actions for Azuki engine.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-07-26
+// update: 2008-10-11
 //=========================================================
 using System;
 
@@ -346,6 +346,7 @@ namespace Sgry.Azuki
 
 			// undo
 			view.Document.Undo();
+			view.SetDesiredColumn();
 			view.ScrollToCaret();
 		}
 
@@ -363,6 +364,7 @@ namespace Sgry.Azuki
 
 			// redo
 			view.Document.Redo();
+			view.SetDesiredColumn();
 			view.ScrollToCaret();
 		}
 

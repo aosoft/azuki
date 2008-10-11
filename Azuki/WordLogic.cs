@@ -2,7 +2,7 @@
 // brief: Word detection logic for well Japanese handling
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-10-02
+// update: 2008-10-11
 //=========================================================
 using System;
 using System.Text;
@@ -381,8 +381,8 @@ namespace Sgry.Azuki
 		/// </summary>
 		static ClassifyCharProc ClassifyChar( TextBuffer text, int index )
 		{
-			if( IsAlphabet(text, index) )	return IsAlphabet;
 			if( IsDigit(text, index) )		return IsDigit;
+			if( IsAlphabet(text, index) )	return IsAlphabet;
 			if( IsWhiteSpace(text, index) )	return IsWhiteSpace;
 			if( IsPunct(text, index) )		return IsPunct;
 			if( IsEolCode(text, index) )	return IsEolCode;
@@ -414,16 +414,51 @@ namespace Sgry.Azuki
 		static ClassifyCharProc IsDigit = delegate( TextBuffer text, int index )
 		{
 			char ch = text[index];
-
+			
 			// is digit?
-			if( ch == 0x66 || ch == 0x69 || ch == 0x6a || ch == 0x6c || ch == 0x78 )
-				return true; // include some pre/postfixes: f, i, j, l, x
 			if( 0x30 <= ch && ch <= 0x39 ) // half-width digits
 				return true;
 			if( 0xff10 <= ch && ch <= 0xff19 ) // full-width digits
 				return true;
 			if( ch == 0x2e ) // '.' for float literal
 				return true;
+			
+			// include some postfixe alphabets
+			// (i, j is for complex numbers in Python)
+			if( (ch == 'f' || ch == 'l' || ch == 'i' || ch == 'j')
+				&& 1 <= index )
+			{
+				char ch2 = text[ index-1 ];
+				if( '0' <= ch && ch <= '9' )
+					return true;
+			}
+
+			// include 'x' of '0x'
+			if( ch == 'x'
+				&& 1 <= index && text[index-1] == '0' )
+			{
+				return true;
+			}
+
+			// include hexadecimal literals
+			if( ('a' <= ch && ch <= 'f' || 'A' <= ch && ch <= 'F')
+				&& 1 <= index )
+			{
+				// find 'x' backward for 16 characters at worst. return true if found.
+				int backCount = 1;
+				while( 0 <= index - backCount
+					&& backCount < 16
+					&& 'a' <= ch && ch <= 'f' || 'A' <= ch && ch <= 'F' || '0' <= ch && ch <= '9' )
+				{
+					ch = text[ index-backCount ];
+					if( ch == 'x' )
+					{
+						return true;
+					}
+
+					backCount++;
+				}
+			}
 
 			return false;
 		};
@@ -431,6 +466,9 @@ namespace Sgry.Azuki
 		static ClassifyCharProc IsPunct = delegate( TextBuffer text, int index )
 		{
 			char ch = text[index];
+			
+			if( ch == 0x5f ) // exclude '_'; is treated as an alphabet
+				return false;
 
 			if( 0x21 <= ch && ch <= 0x2f )
 				return true;
@@ -504,9 +542,9 @@ namespace Sgry.Azuki
 
 		static ClassifyCharProc IsUnknown = delegate( TextBuffer text, int index )
 		{
-			if( IsAlphabet(text, index) )
-				return false;
 			if( IsDigit(text, index) )
+				return false;
+			if( IsAlphabet(text, index) )
 				return false;
 			if( IsWhiteSpace(text, index) )
 				return false;
