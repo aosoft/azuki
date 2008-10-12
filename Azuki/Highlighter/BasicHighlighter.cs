@@ -106,9 +106,9 @@ namespace Sgry.Azuki
 		}
 
 		/// <summary>
-		/// Clears all registered line-comment entries.
+		/// Clears all registered line-highlight entries.
 		/// </summary>
-		public void ClearLineComments()
+		public void ClearLineHighlight()
 		{
 			_LineHighlights.Clear();
 		}
@@ -445,40 +445,6 @@ namespace Sgry.Azuki
 
 			nextSeekIndex = index;
 			return false;
-		}
-
-		/// <summary>
-		/// Highlight a token consisted with only digits.
-		/// </summary>
-		/// <returns>Index of next parse point if a pair was highlighted or 'begin' index</returns>
-		static int TryHighlightNumberToken( Document doc, int startIndex, int endIndex )
-		{
-			Debug.Assert( endIndex <= doc.Length );
-			int begin = startIndex;
-			int end = begin;
-
-			if( doc.Length <= end || doc[end] < '0' || '9' < doc[end] )
-				return begin;
-
-			// seek end of this number token
-			while( end < endIndex && '0' <= doc[end] && doc[end] <= '9' )
-			{
-				end++;
-			}
-
-			// ensure this token ends with NOT an alphabet
-			if( end < endIndex && Char.IsLetter(doc[end]) )
-			{
-				return begin; // not a number token
-			}
-
-			// highlight this token
-			for( int i=begin; i<end; i++ )
-			{
-				doc.SetCharClass( i, CharClass.Number );
-			}
-
-			return end;
 		}
 		#endregion
 

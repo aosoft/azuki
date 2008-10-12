@@ -75,7 +75,6 @@
     <Compile Include="AutoIndentLogic.cs" />
     <Compile Include="CaretMoveLogic.cs" />
     <Compile Include="DebugUtl.cs" />
-    <Compile Include="Highlighter\HighlighterFactory.cs" />
     <Compile Include="UiImpl.cs" />
     <Compile Include="IUserInterface.cs" />
     <Compile Include="LineLogic.cs" />
@@ -88,10 +87,12 @@
     <Compile Include="Document\EditAction.cs" />
     <Compile Include="Document\EditHistory.cs" />
     <Compile Include="Document\SplitArray.cs" />
+    <Compile Include="Highlighter\IHighlighter.cs" />
+    <Compile Include="Highlighter\HighlighterFactory.cs" />
+    <Compile Include="Highlighter\DummyHighlighter.cs" />
     <Compile Include="Highlighter\BasicHighlighter.cs" />
     <Compile Include="Highlighter\CppHighlighter.cs" />
-    <Compile Include="Highlighter\DummyHighlighter.cs" />
-    <Compile Include="Highlighter\IHighlighter.cs" />
+    <Compile Include="Highlighter\XmlHighlighter.cs" />
     <Compile Include="Test\EditHistoryTest.cs" />
     <Compile Include="Test\LineLogicTest.cs" />
     <Compile Include="Test\SplitArrayTest.cs" />

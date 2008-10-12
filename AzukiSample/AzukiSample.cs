@@ -101,11 +101,26 @@ x64 版 Windows が現れてから少しは時間が経過しているものの�
 		//     1101 1000 0101 1010 + 1101 1101 0101 0001
 		//        d    8    5    a      d    d    5    1
 		const string Text3 = "臼と似た形をした文字「\xd85a\xdd51」は、Unicode の第 2 面に位置する";
-		const string Text4 = @"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiu
+		const string Text4 = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Strict//EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"">
+<html lang=""ja"" xmlns=""http://www.w3.org/1999/xhtml"">
+<head>
+	<meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8""/>
+	<meta name=""DC.Creater"" content=""SGRY""/>
+	<meta name=""DC.Date.Created"" content=""2000-??-??""/>
+	<meta name=""DC.Date.Modified"" content=""2008-08-30""/>
+	<meta name=""home"" content=""http://sgry.jp/""/>
+	<script type=""text/javascript"" src=""styles/hekiraku.js""></script>
+	<link title=""WebSite Icon"" rel=""Shortcut Icon"" href=""favicon.ico""/>
+	<!-- This is a comment sample -->
+	<title>碧落</title>
+</head>
+<body>
 
+<h1>ほげ</h1>
 
-smod tempor incididunt ut labore
-et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+</body>
+</html>
 ";
 		const string Text5 = @"#include <stdio.h>
 
@@ -174,13 +189,14 @@ main( int argc, char* argv[] )
 //			azuki.DrawsEolCode = false;
 			azuki.Document.EolCode = "\r\n";
 			azuki.AutoIndentHook = AutoIndentLogic.CHook;
-			azuki.Document.Highlighter = HighlighterFactory.Create( "C/C++" );
+			azuki.Document.Highlighter = HighlighterFactory.CppHighlighter;
 			azuki.Resize += delegate {
 				if( WrapTextAtWindowBorder )
 				{
 					azuki.ViewWidth = azuki.ClientSize.Width;
 				}
 			};
+			azuki.ColorScheme.SetColor( CharClass.Number, new ColorPair(Color.Red, Color.White) );
 			form.Controls.Add( azuki as Control );
 
 			// setup form

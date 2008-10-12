@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
+using Debug = System.Diagnostics.Debug;
 
 namespace Sgry.Azuki
 {
@@ -45,16 +46,25 @@ namespace Sgry.Azuki
 			_HighlighterThread.Start();
 		}
 
+#		if DEBUG
+		~UiImpl()
+		{
+			Debug.Assert( _View == null, ""+GetType()+"("+GetHashCode()+") was destroyed but not disposed." );
+		}
+#		endif
+
 		public void Dispose()
 		{
 			_HighlighterThread.Abort();
+			_HighlighterThread = null;
 
 			// uninstall document event handlers
 			Document.SelectionChanged -= Doc_SelectionChanged;
 			Document.ContentChanged -= Doc_ContentChanged;
 
 			// dispose view
-			View.Dispose();
+			_View.Dispose();
+			_View = null;
 		}
 		#endregion
 
@@ -88,6 +98,9 @@ namespace Sgry.Azuki
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the associated view object.
+		/// </summary>
 		public View View
 		{
 			get{ return _View; }
@@ -347,10 +360,10 @@ namespace Sgry.Azuki
 
 				// determine where to start highlighting
 				dirtyBegin = Math.Max( 0, _DirtyRangeBegin );
-				dirtyEnd = Math.Max( doc.Length, _DirtyRangeEnd );
+				dirtyEnd = Math.Max( dirtyBegin, _DirtyRangeEnd );
 
 				// highlight and refresh view
-				doc.Highlighter.Highlight( doc, dirtyBegin, doc.Length, out invalidBegin, out invalidEnd );
+				doc.Highlighter.Highlight( doc, dirtyBegin, dirtyEnd, out invalidBegin, out invalidEnd );
 				_UI.Invalidate();
 
 				// prepare for next loop

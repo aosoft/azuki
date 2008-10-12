@@ -1,11 +1,12 @@
 ﻿// file: View.cs
 // brief: Platform independent view implementation of Azuki engine.
 // author: YAMAMOTO Suguru
-// update: 2008-08-14
+// update: 2008-10-12
 //=========================================================
 using System;
 using System.Drawing;
 using StringBuilder = System.Text.StringBuilder;
+using Debug = System.Diagnostics.Debug;
 
 namespace Sgry.Azuki
 {
@@ -95,6 +96,13 @@ namespace Sgry.Azuki
 			TextAreaWidth = other._TextAreaWidth;
 		}
 
+#		if DEBUG
+		~View()
+		{
+			Debug.Assert( _Gra == null, ""+GetType()+"("+GetHashCode()+") was destroyed but not disposed." );
+		}
+#		endif
+
 		/// <summary>
 		/// Disposes resources.
 		/// </summary>
@@ -102,6 +110,7 @@ namespace Sgry.Azuki
 		{
 			// dispose graphic resources
 			_Gra.Dispose();
+			_Gra = null;
 
 			// uninstall event handlers from document
 			if( _Document != null )
