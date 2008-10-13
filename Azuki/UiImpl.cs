@@ -367,6 +367,10 @@ namespace Sgry.Azuki
 				// determine where to start highlighting
 				dirtyBegin = Math.Max( 0, _DirtyRangeBegin );
 				dirtyEnd = Math.Max( dirtyBegin, _DirtyRangeEnd );
+				if( doc.Length < dirtyEnd )
+				{
+					dirtyEnd = doc.Length;
+				}
 
 				// highlight and refresh view
 				doc.Highlighter.Highlight( doc, ref dirtyBegin, ref dirtyEnd );

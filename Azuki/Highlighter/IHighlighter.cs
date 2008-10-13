@@ -139,7 +139,32 @@ namespace Sgry.Azuki
 		/// </summary>
 		protected static int FindNextToken( Document doc, int index )
 		{
-			return WordLogic.NextWordStartForMove( doc, index );
+			if( doc.Length <= index+1 )
+				return doc.Length;
+
+			if( Utl.IsAlnum(doc[index]) )
+			{
+				do
+				{
+					index++;
+					if( doc.Length <= index )
+						return doc.Length;
+				}
+				while( Utl.IsAlnum(doc[index]) );
+			}
+			else
+			{
+				index++;
+			}
+			
+			while( Char.IsWhiteSpace(doc[index]) )
+			{
+				index++;
+				if( doc.Length <= index )
+					return doc.Length;
+			}
+			
+			return index;
 		}
 
 		/// <summary>
@@ -278,6 +303,16 @@ namespace Sgry.Azuki
 
 		static class Utl
 		{
+			public static bool IsAlnum( char ch )
+			{
+				if( IsAlphabet(ch) )
+					return true;
+				if( '0' <= ch && ch <= '9' )
+					return true;
+
+				return false;
+			}
+
 			public static bool IsAlphabet( char ch )
 			{
 				if( 'a' <= ch && ch <= 'z' )

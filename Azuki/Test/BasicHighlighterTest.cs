@@ -240,7 +240,7 @@ ho//ge";
 		{
 			Document doc = new Document();
 			BasicHighlighter h = new BasicHighlighter();
-			int dummy1, dummy2;
+			int begin_, end_;
 			h.AddEnclosure( "/*", "*/", CharClass.Comment );
 			doc.Highlighter = h;
 			//---------------------------------------------
@@ -254,13 +254,15 @@ ho//ge";
 
 			// replace from out to in
 			{
-				int begin=4, end=12;
+				const int begin = 4;
+				const int end = 12;
 
 				// no pair
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "**XX**", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The **XX**EPI*/ method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "26 40", h._EPI.ToString() );
 
@@ -268,7 +270,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "/*XX**", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*XX**EPI*/ method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 15 26 40", h._EPI.ToString() );
 
@@ -276,7 +279,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "**XX*/", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The **XX*/EPI*/ method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "26 40", h._EPI.ToString() );
 
@@ -284,7 +288,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "/*XX*/", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*XX*/EPI*/ method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 10 26 40", h._EPI.ToString() );
 
@@ -292,20 +297,22 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "*/XX/*", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The */XX/*EPI*/ method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "8 15 26 40", h._EPI.ToString() );
 			}
 
 			// replace from in to in
 			{
-				int begin=8, end=12;
+				const int begin=8, end=12;
 
 				// no pair
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "**XX**", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*Up**XX**EPI*/ method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 19 30 44", h._EPI.ToString() );
 
@@ -313,7 +320,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "/*XX**", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*Up/*XX**EPI*/ method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 19 30 44", h._EPI.ToString() );
 
@@ -321,7 +329,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "**XX*/", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*Up**XX*/EPI*/ method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 14 30 44", h._EPI.ToString() );
 
@@ -329,7 +338,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "/*XX*/", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*Up/*XX*/EPI*/ method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 14 30 44", h._EPI.ToString() );
 
@@ -337,7 +347,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "*/XX/*", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*Up*/XX/*EPI*/ method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 10 12 19 30 44", h._EPI.ToString() );
 			}
@@ -350,7 +361,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "**XX**", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*UpdateE**XX** method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 44", h._EPI.ToString() );
 
@@ -358,7 +370,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "/*XX**", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*UpdateE/*XX** method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 44", h._EPI.ToString() );
 
@@ -366,7 +379,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "**XX*/", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*UpdateE**XX*/ method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 19 30 44", h._EPI.ToString() );
 
@@ -374,7 +388,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "/*XX*/", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*UpdateE/*XX*/ method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 19 30 44", h._EPI.ToString() );
 
@@ -382,7 +397,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "*/XX/*", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*UpdateE*/XX/* method is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 15 17 44", h._EPI.ToString() );
 			}
@@ -395,7 +411,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "**XX**", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*UpdateEPI*/ m**XX**d is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 17 30 44", h._EPI.ToString() );
 
@@ -403,7 +420,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "**XX/*", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*UpdateEPI*/ m**XX/*d is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 17 23 44", h._EPI.ToString() );
 
@@ -411,7 +429,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "**XX*/", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*UpdateEPI*/ m**XX*/d is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 17 30 44", h._EPI.ToString() );
 
@@ -419,7 +438,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "/*XX*/", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*UpdateEPI*/ m/*XX*/d is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 17 19 25 30 44", h._EPI.ToString() );
 
@@ -427,7 +447,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "*/XX/*", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The /*UpdateEPI*/ m*/XX/*d is /*currently */main target.", doc.Text );
 				TestUtl.AssertEquals( "4 17 23 44", h._EPI.ToString() );
 			}
@@ -437,7 +458,7 @@ ho//ge";
 		{
 			Document doc = new Document();
 			BasicHighlighter h = new BasicHighlighter();
-			int dummy1, dummy2;
+			int begin_, end_;
 			h.AddEnclosure( "\"", "\"", CharClass.String, '\\' );
 			doc.Highlighter = h;
 			//---------------------------------------------
@@ -457,7 +478,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "XXXX", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The XXXXEPI\" method is \"currently \"main target.", doc.Text );
 				TestUtl.AssertEquals( "11 24 34", h._EPI.ToString() );
 
@@ -465,7 +487,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "X\"XX", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The X\"XXEPI\" method is \"currently \"main target.", doc.Text );
 				TestUtl.AssertEquals( "5 12 23 35", h._EPI.ToString() );
 
@@ -473,7 +496,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "X\"X\"", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The X\"X\"EPI\" method is \"currently \"main target.", doc.Text );
 				TestUtl.AssertEquals( "5 8 11 24 34", h._EPI.ToString() );
 			}
@@ -486,7 +510,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "h/og/e", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The \"Uph/og/eEPI\" method is \"currently \"main target.", doc.Text );
 				TestUtl.AssertEquals( "4 17 28 40", h._EPI.ToString() );
 
@@ -494,7 +519,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "h\"og/e", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The \"Uph\"og/eEPI\" method is \"currently \"main target.", doc.Text );
 				TestUtl.AssertEquals( "4 9 16 29 39", h._EPI.ToString() );
 
@@ -502,7 +528,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "h\"og\"e", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The \"Uph\"og\"eEPI\" method is \"currently \"main target.", doc.Text );
 				TestUtl.AssertEquals( "4 9 11 17 28 40", h._EPI.ToString() );
 			}
@@ -515,7 +542,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "XXXX", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The \"UpdateXXXX method is \"currently \"main target.", doc.Text );
 				TestUtl.AssertEquals( "4 27 37", h._EPI.ToString() );
 
@@ -523,7 +551,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "XX\"X", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The \"UpdateXX\"X method is \"currently \"main target.", doc.Text );
 				TestUtl.AssertEquals( "4 14 26 38", h._EPI.ToString() );
 
@@ -531,7 +560,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "\"XX\"", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The \"Update\"XX\" method is \"currently \"main target.", doc.Text );
 				TestUtl.AssertEquals( "4 12 14 27 37", h._EPI.ToString() );
 			}
@@ -544,7 +574,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "h/og/e", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The \"UpdateEPI\" mh/og/ed is \"currently \"main target.", doc.Text );
 				TestUtl.AssertEquals( "4 15 28 40", h._EPI.ToString() );
 
@@ -552,7 +583,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "h\"og/e", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The \"UpdateEPI\" mh\"og/ed is \"currently \"main target.", doc.Text );
 				TestUtl.AssertEquals( "4 15 18 29 39", h._EPI.ToString() );
 
@@ -560,7 +592,8 @@ ho//ge";
 				doc.Text = initText;
 				h.Highlight( doc );
 				doc.Replace( "h\"og\"e", begin, end );
-				h.Highlight( doc, begin, doc.Length, out dummy1, out dummy2 );
+				begin_ = begin; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
 				TestUtl.AssertEquals( "The \"UpdateEPI\" mh\"og\"ed is \"currently \"main target.", doc.Text );
 				TestUtl.AssertEquals( "4 15 18 22 28 40", h._EPI.ToString() );
 			}
@@ -590,7 +623,7 @@ ho//ge";
 		{
 			Document doc = new Document();
 			BasicHighlighter h = new BasicHighlighter();
-			int dummy1, dummy2;
+			int begin_, end_;
 			h.AddEnclosure( "\"", "\"", CharClass.String );
 			h.AddEnclosure( "/*", "*/", CharClass.Comment );
 			h.SetKeywords( new string[]{
@@ -599,22 +632,23 @@ ho//ge";
 			doc.Highlighter = h;
 			//---------------------------------------------
 
-			int i;
 			{
-				doc.Text = "printf(\"%s\n\", name);";
+				doc.Text = @"printf(""%s\n"", name);"; // printf("%s\n", name);
 				h.Highlight( doc );
-				for( i=0; i<7; i++ )
-					TestUtl.AssertEquals( CharClass.Normal, doc.GetCharClass(i) );
-				for( ; i<12; i++ )
-					TestUtl.AssertEquals( CharClass.String, doc.GetCharClass(i) );
-				for( ; i<20; i++ )
-					TestUtl.AssertEquals( CharClass.Normal, doc.GetCharClass(i) );
-				doc.Replace( "Z", 7, 8 );
-				h.Highlight( doc, 7, doc.Length, out dummy1, out dummy2 );
-				for( i=0; i<11; i++ )
-					TestUtl.AssertEquals( CharClass.Normal, doc.GetCharClass(i) );
-				for( ; i<20; i++ )
-					TestUtl.AssertEquals( CharClass.String, doc.GetCharClass(i) );
+				TestUtl.AssertEquals( CharClass.Normal, doc.GetCharClass(0) );
+				TestUtl.AssertEquals( CharClass.Normal, doc.GetCharClass(6) );
+				TestUtl.AssertEquals( CharClass.String, doc.GetCharClass(7) );
+				TestUtl.AssertEquals( CharClass.String, doc.GetCharClass(12) );
+				TestUtl.AssertEquals( CharClass.Normal, doc.GetCharClass(13) );
+				TestUtl.AssertEquals( CharClass.Normal, doc.GetCharClass(20) );
+
+				doc.Replace( "Z", 7, 8 ); // printf(Z%s\n", name);
+				begin_ = 7; end_ = doc.Length;
+				h.Highlight( doc, ref begin_, ref end_ );
+				TestUtl.AssertEquals( CharClass.Normal, doc.GetCharClass(0) );
+				TestUtl.AssertEquals( CharClass.Normal, doc.GetCharClass(11) );
+				TestUtl.AssertEquals( CharClass.String, doc.GetCharClass(12) );
+				TestUtl.AssertEquals( CharClass.String, doc.GetCharClass(20) );
 			}
 		}
 	}
