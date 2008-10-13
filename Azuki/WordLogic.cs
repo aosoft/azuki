@@ -1,8 +1,7 @@
 ﻿// file: WordLogic.cs
 // brief: Word detection logic for well Japanese handling
 // author: YAMAMOTO Suguru
-// encoding: UTF-8
-// update: 2008-10-11
+// update: 2008-10-13
 //=========================================================
 using System;
 using System.Text;
@@ -10,9 +9,9 @@ using System.Text;
 namespace Sgry.Azuki
 {
 	/// <summary>
-	/// Custom word detection logic for Azuki
+	/// Custom word detection logic for Azuki.
 	/// </summary>
-	class WordLogic
+	public class WordLogic
 	{
 		delegate bool ClassifyCharProc( TextBuffer text, int index );
 
@@ -20,14 +19,14 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Finds a word at specified index.
 		/// </summary>
-		public static void GetWordAt( TextBuffer text, int index, out int wordBegin, out int wordEnd )
+		public static void GetWordAt( Document doc, int index, out int wordBegin, out int wordEnd )
 		{
 			int ps, pe, ns, ne;
 
-			ps = PrevWordStart( text, index );
-			pe = PrevWordEnd( text, index );
-			ns = NextWordStartForMove( text, index );
-			ne = NextWordEnd( text, index );
+			ps = PrevWordStart( doc, index );
+			pe = PrevWordEnd( doc, index );
+			ns = NextWordStartForMove( doc, index );
+			ne = NextWordEnd( doc, index );
 
 			wordBegin = Math.Max( ps, pe );
 			wordEnd = Math.Min( ns, ne );
@@ -99,10 +98,11 @@ namespace Sgry.Azuki
 		/// Basically this is same logic as NextWordStart
 		/// except that this do not treat EOL code as a word.
 		/// </remarks>
-		public static int NextWordStartForMove( TextBuffer text, int startIndex )
+		public static int NextWordStartForMove( Document doc, int startIndex )
 		{
 			int index;
 			ClassifyCharProc isSameClass;
+			TextBuffer text = doc.InternalBuffer;
 			
 			// check start index
 			index = startIndex;
@@ -145,10 +145,11 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Finds previous word start location.
 		/// </summary>
-		public static int PrevWordStart( TextBuffer text, int startIndex )
+		public static int PrevWordStart( Document doc, int startIndex )
 		{
 			int index;
 			ClassifyCharProc isSameClass;
+			TextBuffer text = doc.InternalBuffer;
 			
 			// check start index
 			index = startIndex;
@@ -191,10 +192,11 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Gets previous word end location.
 		/// </summary>
-		public static int PrevWordEnd( TextBuffer text, int startIndex )
+		public static int PrevWordEnd( Document doc, int startIndex )
 		{
 			int index;
 			ClassifyCharProc isSameClass;
+			TextBuffer text = doc.InternalBuffer;
 			
 			// check start index
 			index = startIndex;
@@ -231,10 +233,11 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Gets start location of the next word.
 		/// </summary>
-		public static int NextWordStart( TextBuffer text, int startIndex )
+		public static int NextWordStart( Document doc, int startIndex )
 		{
 			int index;
 			ClassifyCharProc isSameClass;
+			TextBuffer text = doc.InternalBuffer;
 			
 			// check start index
 			index = startIndex - 1;
@@ -271,10 +274,11 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// get end location of the next word
 		/// </summary>
-		public static int NextWordEnd( TextBuffer text, int startIndex )
+		public static int NextWordEnd( Document doc, int startIndex )
 		{
 			int index;
 			ClassifyCharProc isSameClass;
+			TextBuffer text = doc.InternalBuffer;
 
 			// check start index
 			index = startIndex;

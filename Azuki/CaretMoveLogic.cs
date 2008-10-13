@@ -1,7 +1,7 @@
 // file: CaretMoveLogic.cs
 // brief: Implementation of caret movement.
 // author: YAMAMOTO Suguru
-// update: 2008-10-11
+// update: 2008-10-13
 //=========================================================
 using System;
 using System.Drawing;
@@ -177,7 +177,7 @@ namespace Sgry.Azuki
 				return doc.Length;
 			}
 
-			return WordLogic.NextWordStartForMove( doc.InternalBuffer, doc.CaretIndex );
+			return WordLogic.NextWordStartForMove( doc, doc.CaretIndex );
 		};
 
 		/// <summary>

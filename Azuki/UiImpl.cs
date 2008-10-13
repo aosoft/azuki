@@ -1,7 +1,7 @@
 ﻿// file: UiImpl.cs
 // brief: User interface logic that independent from platform.
 // author: YAMAMOTO Suguru
-// update: 2008-10-04
+// update: 2008-10-13
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -17,6 +17,11 @@ namespace Sgry.Azuki
 	class UiImpl : IDisposable
 	{
 		#region Fields
+#		if PocketPC
+		const int HighlightInterval = 500;
+#		else
+		const int HighlightInterval = 350;
+#		endif
 		IUserInterface _UI;
 		View _View = null;
 		ViewType _ViewType = ViewType.Propotional;
@@ -336,7 +341,6 @@ namespace Sgry.Azuki
 
 		void HighlighterThreadProc()
 		{
-			int invalidBegin, invalidEnd;
 			int dirtyBegin, dirtyEnd;
 			Document doc;
 
@@ -345,15 +349,17 @@ namespace Sgry.Azuki
 				// wait until the flag was set down
 				while( _ShouldBeHighlighted == false )
 				{
-					Thread.Sleep( 500 );
+					Thread.Sleep( HighlightInterval );
 				}
 				_ShouldBeHighlighted = false;
 
-				// wait a moment and begin highlight
-				Thread.Sleep( 500 );
-				if( _ShouldBeHighlighted != false || Document == null )
+				// wait a moment and check if 
+				Thread.Sleep( HighlightInterval );
+				if( _ShouldBeHighlighted != false || _UI.Document == null )
 				{
-					continue; // flag was set up while this thread are sleeping... skip this time.
+					// flag was set up while this thread are sleeping.
+					// skip this time.
+					continue;
 				}
 
 				doc = _UI.Document;
@@ -363,7 +369,7 @@ namespace Sgry.Azuki
 				dirtyEnd = Math.Max( dirtyBegin, _DirtyRangeEnd );
 
 				// highlight and refresh view
-				doc.Highlighter.Highlight( doc, dirtyBegin, dirtyEnd, out invalidBegin, out invalidEnd );
+				doc.Highlighter.Highlight( doc, ref dirtyBegin, ref dirtyEnd );
 				_UI.Invalidate();
 
 				// prepare for next loop
@@ -425,7 +431,7 @@ namespace Sgry.Azuki
 
 			// get range of a word at clicked location
 			index = View.GetIndexFromVirPos( pos );
-			WordLogic.GetWordAt( Document.InternalBuffer, index, out begin, out end );
+			WordLogic.GetWordAt( Document, index, out begin, out end );
 			if( end <= begin )
 			{
 				return;

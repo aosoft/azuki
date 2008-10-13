@@ -1,8 +1,7 @@
 ﻿// file: DummyHighlighter.cs
 // brief: Dummy highlighter which executes nothing.
 // author: YAMAMOTO Suguru
-// encoding: UTF-8
-// update: 2008-07-12
+// update: 2008-10-13
 //=========================================================
 using System;
 
@@ -16,9 +15,7 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Does nothing.
 		/// </summary>
-		public override void Highlight( Document doc, int begin, int end, out int invalidBegin, out int invalidEnd )
-		{
-			invalidBegin = invalidEnd = 0;
-		}
+		public override void Highlight( Document doc, ref int dirtyBegin, ref int dirtyEnd )
+		{}
 	}
 }

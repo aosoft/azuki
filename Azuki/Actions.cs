@@ -2,7 +2,7 @@
 // brief: Actions for Azuki engine.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-10-11
+// update: 2008-10-13
 //=========================================================
 using System;
 
@@ -170,7 +170,7 @@ namespace Sgry.Azuki
 			// nothing selected?
 			if( doc.AnchorIndex == doc.CaretIndex )
 			{
-				int nextWordIndex = WordLogic.NextWordStartForMove( doc.InternalBuffer, doc.CaretIndex );
+				int nextWordIndex = WordLogic.NextWordStartForMove( doc, doc.CaretIndex );
 				if( nextWordIndex == doc.Length && doc.CaretIndex == nextWordIndex )
 				{
 					Plat.Inst.MessageBeep();

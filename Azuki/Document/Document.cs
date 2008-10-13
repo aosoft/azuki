@@ -1,8 +1,7 @@
 // file: Document.cs
 // brief: Document of Azuki engine.
 // author: YAMAMOTO Suguru
-// encoding: UTF-8
-// update: 2008-10-04
+// update: 2008-10-13
 //=========================================================
 using System;
 using System.Collections;
@@ -250,7 +249,7 @@ namespace Sgry.Azuki
 
 			int begin, end;
 
-			WordLogic.GetWordAt( _Buffer, index, out begin, out end );
+			WordLogic.GetWordAt( this, index, out begin, out end );
 			if( begin < 0 || end < 0 || end <= begin )
 			{
 				return String.Empty;
