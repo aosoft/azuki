@@ -189,7 +189,7 @@ main( int argc, char* argv[] )
 //			azuki.DrawsEolCode = false;
 			azuki.Document.EolCode = "\r\n";
 			azuki.AutoIndentHook = AutoIndentLogic.CHook;
-			azuki.Document.Highlighter = HighlighterFactory.CppHighlighter;
+			azuki.Document.Highlighter = HighlighterFactory.RubyHighlighter;
 			azuki.Resize += delegate {
 				if( WrapTextAtWindowBorder )
 				{
