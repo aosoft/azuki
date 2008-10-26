@@ -1,3 +1,4 @@
+#if HOGE
 // 2008-10-13
 using System;
 using System.Drawing;
@@ -5,7 +6,10 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Sgry.Azuki.Windows
+using Sgry.Azuki;
+using Sgry.Azuki.Windows;
+
+namespace Sgry.Ann
 {
 #	if false
 	class AzukiSample
@@ -421,3 +425,4 @@ main( int argc, char* argv[] )
 	}
 #	endif
 }
+#endif

@@ -16,12 +16,12 @@
 
 	<target name="build">
 		<nant target="build" buildfile="Azuki/Azuki.build"/>
-		<nant target="build" buildfile="AzukiSample/AzukiSample.build"/>
+		<nant target="build" buildfile="Ann/Ann.build"/>
 	</target>
 	
 	<target name="cf">
 		<nant target="cf" buildfile="Azuki/Azuki.build"/>
-		<nant target="cf" buildfile="AzukiSample/AzukiSample.build"/>
+		<nant target="cf" buildfile="Ann/Ann.build"/>
 	</target>
 
 	<target name="test">
@@ -30,7 +30,7 @@
 	
 	<target name="clean">
 		<nant target="clean" buildfile="Azuki/Azuki.build"/>
-		<nant target="clean" buildfile="AzukiSample/AzukiSample.build"/>
+		<nant target="clean" buildfile="Ann/Ann.build"/>
 	</target>
 
 

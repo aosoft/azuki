@@ -2,7 +2,7 @@
 <project
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://nant.sourceforge.net/release/latest/nant.xsd"
-	name="AzukiSample"
+	name="Ann"
 	basedir="."
 	default="build"
 >
@@ -24,10 +24,10 @@ Small application to test Azuki.
 />
 
 <!-- assembly name -->
-<property name="assembly_name" value="AzukiSample.exe"/>
+<property name="assembly_name" value="Ann.exe"/>
 <property name="pdb_name" value="${path::change-extension(assembly_name, 'pdb')}"/>
 
-<property name="assembly_name_cf" value="AzukiCompactSample.exe"/>
+<property name="assembly_name_cf" value="AnnCompact.exe"/>
 <property name="pdb_name_cf" value="${path::change-extension(assembly_name_cf, 'pdb')}"/>
 
 

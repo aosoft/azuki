@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-10-04
+// update: 2008-10-26
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -108,7 +108,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 #		if !PocketPC
 		[Browsable(false)]
-		[DefaultValue(null)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 #		endif
 		public Document Document
 		{
@@ -119,6 +119,10 @@ namespace Sgry.Azuki.Windows
 		/// <summary>
 		/// Gets the associated view object.
 		/// </summary>
+#		if !PocketPC
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+#		endif
 		public View View
 		{
 			get{ return _Impl.View; }
@@ -131,6 +135,7 @@ namespace Sgry.Azuki.Windows
 #		if !PocketPC
 		[Category("Drawing")]
 		[DefaultValue(ViewType.Propotional)]
+		[Description("Specify how to draw text content. Wrapped propotional view shows text wrapped within the width specified as ViewWidth property. Propotional view do not wrap text but draws faster.")]
 #		endif
 		public ViewType ViewType
 		{
@@ -305,6 +310,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 #		if !PocketPC
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 #		endif
 		public ColorScheme ColorScheme
 		{
@@ -456,7 +462,9 @@ namespace Sgry.Azuki.Windows
 		/// Sets width of the content area (including line number area).
 		/// </summary>
 #		if !PocketPC
-		[Browsable(false)]
+		[Browsable(true)]
+		[Category("Drawing")]
+		[Description("Width of the text content area. In proportional view, highlight line will be drawn in this width and this will be automatically expanded to enough width to show the input text. In wrapped-propotional view, text will be wrapped in this width.")]
 #		endif
 		public int ViewWidth
 		{
@@ -530,6 +538,7 @@ namespace Sgry.Azuki.Windows
 		/// <seealso cref="AutoIndentLogic"/>
 #		if !PocketPC
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 #		endif
 		public AutoIndentHook AutoIndentHook
 		{
@@ -612,6 +621,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 #		if !PocketPC
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 #		endif
 		public bool CanUndo
 		{
@@ -631,6 +641,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 #		if !PocketPC
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 #		endif
 		public bool IsRecordingHistory
 		{
@@ -651,6 +662,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 #		if !PocketPC
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 #		endif
 		public bool CanRedo
 		{
@@ -739,9 +751,20 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 		public override string Text
 		{
-			get{ return View.Document.Text; }
+			get
+			{
+				// under unknown condition, Text property was called when a Form was disposed.
+				// take care of that case.
+				if( View == null || View.Document == null )
+					return null;
+
+				return View.Document.Text;
+			}
 			set
 			{
+				//if( View == null || View.Document == null )
+				//	return;
+
 				View.Document.Text = value;
 				View.SetDesiredColumn();
 				ScrollToCaret();
@@ -754,6 +777,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 #		if !PocketPC
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 #		endif
 		public int TextLength
 		{
@@ -783,6 +807,7 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 #		if !PocketPC
 		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 #		endif
 		public int LineCount
 		{
@@ -935,6 +960,10 @@ namespace Sgry.Azuki.Windows
 		/// Gets or sets highlighter for currently active document.
 		/// Setting null to this property will disable highlighting.
 		/// </summary>
+#		if !PocketPC
+		[Browsable(false)]
+		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+#		endif
 		public IHighlighter Highlighter
 		{
 			get{ return _Impl.Highlighter; }

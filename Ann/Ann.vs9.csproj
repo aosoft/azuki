@@ -2,15 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0A4BB220-4224-4879-8146-3230357CC320}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Sgry.Azuki</RootNamespace>
-    <AssemblyName>AzukiSample</AssemblyName>
-    <StartupObject>Sgry.Azuki.Windows.AzukiSample</StartupObject>
+    <RootNamespace>Sgry.Ann</RootNamespace>
+    <AssemblyName>Ann</AssemblyName>
+    <StartupObject>Sgry.Ann.Program</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -54,7 +54,7 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UseVSHostingProcess>false</UseVSHostingProcess>
-    <DocumentationFile>..\package\AzukiSample.xml</DocumentationFile>
+    <DocumentationFile>..\package\Ann.xml</DocumentationFile>
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
@@ -87,8 +87,29 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AzukiSample.cs">
+    <Compile Include="Actions.File.cs" />
+    <Compile Include="AnnForm.cs">
+      <SubType>Form</SubType>
     </Compile>
+    <Compile Include="AppConfig.cs" />
+    <Compile Include="AppLogic.cs" />
+    </Compile>
+    <Compile Include="Document.cs" />
+    <Compile Include="EncodingAnalyzer.cs" />
+    <Compile Include="Ini.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Actions.Edit.cs" />
+    <Compile Include="Actions.Window.cs" />
+    <Compile Include="Actions.Tool.cs" />
+    <Compile Include="Actions.View.cs" />
+    <Compile Include="DrawingOptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DrawingOptionForm.resx">
+      <DependentUpon>DrawingOptionForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,7 +4,7 @@ cd Azuki
 call clean.bat
 cd ..
 
-cd AzukiSample
+cd Ann
 call clean.bat
 cd ..
 

@@ -75,6 +75,8 @@
     <Compile Include="AutoIndentLogic.cs" />
     <Compile Include="CaretMoveLogic.cs" />
     <Compile Include="DebugUtl.cs" />
+    <Compile Include="Highlighter\JavaHighlighter.cs" />
+    <Compile Include="Highlighter\RubyHighlighter.cs" />
     <Compile Include="UiImpl.cs" />
     <Compile Include="IUserInterface.cs" />
     <Compile Include="LineLogic.cs" />
