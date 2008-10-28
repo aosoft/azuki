@@ -2,7 +2,7 @@
 // brief: Logics to manipulate line/column in a string.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-09-26
+// update: 2008-10-28
 //=========================================================
 using System;
 using System.Collections;
@@ -172,17 +172,28 @@ namespace Sgry.Azuki
 		public static void LHI_Insert( SplitArray<int> lhi, TextBuffer text, string insertText, int insertIndex )
 		{
 			DebugUtl.Assert( 0 < lhi.Count && lhi[0] == 0, "lhi must have 0 as a first member." );
+			DebugUtl.Assert( 0 < insertText.Length, "insertText is empty" );
+			DebugUtl.Assert( insertIndex <= text.Count, "insertIndex is out of range." );
 			int insL, insC;
-			int lineHeadIndex;
+			int lineHeadIndex = 0;
 			int lineEndIndex;
 			int insLineCount;
 
 			// at first, find the line which contains the insertion point
 			GetLineColumnIndexFromCharIndex( text, lhi, insertIndex, out insL, out insC );
 
-			// if multiple lines are inserted, insert line index entry to LHI
+			// before inserting line index entries, treat an exceptional case:
+			// "inserting text begining with LF into the position just after CR".
+			// for this case, remove this LF's entry from LHI to avoid registering two lines for a CR+LF.
+			if( 0 < insertIndex && text[insertIndex-1] == '\r'
+				&& 0 < insertText.Length && insertText[0] == '\n' )
+			{
+				lhi.Delete( insL, insL+1 );
+				insL--;
+			}
+
+			// insert line index entries to LHI
 			insLineCount = 1;
-			lineHeadIndex = 0;
 			do
 			{
 				// get end index of this line
@@ -215,12 +226,16 @@ namespace Sgry.Azuki
 		public static void LHI_Delete( SplitArray<int> lhi, TextBuffer text, int delBegin, int delEnd )
 		{
 			DebugUtl.Assert( 0 < lhi.Count && lhi[0] == 0, "lhi must have 0 as a first member." );
+			DebugUtl.Assert( 0 <= delBegin && delBegin < text.Count, "delBegin is out of range." );
+			DebugUtl.Assert( delBegin <= delEnd && delEnd <= text.Count, "delEnd is out of range." );
 			int delFromL, delFromC, delToL, delToC;
 			int delLen = delEnd - delBegin;
 			
 			// calculate line indexes of both ends of the range
 			GetLineColumnIndexFromCharIndex( text, lhi, delBegin, out delFromL, out delFromC );
 			GetLineColumnIndexFromCharIndex( text, lhi, delEnd, out delToL, out delToC );
+
+int TODO_MustTreatExceptionalCase_See_LHI_Insert;
 
 			// subtract line head indexes for lines after deletion point
 			for( int i=delToL+1; i<lhi.Count; i++ )

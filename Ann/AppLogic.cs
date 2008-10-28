@@ -1,4 +1,4 @@
-// 2008-10-26
+// 2008-10-28
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -147,7 +147,7 @@ MainForm.Azuki.Font = AppConfig.Font;
 		{
 			Document doc = new Document( new AzukiDocument() );
 			StreamReader reader = null;
-			char[] buf = new char[ 4 ];
+			char[] buf = new char[ 1024 ];
 			int readCount = 0;
 
 			// analyze encoding
