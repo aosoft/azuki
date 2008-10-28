@@ -1,7 +1,7 @@
 ﻿// file: UiImpl.cs
 // brief: User interface logic that independent from platform.
 // author: YAMAMOTO Suguru
-// update: 2008-10-20
+// update: 2008-10-28
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -374,7 +374,7 @@ namespace Sgry.Azuki
 
 				// highlight and refresh view
 				doc.Highlighter.Highlight( doc, ref dirtyBegin, ref dirtyEnd );
-				_UI.Invalidate();
+				View.Invalidate( dirtyBegin, dirtyEnd );
 
 				// prepare for next loop
 				_DirtyRangeBegin = -1;
@@ -441,8 +441,12 @@ namespace Sgry.Azuki
 				return;
 			}
 			
-			// select the word
-			Document.SetSelection( begin, end );
+			// select the word.
+			// (because Azuki's invalidation logic only supports
+			// selection change by keyboard commands,
+			// emulate as if this selection was done by keyboard.
+			Document.SetSelection( begin, begin ); // select caret to the head of the word
+			Document.SetSelection( begin, end ); // then, expand selection to the end of it
 		}
 
 		internal void HandleMouseMove( int buttonIndex, Point pos, bool shift, bool ctrl, bool alt, bool win )

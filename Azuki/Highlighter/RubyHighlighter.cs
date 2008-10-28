@@ -1,7 +1,7 @@
 ﻿// file: RubyHighlighter.cs
 // brief: Ruby highlighter.
 // author: YAMAMOTO Suguru
-// update: 2008-10-21
+// update: 2008-10-28
 //=========================================================
 using System;
 using Color = System.Drawing.Color;
@@ -28,7 +28,6 @@ namespace Sgry.Azuki
 
 			AddEnclosure( "'", "'", CharClass.String, '\\' );
 			AddEnclosure( "\"", "\"", CharClass.String, '\\' );
-AddEnclosure( "/", "/", CharClass.String, '\0' );int これは閉じをマジメに検知しないとヒドイことに;
 			AddEnclosure( "=begin", "=end", CharClass.DocComment, '\0' );
 			AddLineHighlight( "#", CharClass.Comment );
 		}

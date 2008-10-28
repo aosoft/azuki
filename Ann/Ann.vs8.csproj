@@ -48,19 +48,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions.cs" />
+    <Compile Include="Actions.Edit.cs" />
+    <Compile Include="Actions.File.cs" />
+    <Compile Include="Actions.Tool.cs" />
+    <Compile Include="Actions.View.cs" />
+    <Compile Include="Actions.Window.cs" />
     <Compile Include="AnnForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="AppConfig.cs" />
     <Compile Include="AppLogic.cs" />
+    <Compile Include="AzukiSample.cs" />
     <Compile Include="Document.cs" />
+    <Compile Include="DrawingOptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="EncodingAnalyzer.cs" />
+    <Compile Include="Ini.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AnnForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>AnnForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DrawingOptionForm.resx">
+      <DependentUpon>DrawingOptionForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

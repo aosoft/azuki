@@ -1,7 +1,7 @@
 ﻿// file: View.cs
 // brief: Platform independent view implementation of Azuki engine.
 // author: YAMAMOTO Suguru
-// update: 2008-10-12
+// update: 2008-10-28
 //=========================================================
 using System;
 using System.Drawing;
@@ -659,6 +659,13 @@ namespace Sgry.Azuki
 //DEBUG//_Gra.ForeColor=Color.Red;_Gra.DrawLine(rect.Left,rect.Top,rect.Right,rect.Bottom);_Gra.DrawLine(rect.Left,rect.Bottom,rect.Right,rect.Top);DebugUtl.Sleep(400);
 			_UI.Invalidate( rect );
 		}
+
+		/// <summary>
+		/// Requests to invalidate area covered by given text range.
+		/// </summary>
+		/// <param name="beginIndex">Begin text index of the area to be invalidated.</param>
+		/// <param name="endIndex">End text index of the area to be invalidated.</param>
+		public abstract void Invalidate( int beginIndex, int endIndex );
 		#endregion
 
 		#region Utilities
