@@ -1,8 +1,7 @@
 ﻿// file: TextBuffer.cs
 // brief: Specialized SplitArray for char with text search feature without copying content.
 // author: YAMAMOTO Suguru
-// encoding: UTF-8
-// update: 2008-10-04
+// update: 2008-10-31
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -39,6 +38,7 @@ namespace Sgry.Azuki
 		}
 		#endregion
 
+		#region Character Classes
 		/// <summary>
 		/// Clears class information from all characters.
 		/// </summary>
@@ -65,6 +65,7 @@ namespace Sgry.Azuki
 		{
 			_Classes[ index ] = klass;
 		}
+		#endregion
 
 		#region Content Access
 		/// <summary>
@@ -215,6 +216,23 @@ namespace Sgry.Azuki
 
 			return foundIndex - _GapLen;
 		}
+		#endregion
+
+		#region Utilities
+#		if DEBUG
+		/// <summary>
+		/// ToString for Debug.
+		/// </summary>
+		public override string ToString()
+		{
+			System.Text.StringBuilder buf = new System.Text.StringBuilder( this.Count );
+			for( int i=0; i<Count; i++ )
+			{
+				buf.Append( this[i] );
+			}
+			return buf.ToString();
+		}
+#		endif
 		#endregion
 	}
 }

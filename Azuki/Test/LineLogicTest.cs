@@ -1,3 +1,4 @@
+// 2008-11-01
 #if DEBUG
 using System;
 using System.Collections;
@@ -34,13 +35,13 @@ namespace Sgry.Azuki.Test
 			// LHI_Insert
 			//
 			Console.WriteLine( "test {0} - LHI_Insert()", testNum++ );
-			Test_LHI_Insert();
+			TestUtl.Do( Test_LHI_Insert );
 
 			//
 			// LHI_Delete
 			//
 			Console.WriteLine( "test {0} - LHI_Delete()", testNum++ );
-			Test_LHI_Delete();
+			TestUtl.Do( Test_LHI_Delete );
 
 			LineLogic.LHI_Insert( lhi, text, TestData1, 0 );
 			text.Add( TestData1.ToCharArray() );
@@ -310,6 +311,79 @@ namespace Sgry.Azuki.Test
 			Debug.Assert( lhi[5] == 52, "lhi[5] is expected to be 52 but "+lhi[5] );
 			Debug.Assert( lhi[6] == 53, "lhi[6] is expected to be 53 but "+lhi[6] );
 			Debug.Assert( lhi.Count == 7, "lhi.Count is expected to be 7 but "+lhi.Count );
+
+			//--- special care about CR+LF ---
+			// (1) insertion divides a CR+LF
+			// (2) inserting text begins with LF creates a new CR+LF at left side of the insertion point
+			// (3) inserting text ends with CR creates a new CR+LF at right side of the insertion point
+			//--------------------------------
+			// (1)+(2)
+			{
+				text.Clear(); lhi.Clear(); lhi.Add( 0 );
+				LineLogic.LHI_Insert( lhi, text, "foo\r\nbar", 0 );
+				text.Add( "foo\r\nbar".ToCharArray() );
+
+				LineLogic.LHI_Insert( lhi, text, "\nx", 4 );
+				text.Insert( 4, "\nx".ToCharArray() );
+				TestUtl.AssertEquals( 3, lhi.Count );
+				TestUtl.AssertEquals( 0, lhi[0] );
+				TestUtl.AssertEquals( 5, lhi[1] );
+				TestUtl.AssertEquals( 7, lhi[2] );
+			}
+
+			// (1)+(3)
+			{
+				text.Clear(); lhi.Clear(); lhi.Add( 0 );
+				LineLogic.LHI_Insert( lhi, text, "foo\r\nbar", 0 );
+				text.Add( "foo\r\nbar".ToCharArray() );
+
+				LineLogic.LHI_Insert( lhi, text, "x\r", 4 );
+				text.Insert( 4, "x\r".ToCharArray() );
+				TestUtl.AssertEquals( 3, lhi.Count );
+				TestUtl.AssertEquals( 0, lhi[0] );
+				TestUtl.AssertEquals( 4, lhi[1] );
+				TestUtl.AssertEquals( 7, lhi[2] );
+			}
+
+			// (1)+(2)+(3)
+			{
+				text.Clear(); lhi.Clear(); lhi.Add( 0 );
+				LineLogic.LHI_Insert( lhi, text, "foo\r\nbar", 0 );
+				text.Add( "foo\r\nbar".ToCharArray() );
+
+				LineLogic.LHI_Insert( lhi, text, "\n\r", 4 );
+				text.Insert( 4, "\n\r".ToCharArray() );
+				TestUtl.AssertEquals( 3, lhi.Count );
+				TestUtl.AssertEquals( 0, lhi[0] );
+				TestUtl.AssertEquals( 5, lhi[1] );
+				TestUtl.AssertEquals( 7, lhi[2] );
+			}
+
+			// (2)
+			{
+				text.Clear(); lhi.Clear(); lhi.Add( 0 );
+				LineLogic.LHI_Insert( lhi, text, "foo\rbar", 0 );
+				text.Add( "foo\rbar".ToCharArray() );
+
+				LineLogic.LHI_Insert( lhi, text, "\nx", 4 );
+				text.Insert( 4, "\nx".ToCharArray() );
+				TestUtl.AssertEquals( 2, lhi.Count );
+				TestUtl.AssertEquals( 0, lhi[0] );
+				TestUtl.AssertEquals( 5, lhi[1] );
+			}
+
+			// (3)
+			{
+				text.Clear(); lhi.Clear(); lhi.Add( 0 );
+				LineLogic.LHI_Insert( lhi, text, "foo\nbar", 0 );
+				text.Add( "foo\nbar".ToCharArray() );
+
+				LineLogic.LHI_Insert( lhi, text, "x\r", 3 );
+				text.Insert( 3, "x\r".ToCharArray() );
+				TestUtl.AssertEquals( 2, lhi.Count );
+				TestUtl.AssertEquals( 0, lhi[0] );
+				TestUtl.AssertEquals( 6, lhi[1] );
+			}
 		}
 
 		static void Test_LHI_Delete()
@@ -332,30 +406,31 @@ namespace Sgry.Azuki.Test
 			lhi.Add( 0 );
 			LineLogic.LHI_Insert( lhi, text, TestData, 0 );
 			text.Add( TestData.ToCharArray() );
-			Debug.Assert( lhi[0] == 0, "lhi[0] is expected to be 0 but "+lhi[0] );
-			Debug.Assert( lhi[1] == 32, "lhi[1] is expected to be 32 but "+lhi[1] );
-			Debug.Assert( lhi[2] == 33, "lhi[2] is expected to be 33 but "+lhi[2] );
-			Debug.Assert( lhi[3] == 37, "lhi[3] is expected to be 37 but "+lhi[3] );
-			Debug.Assert( lhi[4] == 38, "lhi[4] is expected to be 38 but "+lhi[4] );
-			Debug.Assert( lhi[5] == 52, "lhi[5] is expected to be 52 but "+lhi[5] );
-			Debug.Assert( lhi[6] == 53, "lhi[6] is expected to be 53 but "+lhi[6] );
-			Debug.Assert( lhi.Count == 7, "lhi.Count is expected to be 7 but "+lhi.Count );
+			TestUtl.AssertEquals(  0, lhi[0] );
+			TestUtl.AssertEquals( 32, lhi[1] );
+			TestUtl.AssertEquals( 33, lhi[2] );
+			TestUtl.AssertEquals( 37, lhi[3] );
+			TestUtl.AssertEquals( 38, lhi[4] );
+			TestUtl.AssertEquals( 52, lhi[5] );
+			TestUtl.AssertEquals( 53, lhi[6] );
+			TestUtl.AssertEquals( 7, lhi.Count );
 			
 			//--- delete range in line ---
 			// valid range
 			LineLogic.LHI_Delete( lhi, text, 2, 5 );
 			text.Delete( 2, 5 );
-			Debug.Assert( lhi[0] == 0, "lhi[0] is expected to be 0 but "+lhi[0] );
-			Debug.Assert( lhi[1] == 29, "lhi[1] is expected to be 29 but "+lhi[1] );
-			Debug.Assert( lhi[2] == 30, "lhi[2] is expected to be 30 but "+lhi[2] );
-			Debug.Assert( lhi[3] == 34, "lhi[3] is expected to be 34 but "+lhi[3] );
-			Debug.Assert( lhi[4] == 35, "lhi[4] is expected to be 35 but "+lhi[4] );
-			Debug.Assert( lhi[5] == 49, "lhi[5] is expected to be 49 but "+lhi[5] );
-			Debug.Assert( lhi[6] == 50, "lhi[6] is expected to be 50 but "+lhi[6] );
-			Debug.Assert( lhi.Count == 7, "lhi.Count is expected to be 7 but "+lhi.Count );
+			TestUtl.AssertEquals(  0, lhi[0] );
+			TestUtl.AssertEquals( 29, lhi[1] );
+			TestUtl.AssertEquals( 30, lhi[2] );
+			TestUtl.AssertEquals( 34, lhi[3] );
+			TestUtl.AssertEquals( 35, lhi[4] );
+			TestUtl.AssertEquals( 49, lhi[5] );
+			TestUtl.AssertEquals( 50, lhi[6] );
+			TestUtl.AssertEquals( 7, lhi.Count );
 
 			// invalid range (before begin to middle)
-			//MUST_FAIL//LineLogic.LHI_Delete( lhi, text, -1, 5 );
+			try{ LineLogic.LHI_Delete(lhi, text, -1, 5); throw new ApplicationException(); }
+			catch( Exception ex ){ TestUtl.AssertExceptionType(ex, typeof(AssertException)); }
 
 			//--- delete range between different lines ---
 			lhi.Clear();
@@ -382,13 +457,13 @@ namespace Sgry.Azuki.Test
 			//----
 			LineLogic.LHI_Delete( lhi, text, 32, 33 );
 			text.Delete( 32, 33 );
-			Debug.Assert( lhi[0] == 0, "lhi[0] is expected to be 0 but "+lhi[0] );
-			Debug.Assert( lhi[1] == 32, "lhi[1] is expected to be 32 but "+lhi[1] );
-			Debug.Assert( lhi[2] == 36, "lhi[2] is expected to be 36 but "+lhi[2] );
-			Debug.Assert( lhi[3] == 37, "lhi[3] is expected to be 37 but "+lhi[3] );
-			Debug.Assert( lhi[4] == 51, "lhi[4] is expected to be 51 but "+lhi[4] );
-			Debug.Assert( lhi[5] == 52, "lhi[5] is expected to be 52 but "+lhi[5] );
-			Debug.Assert( lhi.Count == 6, "lhi.Count is expected to be 6 but "+lhi.Count );
+			TestUtl.AssertEquals(  0, lhi[0] );
+			TestUtl.AssertEquals( 32, lhi[1] );
+			TestUtl.AssertEquals( 36, lhi[2] );
+			TestUtl.AssertEquals( 37, lhi[3] );
+			TestUtl.AssertEquals( 51, lhi[4] );
+			TestUtl.AssertEquals( 52, lhi[5] );
+			TestUtl.AssertEquals( 6, lhi.Count );
 
 			// delete middle of the first line to not EOF pos
 			//----
@@ -398,10 +473,10 @@ namespace Sgry.Azuki.Test
 			//----
 			LineLogic.LHI_Delete( lhi, text, 22, 37 );
 			text.Delete( 22, 37 );
-			Debug.Assert( lhi[0] == 0, "lhi[0] is expected to be 0 but "+lhi[0] );
-			Debug.Assert( lhi[1] == 36, "lhi[1] is expected to be 36 but "+lhi[1] );
-			Debug.Assert( lhi[2] == 37, "lhi[2] is expected to be 37 but "+lhi[2] );
-			Debug.Assert( lhi.Count == 3, "lhi.Count is expected to be 3 but "+lhi.Count );
+			TestUtl.AssertEquals(  0, lhi[0] );
+			TestUtl.AssertEquals( 36, lhi[1] );
+			TestUtl.AssertEquals( 37, lhi[2] );
+			TestUtl.AssertEquals( 3, lhi.Count );
 
 			// delete all
 			//----
@@ -409,8 +484,65 @@ namespace Sgry.Azuki.Test
 			//----
 			LineLogic.LHI_Delete( lhi, text, 0, 55 );
 			text.Delete( 0, 55 );
-			Debug.Assert( lhi[0] == 0, "lhi[0] is expected to be 0 but "+lhi[0] );
-			Debug.Assert( lhi.Count == 1, "lhi.Count is expected to be 1 but "+lhi.Count );
+			TestUtl.AssertEquals(  0, lhi[0] );
+			TestUtl.AssertEquals( 1, lhi.Count );
+
+			//--- special care about CR+LF ---
+			// (1) deletion creates a new CR+LF
+			// (2) deletion breaks a CR+LF at the left side of the deletion range
+			// (3) deletion breaks a CR+LF at the left side of the deletion range
+			//--------------------------------
+			// (1)
+			{
+				text.Clear(); lhi.Clear(); lhi.Add( 0 );
+				LineLogic.LHI_Insert( lhi, text, "foo\rx\nbar", 0 );
+				text.Add( "foo\rx\nbar".ToCharArray() );
+
+				LineLogic.LHI_Delete( lhi, text, 4, 5 );
+				text.Delete( 4, 5 );
+				TestUtl.AssertEquals( 2, lhi.Count );
+				TestUtl.AssertEquals( 0, lhi[0] );
+				TestUtl.AssertEquals( 5, lhi[1] );
+			}
+
+			// (2)
+			{
+				text.Clear(); lhi.Clear(); lhi.Add( 0 );
+				LineLogic.LHI_Insert( lhi, text, "foo\r\nbar", 0 );
+				text.Add( "foo\r\nbar".ToCharArray() );
+
+				LineLogic.LHI_Delete( lhi, text, 4, 6 );
+				text.Delete( 4, 6 );
+				TestUtl.AssertEquals( 2, lhi.Count );
+				TestUtl.AssertEquals( 0, lhi[0] );
+				TestUtl.AssertEquals( 4, lhi[1] );
+			}
+
+			// (3)
+			{
+				text.Clear(); lhi.Clear(); lhi.Add( 0 );
+				LineLogic.LHI_Insert( lhi, text, "foo\r\nbar", 0 );
+				text.Add( "foo\r\nbar".ToCharArray() );
+
+				LineLogic.LHI_Delete( lhi, text, 2, 4 );
+				text.Delete( 2, 4 );
+				TestUtl.AssertEquals( 2, lhi.Count );
+				TestUtl.AssertEquals( 0, lhi[0] );
+				TestUtl.AssertEquals( 3, lhi[1] );
+			}
+
+			// (1)+(2)+(3)
+			{
+				text.Clear(); lhi.Clear(); lhi.Add( 0 );
+				LineLogic.LHI_Insert( lhi, text, "\r\nfoo\r\n", 0 );
+				text.Add( "\r\nfoo\r\n".ToCharArray() );
+
+				LineLogic.LHI_Delete( lhi, text, 1, 6 );
+				text.Delete( 1, 6 );
+				TestUtl.AssertEquals( 2, lhi.Count );
+				TestUtl.AssertEquals( 0, lhi[0] );
+				TestUtl.AssertEquals( 2, lhi[1] );
+			}
 		}
 	}
 }
