@@ -210,7 +210,8 @@ namespace Sgry.Azuki
 		protected static int FindLast( Document doc, string token, int startIndex )
 		{
 			Debug.Assert( doc != null && token != null );
-			Debug.Assert( 0 <= startIndex && startIndex < doc.Length );
+			Debug.Assert( 0 <= startIndex );
+			Debug.Assert( (doc.Length == 0 && startIndex == 0) || startIndex < doc.Length );
 
 			for( int i=startIndex; 0<=i; i-- )
 			{

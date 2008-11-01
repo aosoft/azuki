@@ -1,7 +1,7 @@
 ﻿// file: HighlighterFactory.cs
 // brief: Class factory of highlighters.
 // author: YAMAMOTO Suguru
-// update: 2008-10-21
+// update: 2008-11-01
 //=========================================================
 using System;
 
@@ -13,13 +13,14 @@ namespace Sgry.Azuki
 	public static class HighlighterFactory
 	{
 		static CppHighlighter _CppHighlighter = null;
+		static CSharpHighlighter _CSharpHighlighter = null;
 		static XmlHighlighter _XmlHighlighter = null;
 		static BasicHighlighter _BasicHighlighter = null;
 		static JavaHighlighter _JavaHighlighter = null;
 		static RubyHighlighter _RubyHighlighter = null;
 
 		/// <summary>
-		/// Gets a highlighter for C/C++/C#.
+		/// Gets a highlighter for C/C++.
 		/// </summary>
 		public static CppHighlighter CppHighlighter
 		{
@@ -30,6 +31,21 @@ namespace Sgry.Azuki
 					_CppHighlighter = new CppHighlighter();
 				}
 				return _CppHighlighter;
+			}
+		}
+
+		/// <summary>
+		/// Gets a highlighter for C#.
+		/// </summary>
+		public static CSharpHighlighter CSharpHighlighter
+		{
+			get
+			{
+				if( _CSharpHighlighter == null )
+				{
+					_CSharpHighlighter = new CSharpHighlighter();
+				}
+				return _CSharpHighlighter;
 			}
 		}
 

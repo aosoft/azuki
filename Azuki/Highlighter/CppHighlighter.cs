@@ -1,7 +1,7 @@
 ﻿// file: CppHighlighter.cs
-// brief: C/C++/C# highlighter.
+// brief: C/C++ highlighter.
 // author: YAMAMOTO Suguru
-// update: 2008-09-10
+// update: 2008-11-01
 //=========================================================
 using System;
 using Color = System.Drawing.Color;
@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 namespace Sgry.Azuki
 {
 	/// <summary>
-	/// Highlighter for C/C++/C# language based on keyword matching.
+	/// Highlighter for C/C++ language based on keyword matching.
 	/// </summary>
 	public class CppHighlighter : BasicHighlighter
 	{
@@ -19,27 +19,22 @@ namespace Sgry.Azuki
 		public CppHighlighter()
 		{
 			SetKeywords( new string[] {
-				"__FILE__", "__LINE__",
-				"as", "asm", "auto", "base",
-				"bool", "break", "byte", "case", "catch", "char", "checked",
-				"class", "const", "const_cast", "continue", "decimal", "default",
-				"delegate", "delete", "do", "double", "dynamic_cast", "else",
-				"enum", "event", "explicit", "export", "extern", "false", "finally", "fixed",
-				"float", "for", "foreach", "friend", "goto", "if", "in", "inline",
-				"int", "interface", "internal", "is", "lock", "long", "mutable",
-				"namespace", "null", "new", "object",
-				"operator", "out", "override", "params", "private", "protected",
-				"public", "readonly", "ref", "register",
-				"reinterpret_cast", "return", "sbyte", "sealed", "short",
-				"signed", "sizeof", "stackalloc", "static", "static_cast", "string",
+				"asm", "auto", "bool", "break", "case", "catch", "char",
+				"class", "const", "const_cast", "continue", "default",
+				"delete", "do", "double", "dynamic_cast", "else",
+				"enum", "explicit", "export", "extern", "false",
+				"float", "for", "friend", "goto", "if", "inline",
+				"int", "long", "mutable", "namespace", "new",
+				"operator", "private", "protected", "public", "register",
+				"reinterpret_cast", "return", "short",
+				"signed", "sizeof", "static", "static_cast",
 				"struct", "switch", "template", "this", "throw", "true", "try",
-				"typedef", "typeid", "typename", "typeof", "uint", "ulong",
-				"unchecked", "union", "unsafe", "unsigned", "using", "ushort",
+				"typedef", "typeid", "typename", "union", "unsigned", "using",
 				"virtual", "void", "volatile", "while"
 			}, CharClass.Keyword );
 
 			SetKeywords( new string[] {
-				"size_t", "wchar_t"
+				"NULL", "offsetof", "ptrdiff_t", "size_t", "wchar_t"
 			}, CharClass.Keyword2 );
 
 			SetKeywords( new string[] {
@@ -49,15 +44,14 @@ namespace Sgry.Azuki
 			}, CharClass.Keyword3 );
 
 			SetKeywords( new string[] {
-				"#define", "#elif", "#else", "#endif", "#endregion", "#error",
+				"__FILE__", "__LINE__",
+				"#define", "#elif", "#else", "#endif", "#error",
 				"#if", "#ifdef", "#ifndef", "#include", "#import",
-				"#line", "#pragma", "#region", "#undef"
+				"#line", "#pragma", "#undef"
 			}, CharClass.PreProcessor );
 
 			AddEnclosure( "'", "'", CharClass.String, '\\' );
-			AddEnclosure( "@\"", "\"", CharClass.String, '\"' );
 			AddEnclosure( "\"", "\"", CharClass.String, '\\' );
-			AddEnclosure( "/**", "*/", CharClass.DocComment );
 			AddEnclosure( "/*", "*/", CharClass.Comment );
 			AddLineHighlight( "//", CharClass.Comment );
 		}
