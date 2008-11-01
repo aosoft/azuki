@@ -56,6 +56,7 @@
     <Compile Include="Document\TextBuffer.cs" />
     <Compile Include="Highlighter\JavaHighlighter.cs" />
     <Compile Include="Highlighter\RubyHighlighter.cs" />
+    <Compile Include="Highlighter\CSharpHighlighter.cs" />
     <Compile Include="IUserInterface.cs" />
     <Compile Include="Test\BasicHighlighterTest.cs" />
     <Compile Include="UiImpl.cs" />
