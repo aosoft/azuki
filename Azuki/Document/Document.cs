@@ -1,7 +1,7 @@
 // file: Document.cs
 // brief: Document of Azuki engine.
 // author: YAMAMOTO Suguru
-// update: 2008-10-13
+// update: 2008-11-01
 //=========================================================
 using System;
 using System.Collections;
@@ -777,7 +777,7 @@ namespace Sgry.Azuki
 		/// </summary>
 		public IEnumerator GetEnumerator()
 		{
-			return new DocumentLineEnumerator( this );
+			return _Buffer.GetEnumerator();
 		}
 
 		/// <summary>
@@ -940,63 +940,6 @@ namespace Sgry.Azuki
 		{
 			get{ return _NewText; }
 		}
-	}
-	#endregion
-
-	#region Line Enumerator
-	/// <summary>
-	/// Line enumerator for Document of Azuki.
-	/// </summary>
-	public class DocumentLineEnumerator : IEnumerator
-	{
-		Document _Doc;
-		int _LineIndex = -1;
-
-		#region Init / Dispose
-		/// <summary>
-		/// Creates a new instance.
-		/// </summary>
-		public DocumentLineEnumerator( Document doc )
-		{
-			_Doc = doc;
-		}
-
-		/// <summary>
-		/// Disposes resources.
-		/// </summary>
-		public void Dispose()
-		{}
-		#endregion
-
-		#region IEnumerator Interface
-		/// <summary>
-		/// Moves this enumerator to the next line.
-		/// </summary>
-		public bool MoveNext()
-		{
-			if( _Doc.LineCount <= _LineIndex+1 )
-				return false;
-
-			_LineIndex++;
-			return true;
-		}
-
-		/// <summary>
-		/// Resets location of this enumerator.
-		/// </summary>
-		public void Reset()
-		{
-			_LineIndex = -1;
-		}
-		
-		/// <summary>
-		/// Retrieves the line content where this enumerator indicates. (System.String)
-		/// </summary>
-		public object Current
-		{
-			get{ return _Doc.GetLineContent(_LineIndex); }
-		}
-		#endregion
 	}
 	#endregion
 }
