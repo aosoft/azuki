@@ -1,7 +1,7 @@
 About contents of this package
-                                                 2008-10-26
-                                            YAMAMOTO Suguru
-                      http://sourceforge.jp/projects/azuki/
+                                                                     2008-10-26
+                                                                YAMAMOTO Suguru
+                                          http://sourceforge.jp/projects/azuki/
 
 - Azuki.dll
 	.NET Framework version of Azuki.
@@ -19,8 +19,8 @@ About contents of this package
 
 - AnnCompact.exe
 	Sample program for testing .NET Compact Framework version of Azuki.
-	To execute this program, please copy this executable with AzukiCompact.dll 
-	to a Windows Mobile device and execute
+	To execute this program, please copy this executable with
+	AzukiCompact.dll to a Windows Mobile device and execute
 	(currently this is only tested with SHARP's Advanced W-ZERO3 [es]).
 
 - Azuki.xml

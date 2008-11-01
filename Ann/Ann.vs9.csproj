@@ -93,9 +93,13 @@
     </Compile>
     <Compile Include="AppConfig.cs" />
     <Compile Include="AppLogic.cs" />
-    </Compile>
+    <Compile Include="AzukiSample.cs" />
     <Compile Include="Document.cs" />
+    <Compile Include="DocumentListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="EncodingAnalyzer.cs" />
+    <Compile Include="FileType.cs" />
     <Compile Include="Ini.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Actions.Edit.cs" />
@@ -105,11 +109,6 @@
     <Compile Include="DrawingOptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="DrawingOptionForm.resx">
-      <DependentUpon>DrawingOptionForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,8 +1,9 @@
 // file: EncodingAnalyzer.cs
 // brief: Japanese charactor encoding analyzer class
 // author: SGRY (YAMAMOTO Suguru)
-// update: 2008-10-25 (SGRY)
+// encoding: UTF-8
 // version: 1.2.2
+// update: 2008-11-01 (SGRY)
 // license: zlib License (see END of this file)
 //=========================================================
 using IndexOutOfRangeException  = System.IndexOutOfRangeException;
@@ -19,11 +20,10 @@ namespace Sgry
 	/// UTF-16 の判定は Byte Order Mark に依存。
 	/// </summary>
 	/// <example>
-	///	// 指定ファイルの内容を読み出す
+	///	// エンコーディングを自動推定して指定ファイルの内容を読み出す関数
 	/// static string MyReadFile( string filePath )
 	/// {
 	///		Encoding encoding = EncodingAnalyzer.Analyze( filePath );
-	///		
 	///		return new String( encoding.GetChars(content) );
 	/// }
 	/// </example>
@@ -218,7 +218,8 @@ namespace Sgry
 			int followingByteCount;
 			
 			// UTF-8 特有の BOM で始まるならば UTF-8 とする
-			if( text[0] == 0xEF
+			if( 2 < text.Length
+				&& text[0] == 0xEF
 				&& text[1] == 0xBB
 				&& text[2] == 0xBF )
 			{
@@ -264,7 +265,7 @@ namespace Sgry
 		/// <remarks>BOMでのみ判断</remarks>
 		static bool IsUtf16Le( byte[] text )
 		{
-			return (text[0] == 0xFF && text[1] == 0xFE);
+			return (1 < text.Length && text[0] == 0xFF && text[1] == 0xFE);
 		}
 
 		/// <summary>
@@ -275,7 +276,7 @@ namespace Sgry
 		/// <remarks>BOMでのみ判断</remarks>
 		static bool IsUtf16Be( byte[] text )
 		{
-			return (text[0] == 0xFE && text[1] == 0xFF);
+			return (1 < text.Length && text[0] == 0xFE && text[1] == 0xFF);
 		}
 		
 		/// <summary>
@@ -522,7 +523,8 @@ namespace Sgry
 /*
 Version History
 
-[v1.2.2] 2008-10-25
+[v1.2.2] 2008-11-01
+・空のファイルを解析すると例外が発生する問題を修正
 ・ライセンスを zlib license に変更
 
 [v1.2.1] 2007-01-25

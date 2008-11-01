@@ -30,7 +30,7 @@ namespace Sgry.Ann
 				Document doc = new Document( value.Azuki.Document );
 				AddDocument( doc );
 				ActiveDocument = doc;
-MainForm.Azuki.Font = AppConfig.Font;
+				MainForm.Azuki.Font = AppConfig.Font;
 			}
 		}
 
@@ -134,6 +134,37 @@ MainForm.Azuki.Font = AppConfig.Font;
 			else
 			{
 				ActiveDocument = _DAD_Documents[ _DAD_Documents.Count-1 ];
+			}
+		}
+
+		/// <summary>
+		/// Shows document list in a dialog.
+		/// </summary>
+		public void ShowDocumentList()
+		{
+			DocumentListForm dialog;
+			DialogResult result;
+			Document selectedDoc;
+
+			using( dialog = new DocumentListForm() )
+			{
+				// prepare to show dialog
+				dialog.Size = MainForm.Size;
+				dialog.Documents = Documents;
+
+				// show document list dialog
+				result = dialog.ShowDialog();
+				if( result != DialogResult.OK )
+				{
+					return;
+				}
+
+				// get user's selection
+				selectedDoc = dialog.SelectedDocument;
+				if( selectedDoc != null )
+				{
+					ActiveDocument = selectedDoc;
+				}
 			}
 		}
 

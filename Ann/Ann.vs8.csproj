@@ -60,6 +60,9 @@
     <Compile Include="AppLogic.cs" />
     <Compile Include="AzukiSample.cs" />
     <Compile Include="Document.cs" />
+    <Compile Include="DocumentListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="DrawingOptionForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -30,12 +30,7 @@ namespace Sgry.Ann
 		public static AnnAction ShowDocumentList
 			= delegate( AppLogic app )
 		{
-			string t = "";
-			foreach( Document doc in app.Documents )
-			{
-				t += doc.FilePath;
-			}
-			MessageBox.Show(t);
+			app.ShowDocumentList();
 		};
 	}
 }

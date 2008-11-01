@@ -1,7 +1,7 @@
 ìØç´ï®ÇÃê‡ñæ
-                                                           2008-10-26
-                                                      YAMAMOTO Suguru
-                                         http://azuki.sourceforge.jp/
+                                                                     2008-10-26
+                                                                YAMAMOTO Suguru
+                                                   http://azuki.sourceforge.jp/
 
 - Azuki.dll
 	.NET Framework î≈ÇÃ Azuki Ç≈Ç∑ÅB
