@@ -1,10 +1,11 @@
-// 2008-10-26
+// 2008-11-01
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using Sgry.Azuki;
 using Sgry.Azuki.Windows;
+using Path = System.IO.Path;
 using Debug = System.Diagnostics.Debug;
 
 namespace Sgry.Ann
@@ -38,6 +39,7 @@ namespace Sgry.Ann
 		}
 		#endregion
 
+		#region UI Access
 		/// <summary>
 		/// Gets Azuki control.
 		/// </summary>
@@ -47,16 +49,21 @@ namespace Sgry.Ann
 		}
 
 		/// <summary>
-		/// Gets or sets window text.
+		/// Resets form text.
 		/// </summary>
-		public override string Text
+		public
+#		if !PocketPC
+		override
+#		endif
+		void ResetText()
 		{
-			get{ return base.Text; }
-			set
-			{
-				base.Text = "Ann - " + value;
-			}
+			Document doc = _App.ActiveDocument;
+			base.Text = String.Format( "Ann - {0} [{1}, {2}]",
+				Path.GetFileName(doc.FilePath),
+				doc.Encoding.WebName,
+				doc.FileType.Name );
 		}
+		#endregion
 
 		#region Action Mapping
 		void HandleMenuAction( object sender, EventArgs e )
@@ -99,6 +106,7 @@ namespace Sgry.Ann
 			_MenuMap[ _MI_View_ShowSpecialChar ]	= Actions.SelectSpecialCharVisibility;
 			_MenuMap[ _MI_View_WrapLines ]			= Actions.ToggleWrapLines;
 
+			_MenuMap[ _MI_Mode_Text ]		= Actions.SetToTextMode;
 			_MenuMap[ _MI_Mode_Cpp ]		= Actions.SetToCppMode;
 			_MenuMap[ _MI_Mode_CSharp ]		= Actions.SetToCSharpMode;
 			_MenuMap[ _MI_Mode_Java ]		= Actions.SetToJavaMode;
@@ -192,6 +200,7 @@ namespace Sgry.Ann
 			_MI_View.MenuItems.Add( _MI_View_ShowSpecialChar );
 			_MI_View.MenuItems.Add( _MI_View_WrapLines );
 
+			_MI_Mode.MenuItems.Add( _MI_Mode_Text );
 			_MI_Mode.MenuItems.Add( _MI_Mode_Cpp );
 			_MI_Mode.MenuItems.Add( _MI_Mode_CSharp );
 			_MI_Mode.MenuItems.Add( _MI_Mode_Java );	
@@ -221,6 +230,7 @@ namespace Sgry.Ann
 			_MI_View_ShowSpecialChar.Text = "Show &Special Chars...";
 			_MI_View_WrapLines.Text = "&Wrap lines";
 			_MI_Mode.Text = "&Mode";
+			_MI_Mode_Text.Text = "&Text";
 			_MI_Mode_Cpp.Text = "&C/C++";
 			_MI_Mode_CSharp.Text = "C&#";
 			_MI_Mode_Java.Text = "&Java";
@@ -305,6 +315,7 @@ namespace Sgry.Ann
 		MenuItem _MI_View_ShowSpecialChar	= new MenuItem();
 		MenuItem _MI_View_WrapLines			= new MenuItem();
 		MenuItem _MI_Mode			= new MenuItem();
+		MenuItem _MI_Mode_Text		= new MenuItem();
 		MenuItem _MI_Mode_Cpp		= new MenuItem();
 		MenuItem _MI_Mode_CSharp	= new MenuItem();
 		MenuItem _MI_Mode_Java		= new MenuItem();

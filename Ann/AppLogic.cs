@@ -1,4 +1,4 @@
-// 2008-10-28
+// 2008-11-01
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -64,7 +64,7 @@ MainForm.Azuki.Font = AppConfig.Font;
 				MainForm.Azuki.ScrollToCaret();
 
 				// update UI
-				MainForm.Text = Utl.ToWindowText( _DAD_ActiveDocument );
+				MainForm.ResetText();
 			}
 		}
 		#endregion
@@ -136,6 +136,21 @@ MainForm.Azuki.Font = AppConfig.Font;
 				ActiveDocument = _DAD_Documents[ _DAD_Documents.Count-1 ];
 			}
 		}
+
+		/// <summary>
+		/// Sets file type to the document.
+		/// </summary>
+		public void SetFileType( Document doc, FileType fileType )
+		{
+			doc.FileType = fileType;
+			doc.AzukiDoc.Highlighter = fileType.Highlighter;
+
+			if( doc == ActiveDocument )
+			{
+				_MainForm.ResetText();
+				_MainForm.Azuki.Invalidate();
+			}
+		}
 		#endregion
 
 		#region I/O
@@ -146,7 +161,7 @@ MainForm.Azuki.Font = AppConfig.Font;
 		public Document OpenFile( string filePath, Encoding encoding, bool withBom )
 		{
 			Document doc = new Document( new AzukiDocument() );
-			StreamReader reader = null;
+			StreamReader file = null;
 			char[] buf = new char[ 1024 ];
 			int readCount = 0;
 
@@ -158,14 +173,20 @@ MainForm.Azuki.Font = AppConfig.Font;
 			doc.Encoding = encoding;
 
 			// load file content
-			using( reader = new StreamReader(filePath, encoding) )
+			file = new StreamReader( filePath, encoding );
+			while( !file.EndOfStream )
 			{
-				while( !reader.EndOfStream )
+				readCount = file.Read( buf, 0, buf.Length-1 );
+				buf[ readCount ] = '\0';
+				unsafe
 				{
-					readCount += reader.Read( buf, 0, buf.Length );
-					doc.AzukiDoc.Replace( new String(buf), doc.AzukiDoc.Length, doc.AzukiDoc.Length );
+					fixed( char* p = buf )
+					{
+						doc.AzukiDoc.Replace( new String(p), doc.AzukiDoc.Length, doc.AzukiDoc.Length );
+					}
 				}
 			}
+			file.Close();
 			doc.AzukiDoc.ClearHistory();
 			doc.FilePath = filePath;
 
@@ -232,11 +253,6 @@ MainForm.Azuki.Font = AppConfig.Font;
 		#region Utilities
 		static class Utl
 		{
-			public static string ToWindowText( Document doc )
-			{
-				return String.Format( "{0} [{1}]", Path.GetFileName(doc.FilePath), doc.Encoding.WebName );
-			}
-
 			public static void AnalyzeEncoding( string filePath, out Encoding encoding, out bool withBom )
 			{
 				const int OneMega = 1024 * 1024;

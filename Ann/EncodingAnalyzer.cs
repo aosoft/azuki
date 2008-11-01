@@ -522,7 +522,7 @@ namespace Sgry
 /*
 Version History
 
-[v1.2.1] 2008-10-25
+[v1.2.2] 2008-10-25
 ・ライセンスを zlib license に変更
 
 [v1.2.1] 2007-01-25

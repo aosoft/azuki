@@ -1,4 +1,4 @@
-// 2008-10-26
+// 2008-11-01
 using System;
 using System.Text;
 using Sgry.Azuki;
@@ -10,6 +10,7 @@ namespace Sgry.Ann
 		Azuki.Document _AzukiDoc;
 		string _FilePath = null;
 		Encoding _Encoding = Encoding.Default;
+		FileType _FileType;
 		
 		/// <summary>
 		/// Creates a new instance.
@@ -17,6 +18,7 @@ namespace Sgry.Ann
 		public Document( Azuki.Document azukiDoc )
 		{
 			_AzukiDoc = azukiDoc;
+			_FileType = FileType.TextFileType;
 		}
 
 		/// <summary>
@@ -25,6 +27,15 @@ namespace Sgry.Ann
 		public Azuki.Document AzukiDoc
 		{
 			get{ return _AzukiDoc; }
+		}
+
+		/// <summary>
+		/// Gets associated file type object.
+		/// </summary>
+		public FileType FileType
+		{
+			get{ return _FileType; }
+			set{ _FileType = value; }
 		}
 
 		/// <summary>

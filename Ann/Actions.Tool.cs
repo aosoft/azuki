@@ -7,13 +7,21 @@ namespace Sgry.Ann
 	static partial class Actions
 	{
 		/// <summary>
+		/// Set editing mode to Text mode.
+		/// </summary>
+		public static AnnAction SetToTextMode
+			= delegate( AppLogic app )
+		{
+			app.SetFileType( app.ActiveDocument, FileType.TextFileType );
+		};
+
+		/// <summary>
 		/// Set editing mode to C/C++ mode.
 		/// </summary>
 		public static AnnAction SetToCppMode
 			= delegate( AppLogic app )
 		{
-			app.MainForm.Azuki.Highlighter = Azuki.HighlighterFactory.CppHighlighter;
-			app.MainForm.Azuki.AutoIndentHook = Azuki.AutoIndentLogic.CHook;
+			app.SetFileType( app.ActiveDocument, FileType.CppFileType );
 		};
 
 		/// <summary>
@@ -22,8 +30,7 @@ namespace Sgry.Ann
 		public static AnnAction SetToCSharpMode
 			= delegate( AppLogic app )
 		{
-			app.MainForm.Azuki.Highlighter = Azuki.HighlighterFactory.CppHighlighter;
-			app.MainForm.Azuki.AutoIndentHook = Azuki.AutoIndentLogic.CHook;
+			app.SetFileType( app.ActiveDocument, FileType.CSharpFileType );
 		};
 
 		/// <summary>
@@ -32,8 +39,7 @@ namespace Sgry.Ann
 		public static AnnAction SetToJavaMode
 			= delegate( AppLogic app )
 		{
-			app.MainForm.Azuki.Highlighter = Azuki.HighlighterFactory.JavaHighlighter;
-			app.MainForm.Azuki.AutoIndentHook = Azuki.AutoIndentLogic.CHook;
+			app.SetFileType( app.ActiveDocument, FileType.JavaFileType );
 		};
 
 		/// <summary>
@@ -42,8 +48,7 @@ namespace Sgry.Ann
 		public static AnnAction SetToRubyMode
 			= delegate( AppLogic app )
 		{
-			app.MainForm.Azuki.Highlighter = Azuki.HighlighterFactory.RubyHighlighter;
-			app.MainForm.Azuki.AutoIndentHook = Azuki.AutoIndentLogic.GenericHook;
+			app.SetFileType( app.ActiveDocument, FileType.RubyFileType );
 		};
 
 		/// <summary>
@@ -52,8 +57,7 @@ namespace Sgry.Ann
 		public static AnnAction SetToXmlMode
 			= delegate( AppLogic app )
 		{
-			app.MainForm.Azuki.Highlighter = Azuki.HighlighterFactory.XmlHighlighter;
-			app.MainForm.Azuki.AutoIndentHook = Azuki.AutoIndentLogic.GenericHook;
+			app.SetFileType( app.ActiveDocument, FileType.XmlFileType );
 		};
 	}
 }
