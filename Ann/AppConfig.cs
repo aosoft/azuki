@@ -1,4 +1,4 @@
-﻿// 2008-10-26
+﻿// 2008-11-01
 using System;
 using System.Drawing;
 using System.IO;
@@ -24,8 +24,9 @@ namespace Sgry.Ann
 			// font
 			try
 			{
+				int fontSize = ini.TryGetInt( "Default", "FontSize", 11 );
 				str = ini.TryGetString( "Default", "Font", null );
-				AppConfig.Font = new Font( str, 11, FontStyle.Regular );
+				AppConfig.Font = new Font( str, fontSize, FontStyle.Regular );
 			}
 			catch
 			{
