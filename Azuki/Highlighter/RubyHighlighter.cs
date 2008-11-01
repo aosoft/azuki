@@ -6,12 +6,12 @@
 using System;
 using Color = System.Drawing.Color;
 
-namespace Sgry.Azuki
+namespace Sgry.Azuki.Highlighter
 {
 	/// <summary>
 	/// Highlighter for Ruby language based on keyword matching.
 	/// </summary>
-	public class RubyHighlighter : BasicHighlighter
+	public class RubyHighlighter : KeywordHighlighter
 	{
 		/// <summary>
 		/// Creates a new instance.

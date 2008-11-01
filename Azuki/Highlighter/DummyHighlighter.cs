@@ -5,17 +5,23 @@
 //=========================================================
 using System;
 
-namespace Sgry.Azuki
+namespace Sgry.Azuki.Highlighter
 {
 	/// <summary>
 	/// Dummy highlighter which does nothing.
 	/// </summary>
-	public class DummyHighlighter : HighlighterBase
+	public class DummyHighlighter : IHighlighter
 	{
 		/// <summary>
 		/// Does nothing.
 		/// </summary>
-		public override void Highlight( Document doc, ref int dirtyBegin, ref int dirtyEnd )
+		public void Highlight( Document doc )
+		{}
+
+		/// <summary>
+		/// Does nothing.
+		/// </summary>
+		public void Highlight( Document doc, ref int dirtyBegin, ref int dirtyEnd )
 		{}
 	}
 }

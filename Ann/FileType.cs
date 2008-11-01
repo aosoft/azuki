@@ -1,6 +1,8 @@
 // 2008-11-01
 using System;
 using Sgry.Azuki;
+using IHighlighter = Sgry.Azuki.Highlighter.IHighlighter;
+using Highlighters = Sgry.Azuki.Highlighter.Highlighters;
 
 namespace Sgry.Ann
 {
@@ -48,7 +50,7 @@ namespace Sgry.Ann
 				if( _CppFileType == null )
 				{
 					_CppFileType = new FileType();
-					_CppFileType._Highlighter = HighlighterFactory.CppHighlighter;
+					_CppFileType._Highlighter = Highlighters.Cpp;
 					_CppFileType._Name = "C/C++";
 				}
 				return _CppFileType;
@@ -65,7 +67,7 @@ namespace Sgry.Ann
 				if( _CSharpFileType == null )
 				{
 					_CSharpFileType = new FileType();
-					_CSharpFileType._Highlighter = HighlighterFactory.CSharpHighlighter;
+					_CSharpFileType._Highlighter = Highlighters.CSharp;
 					_CSharpFileType._Name = "C#";
 				}
 				return _CSharpFileType;
@@ -82,7 +84,7 @@ namespace Sgry.Ann
 				if( _JavaFileType == null )
 				{
 					_JavaFileType = new FileType();
-					_JavaFileType._Highlighter = HighlighterFactory.JavaHighlighter;
+					_JavaFileType._Highlighter = Highlighters.Java;
 					_JavaFileType._Name = "Java";
 				}
 				return _JavaFileType;
@@ -99,7 +101,7 @@ namespace Sgry.Ann
 				if( _RubyFileType == null )
 				{
 					_RubyFileType = new FileType();
-					_RubyFileType._Highlighter = HighlighterFactory.RubyHighlighter;
+					_RubyFileType._Highlighter = Highlighters.Ruby;
 					_RubyFileType._Name = "Ruby";
 				}
 				return _RubyFileType;
@@ -116,7 +118,7 @@ namespace Sgry.Ann
 				if( _XmlFileType == null )
 				{
 					_XmlFileType = new FileType();
-					_XmlFileType._Highlighter = HighlighterFactory.XmlHighlighter;
+					_XmlFileType._Highlighter = Highlighters.Xml;
 					_XmlFileType._Name = "XML";
 				}
 				return _XmlFileType;

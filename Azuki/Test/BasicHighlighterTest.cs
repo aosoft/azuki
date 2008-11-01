@@ -2,16 +2,17 @@
 #if DEBUG
 using System;
 
-namespace Sgry.Azuki
+namespace Sgry.Azuki.Test
 {
+	using Highlighter;
 	using Windows;
 
-	static class BasicHighlighterTest
+	static class KeywordHighlighterTest
 	{
 		public static void Test()
 		{
 			int testNum = 0;
-			Console.WriteLine( "[Test for Azuki.BasicHighlighter]" );
+			Console.WriteLine( "[Test for Azuki.KeywordHighlighter]" );
 
 			// around keywords
 			Console.WriteLine("test {0} - Keywords", testNum++);
@@ -46,7 +47,7 @@ namespace Sgry.Azuki
 		static void Test_LineComment()
 		{
 			Document doc = new Document();
-			BasicHighlighter h = new BasicHighlighter();
+			KeywordHighlighter h = new KeywordHighlighter();
 			h.AddLineHighlight( "///", CharClass.DocComment );
 			h.AddLineHighlight( "//", CharClass.Comment );
 			doc.Highlighter = h;
@@ -84,7 +85,7 @@ ho//ge";
 		static void Test_Keywords()
 		{
 			Document doc = new Document();
-			BasicHighlighter h = new BasicHighlighter();
+			KeywordHighlighter h = new KeywordHighlighter();
 			h.AddEnclosure( "\"", "\"", CharClass.String, '\\' );
 			h.AddEnclosure( "/*", "*/", CharClass.Comment );
 			h.SetKeywords( new string[]{
@@ -239,7 +240,7 @@ ho//ge";
 		static void Test_EnclosingPairs_EPI_Asym()
 		{
 			Document doc = new Document();
-			BasicHighlighter h = new BasicHighlighter();
+			KeywordHighlighter h = new KeywordHighlighter();
 			int begin_, end_;
 			h.AddEnclosure( "/*", "*/", CharClass.Comment );
 			doc.Highlighter = h;
@@ -457,7 +458,7 @@ ho//ge";
 		static void Test_EnclosingPairs_EPI_Sym()
 		{
 			Document doc = new Document();
-			BasicHighlighter h = new BasicHighlighter();
+			KeywordHighlighter h = new KeywordHighlighter();
 			int begin_, end_;
 			h.AddEnclosure( "\"", "\"", CharClass.String, '\\' );
 			doc.Highlighter = h;
@@ -602,7 +603,7 @@ ho//ge";
 		static void Test_EnclosingPairs_Escape()
 		{
 			Document doc = new Document();
-			BasicHighlighter h = new BasicHighlighter();
+			KeywordHighlighter h = new KeywordHighlighter();
 			h.AddEnclosure( "\"", "\"", CharClass.String, '\\' );
 			h.AddEnclosure( "/*", "*/", CharClass.Comment );
 			doc.Highlighter = h;
@@ -622,7 +623,7 @@ ho//ge";
 		static void Test_EnclosingPairs()
 		{
 			Document doc = new Document();
-			BasicHighlighter h = new BasicHighlighter();
+			KeywordHighlighter h = new KeywordHighlighter();
 			int begin_, end_;
 			h.AddEnclosure( "\"", "\"", CharClass.String );
 			h.AddEnclosure( "/*", "*/", CharClass.Comment );

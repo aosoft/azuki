@@ -76,6 +76,7 @@
     <Compile Include="CaretMoveLogic.cs" />
     <Compile Include="DebugUtl.cs" />
     <Compile Include="Highlighter\CSharpHighlighter.cs" />
+    <Compile Include="Highlighter\HighlighterUtl.cs" />
     <Compile Include="Highlighter\JavaHighlighter.cs" />
     <Compile Include="Highlighter\RubyHighlighter.cs" />
     <Compile Include="UiImpl.cs" />
@@ -91,7 +92,7 @@
     <Compile Include="Document\EditHistory.cs" />
     <Compile Include="Document\SplitArray.cs" />
     <Compile Include="Highlighter\IHighlighter.cs" />
-    <Compile Include="Highlighter\HighlighterFactory.cs" />
+    <Compile Include="Highlighter\Highlighters.cs" />
     <Compile Include="Highlighter\DummyHighlighter.cs" />
     <Compile Include="Highlighter\BasicHighlighter.cs" />
     <Compile Include="Highlighter\CppHighlighter.cs" />
@@ -130,6 +131,9 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -8,12 +8,12 @@ using System.Collections.Generic;
 using System.Text;
 using Debug = System.Diagnostics.Debug;
 
-namespace Sgry.Azuki
+namespace Sgry.Azuki.Highlighter
 {
 	/// <summary>
 	/// A highlighter to highlight XML.
 	/// </summary>
-	public class XmlHighlighter : HighlighterBase
+	public class XmlHighlighter : IHighlighter
 	{
 		#region Fields
 		List<Enclosure> _Enclosures = new List<Enclosure>();
@@ -50,9 +50,20 @@ namespace Sgry.Azuki
 		/// Parse and highlight keywords.
 		/// </summary>
 		/// <param name="doc">Document to highlight.</param>
+		public void Highlight( Document doc )
+		{
+			int begin = 0;
+			int end = doc.Length;
+			Highlight( doc, ref begin, ref end );
+		}
+
+		/// <summary>
+		/// Parse and highlight keywords.
+		/// </summary>
+		/// <param name="doc">Document to highlight.</param>
 		/// <param name="dirtyBegin">Index to start highlighting. On return, start index of the range to be invalidated.</param>
 		/// <param name="dirtyEnd">Index to end highlighting. On return, end index of the range to be invalidated.</param>
-		public override void Highlight( Document doc, ref int dirtyBegin, ref int dirtyEnd )
+		public void Highlight( Document doc, ref int dirtyBegin, ref int dirtyEnd )
 		{
 			if( dirtyBegin < 0 || doc.Length < dirtyBegin )
 				throw new ArgumentOutOfRangeException( "dirtyBegin" );
@@ -63,22 +74,22 @@ namespace Sgry.Azuki
 			int index, nextIndex;
 
 			// get index to start highlighting
-			dirtyBegin = HighlighterBase.FindLast( doc, "<", dirtyBegin );
+			dirtyBegin = HighlighterUtl.FindLast( doc, "<", dirtyBegin );
 			if( dirtyBegin == -1 )
 			{
 				dirtyBegin = 0;
 			}
-			dirtyEnd = HighlighterBase.Find( doc, ">", dirtyEnd, doc.Length );
+			dirtyEnd = HighlighterUtl.Find( doc, ">", dirtyEnd, doc.Length );
 			if( dirtyEnd == -1 )
 			{
 				dirtyEnd = doc.Length;
 			}
 
 			// seek each tags
-			index = HighlighterBase.Find( doc, "<", dirtyBegin, doc.Length );
+			index = HighlighterUtl.Find( doc, "<", dirtyBegin, doc.Length );
 			while( 0 <= index && index < dirtyEnd )
 			{
-				if( HighlighterBase.StartsWith(doc, "<!--", index) )
+				if( HighlighterUtl.StartsWith(doc, "<!--", index) )
 				{
 					// highlight enclosing part if this token begins a part
 					nextIndex = TryHighlightEnclosure( doc, _Enclosures, index, dirtyEnd );
@@ -117,7 +128,7 @@ namespace Sgry.Azuki
 					}
 
 					// highlight element name
-					nextIndex = HighlighterBase.FindNextToken( doc, index );
+					nextIndex = HighlighterUtl.FindNextToken( doc, index );
 					for( int i=index; i<nextIndex; i++ )
 					{
 						doc.SetCharClass( i, CharClass.Keyword2 );
@@ -137,7 +148,7 @@ namespace Sgry.Azuki
 						}
 
 						// this token is normal class; reset classes and seek to next token
-						nextIndex = HighlighterBase.FindNextToken( doc, index );
+						nextIndex = HighlighterUtl.FindNextToken( doc, index );
 						for( int i=index; i<nextIndex; i++ )
 						{
 							doc.SetCharClass( i, CharClass.Keyword3 );
@@ -155,13 +166,13 @@ namespace Sgry.Azuki
 				}
 
 				// seek to next tag
-				index = HighlighterBase.Find( doc, "<", index, doc.Length );
+				index = HighlighterUtl.Find( doc, "<", index, doc.Length );
 			}
 
 			// expand invalaidation range
 			if( 0 <= index && index < doc.Length )
 			{
-				dirtyEnd = HighlighterBase.Find( doc, ">", index, doc.Length );
+				dirtyEnd = HighlighterUtl.Find( doc, ">", index, doc.Length );
 			}
 		}
 
@@ -175,14 +186,14 @@ namespace Sgry.Azuki
 			int closePos;
 
 			// get pair which begins from this position
-			pair = HighlighterBase.StartsWith( doc, pairs, startIndex );
+			pair = HighlighterUtl.StartsWith( doc, pairs, startIndex );
 			if( pair == null )
 			{
 				return startIndex; // no pair begins from here.
 			}
 
 			// find closing pair
-			closePos = FindCloser( doc, pair, startIndex+pair.opener.Length, endIndex );
+			closePos = HighlighterUtl.FindCloser( doc, pair, startIndex+pair.opener.Length, endIndex );
 			if( closePos == -1 )
 			{
 				// not found.

@@ -1,28 +1,30 @@
-﻿// file: HighlighterFactory.cs
+﻿// file: Highlighters.cs
 // brief: Class factory of highlighters.
 // author: YAMAMOTO Suguru
 // update: 2008-11-01
 //=========================================================
 using System;
 
-namespace Sgry.Azuki
+namespace Sgry.Azuki.Highlighter
 {
 	/// <summary>
 	/// Class factory to create build-in highlighter by name.
 	/// </summary>
-	public static class HighlighterFactory
+	public static class Highlighters
 	{
+		#region Fields
 		static CppHighlighter _CppHighlighter = null;
 		static CSharpHighlighter _CSharpHighlighter = null;
 		static XmlHighlighter _XmlHighlighter = null;
-		static BasicHighlighter _BasicHighlighter = null;
 		static JavaHighlighter _JavaHighlighter = null;
 		static RubyHighlighter _RubyHighlighter = null;
+		#endregion
 
+		#region Built-in Highlighters
 		/// <summary>
 		/// Gets a highlighter for C/C++.
 		/// </summary>
-		public static CppHighlighter CppHighlighter
+		public static IHighlighter Cpp
 		{
 			get
 			{
@@ -37,7 +39,7 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Gets a highlighter for C#.
 		/// </summary>
-		public static CSharpHighlighter CSharpHighlighter
+		public static IHighlighter CSharp
 		{
 			get
 			{
@@ -52,7 +54,7 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Gets a highlighter for Java.
 		/// </summary>
-		public static JavaHighlighter JavaHighlighter
+		public static IHighlighter Java
 		{
 			get
 			{
@@ -67,7 +69,7 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Gets a highlighter for Ruby.
 		/// </summary>
-		public static RubyHighlighter RubyHighlighter
+		public static IHighlighter Ruby
 		{
 			get
 			{
@@ -82,7 +84,7 @@ namespace Sgry.Azuki
 		/// <summary>
 		/// Gets a highlighter for XML.
 		/// </summary>
-		public static XmlHighlighter XmlHighlighter
+		public static IHighlighter Xml
 		{
 			get
 			{
@@ -93,38 +95,6 @@ namespace Sgry.Azuki
 				return _XmlHighlighter;
 			}
 		}
-
-		/// <summary>
-		/// Gets a generic keyword based highlighter.
-		/// </summary>
-		public static BasicHighlighter BasicHighlighter
-		{
-			get
-			{
-				if( _BasicHighlighter == null )
-				{
-					_BasicHighlighter = new BasicHighlighter();
-				}
-				return _BasicHighlighter;
-			}
-		}
-
-		/// <summary>
-		/// Creates a highlighter by name.
-		/// </summary>
-		public static IHighlighter FindByName( string typeName )
-		{
-			switch( typeName.ToLower() )
-			{
-				case "c":		return CppHighlighter;
-				case "c++":		return CppHighlighter;
-				case "c/c++":	return CppHighlighter;
-				case "c#":		return CppHighlighter;
-				case "java":	return JavaHighlighter;
-				case "ruby":	return RubyHighlighter;
-				case "xml":		return XmlHighlighter;
-				default:		return new DummyHighlighter();
-			}
-		}
+		#endregion
 	}
 }

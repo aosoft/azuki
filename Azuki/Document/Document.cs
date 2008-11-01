@@ -12,6 +12,8 @@ using Debug = System.Diagnostics.Debug;
 
 namespace Sgry.Azuki
 {
+	using Highlighter;
+
 	/// <summary>
 	/// The document of the Azuki editor engine.
 	/// </summary>

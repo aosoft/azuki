@@ -6,12 +6,12 @@
 using System;
 using Color = System.Drawing.Color;
 
-namespace Sgry.Azuki
+namespace Sgry.Azuki.Highlighter
 {
 	/// <summary>
 	/// Highlighter for C/C++ language based on keyword matching.
 	/// </summary>
-	public class CppHighlighter : BasicHighlighter
+	class CppHighlighter : KeywordHighlighter
 	{
 		/// <summary>
 		/// Creates a new instance.

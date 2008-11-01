@@ -14,6 +14,8 @@ using System.Runtime.InteropServices;
 
 namespace Sgry.Azuki.Windows
 {
+	using IHighlighter = Highlighter.IHighlighter;
+
 	/// <summary>
 	/// Azuki user interface for Windows.Forms framework
 	/// (.NET Compact Framework compatible).

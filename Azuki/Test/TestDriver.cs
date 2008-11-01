@@ -12,7 +12,7 @@ namespace Sgry.Azuki.Test
 			EditHistoryTest.Test();
 			SplitArrayTest.Test();
 			DocumentTest.Test();
-			BasicHighlighterTest.Test();
+			KeywordHighlighterTest.Test();
 			if( TestUtl.ErrorOccured )
 			{
 				Console.ForegroundColor = ConsoleColor.Red;

@@ -70,7 +70,7 @@
     <Compile Include="Document\EditHistory.cs" />
     <Compile Include="Document\SplitArray.cs" />
     <Compile Include="Highlighter\IHighlighter.cs" />
-    <Compile Include="Highlighter\HighlighterFactory.cs" />
+    <Compile Include="Highlighter\Highlighters.cs" />
     <Compile Include="Highlighter\DummyHighlighter.cs" />
     <Compile Include="Highlighter\BasicHighlighter.cs" />
     <Compile Include="Highlighter\CppHighlighter.cs" />

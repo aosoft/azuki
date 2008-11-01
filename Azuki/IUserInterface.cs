@@ -9,6 +9,8 @@ using System.Drawing;
 
 namespace Sgry.Azuki
 {
+	using IHighlighter = Highlighter.IHighlighter;
+	
 	/// <summary>
 	/// Interface of user interface module.
 	/// </summary>

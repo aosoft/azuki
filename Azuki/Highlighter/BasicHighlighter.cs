@@ -1,4 +1,4 @@
-﻿// file: BasicHighlighter.cs
+﻿// file: KeywordHighlighter.cs
 // brief: Keyword based highlighter.
 // author: YAMAMOTO Suguru
 // update: 2008-10-13
@@ -6,15 +6,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Debug = System.Diagnostics.Debug;
 
-namespace Sgry.Azuki
+namespace Sgry.Azuki.Highlighter
 {
 	/// <summary>
-	/// A basic highlighter which can highlight
+	/// A keyword-based highlighter which can highlight
 	/// matched keywords and parts being enclosed by specified pair.
 	/// </summary>
-	public class BasicHighlighter : HighlighterBase
+	public class KeywordHighlighter : IHighlighter
 	{
 		#region Inner Types and Fields
 		class KeywordSet
@@ -202,9 +201,20 @@ namespace Sgry.Azuki
 		/// Parse and highlight keywords.
 		/// </summary>
 		/// <param name="doc">Document to highlight.</param>
+		public void Highlight( Document doc )
+		{
+			int begin = 0;
+			int end = doc.Length;
+			Highlight( doc, ref begin, ref end );
+		}
+
+		/// <summary>
+		/// Parse and highlight keywords.
+		/// </summary>
+		/// <param name="doc">Document to highlight.</param>
 		/// <param name="dirtyBegin">Index to start highlighting. On return, start index of the range to be invalidated.</param>
 		/// <param name="dirtyEnd">Index to end highlighting. On return, end index of the range to be invalidated.</param>
-		public override void Highlight( Document doc, ref int dirtyBegin, ref int dirtyEnd )
+		public void Highlight( Document doc, ref int dirtyBegin, ref int dirtyEnd )
 		{
 			if( dirtyBegin < 0 || doc.Length < dirtyBegin )
 				throw new ArgumentOutOfRangeException( "dirtyBegin" );
@@ -250,7 +260,7 @@ dirtyEnd = doc.Length;
 				}
 
 				// highlight digit as number
-				nextIndex = TryHighlightNumberToken( doc, index, dirtyEnd );
+				nextIndex = HighlighterUtl.TryHighlightNumberToken( doc, index, dirtyEnd );
 				if( index < nextIndex )
 				{
 					index = nextIndex;
@@ -258,7 +268,7 @@ dirtyEnd = doc.Length;
 				}
 				
 				// this token is normal class; reset classes and seek to next token
-				nextIndex = HighlighterBase.FindNextToken( doc, index );
+				nextIndex = HighlighterUtl.FindNextToken( doc, index );
 				for( int i=index; i<nextIndex; i++ )
 				{
 					doc.SetCharClass( i, CharClass.Normal );
@@ -278,14 +288,14 @@ dirtyEnd = doc.Length;
 			int closePos;
 
 			// get pair which begins from this position
-			pair = HighlighterBase.StartsWith( doc, pairs, startIndex );
+			pair = HighlighterUtl.StartsWith( doc, pairs, startIndex );
 			if( pair == null )
 			{
 				return startIndex; // no pair begins from here.
 			}
 
 			// find closing pair
-			closePos = HighlighterBase.FindCloser( doc, pair, startIndex+pair.opener.Length, endIndex );
+			closePos = HighlighterUtl.FindCloser( doc, pair, startIndex+pair.opener.Length, endIndex );
 			if( closePos == -1 )
 			{
 				// not found.
@@ -320,14 +330,14 @@ dirtyEnd = doc.Length;
 			Enclosure pair;
 
 			// get line comment opener
-			pair = HighlighterBase.StartsWith( doc, pairs, startIndex );
+			pair = HighlighterUtl.StartsWith( doc, pairs, startIndex );
 			if( pair == null )
 			{
 				return startIndex; // no line-comment begins from here.
 			}
 
 			// get line-end pos
-			closePos = HighlighterBase.GetLineEndIndexFromCharIndex( doc, startIndex );
+			closePos = HighlighterUtl.GetLineEndIndexFromCharIndex( doc, startIndex );
 
 			// highlight the line
 			for( int i=startIndex; i<closePos; i++ )
@@ -474,7 +484,7 @@ dirtyEnd = doc.Length;
 			for( int i=begin; i<end; i++ )
 			{
 				// ensure a pair begins from here
-				pair = HighlighterBase.StartsWith( doc, _Enclosures, i );
+				pair = HighlighterUtl.StartsWith( doc, _Enclosures, i );
 				if( pair == null )
 				{
 					continue; // no pair matched
@@ -485,7 +495,7 @@ dirtyEnd = doc.Length;
 				epiIndex++;
 
 				// find closing pair
-				closePos = HighlighterBase.FindCloser( doc, pair, i+pair.opener.Length, end );
+				closePos = HighlighterUtl.FindCloser( doc, pair, i+pair.opener.Length, end );
 				if( closePos == -1 )
 				{
 					break; // no matching closer

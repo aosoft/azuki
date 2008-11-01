@@ -11,6 +11,8 @@ using Debug = System.Diagnostics.Debug;
 
 namespace Sgry.Azuki
 {
+	using IHighlighter = Highlighter.IHighlighter;
+
 	/// <summary>
 	/// User inteface logic that independent from platform.
 	/// </summary>

@@ -10,6 +10,7 @@ using Sgry.Azuki;
 using Sgry.Azuki.Windows;
 using Font = System.Drawing.Font;
 using FontStyle = System.Drawing.FontStyle;
+using Highlighters = Sgry.Azuki.Highlighter.Highlighters;
 
 namespace Sgry.Ann
 {
@@ -24,7 +25,7 @@ namespace Sgry.Ann
 			_Azuki_Preview.IsReadOnly = false;
 			_Azuki_Preview.Text = "#include <stdio.h>\n\nint main( int argc, char* argv[] ) {\n\tprintf( \"こんにちは　世界！\\n\" );\n\treturn 0;\n}\n";
 			_Azuki_Preview.IsReadOnly = true;
-			_Azuki_Preview.Highlighter = Azuki.HighlighterFactory.CppHighlighter;
+			_Azuki_Preview.Highlighter = Highlighters.Cpp;
 
 			// setup dialog
 #			if !PocketPC
