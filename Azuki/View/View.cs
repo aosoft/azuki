@@ -1,7 +1,7 @@
 ﻿// file: View.cs
 // brief: Platform independent view implementation of Azuki engine.
 // author: YAMAMOTO Suguru
-// update: 2008-10-28
+// update: 2008-11-01
 //=========================================================
 using System;
 using System.Drawing;
@@ -631,6 +631,34 @@ namespace Sgry.Azuki
 			_UI.Scroll( clipRect, -deltaInPx, 0 );
 		}
 		#endregion
+
+		/// <summary>
+		/// Sets font size to larger one.
+		/// </summary>
+		public void ZoomIn()
+		{
+			// calculate next font size
+			float newSize = (float)(Font.Size * 1.25);
+
+			// apply
+			Font = new Font( Font.Name, newSize, Font.Style );
+		}
+
+		/// <summary>
+		/// Sets font size to smaller one.
+		/// </summary>
+		public void ZoomOut()
+		{
+			// calculate next font size
+			float newSize = (float)(Font.Size * 0.8);
+			if( newSize < 1 )
+			{
+				return;
+			}
+
+			// apply
+			Font = new Font( Font.Name, newSize, Font.Style );
+		}
 
 		#region Communication between UI Module
 		/// <summary>

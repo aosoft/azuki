@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-10-26
+// update: 2008-11-01
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -974,13 +974,25 @@ namespace Sgry.Azuki.Windows
 		#region GUI Event Handling
 		void HandleWheelEvent( int scrollOffset )
 		{
-			int type = (scrollOffset < 0) ? WinApi.SB_LINEUP : WinApi.SB_LINEDOWN;
-			
-			if( WinApi.IsKeyDown(Keys.ShiftKey) )
+			// get modifier key state
+			bool shift = WinApi.IsKeyDown( Keys.ShiftKey );
+			bool control = WinApi.IsKeyDown( Keys.ControlKey );
+			bool alt = WinApi.IsKeyDown( Keys.Menu );
+
+			// dispatch mouse event
+			if( !control && !alt && shift )
 			{
+				int type = (scrollOffset < 0) ? WinApi.SB_LINEUP : WinApi.SB_LINEDOWN;
 				HandleHScrollEvent( type );
 			}
-			else
+			else if( control && !alt && !shift )
+			{
+				if( 0 < scrollOffset )
+					View.ZoomIn();
+				else
+					View.ZoomOut();
+			}
+			else if( !control && !alt && !shift )
 			{
 				View.Scroll( scrollOffset );
 			}
