@@ -48,6 +48,7 @@ namespace Sgry.Ann
 			{
 				_MainForm = value;
 				_MainForm.Closing += MainForm_Closing;
+				_MainForm.Azuki.Resize += Azuki_Resize;
 
 				// handle initially set document
 				Document doc = new Document( value.Azuki.Document );
@@ -433,6 +434,11 @@ namespace Sgry.Ann
 					}
 				}
 			}
+		}
+
+		void Azuki_Resize( object sender, EventArgs e )
+		{
+			MainForm.Azuki.ViewWidth = MainForm.Azuki.ClientSize.Width;
 		}
 		#endregion
 
