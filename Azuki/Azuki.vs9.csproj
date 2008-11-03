@@ -94,14 +94,14 @@
     <Compile Include="Highlighter\IHighlighter.cs" />
     <Compile Include="Highlighter\Highlighters.cs" />
     <Compile Include="Highlighter\DummyHighlighter.cs" />
-    <Compile Include="Highlighter\BasicHighlighter.cs" />
+    <Compile Include="Highlighter\KeywordHighlighter.cs" />
     <Compile Include="Highlighter\CppHighlighter.cs" />
     <Compile Include="Highlighter\XmlHighlighter.cs" />
     <Compile Include="Test\EditHistoryTest.cs" />
     <Compile Include="Test\LineLogicTest.cs" />
     <Compile Include="Test\SplitArrayTest.cs" />
     <Compile Include="Test\TestDriver.cs" />
-    <Compile Include="Test\BasicHighlighterTest.cs" />
+    <Compile Include="Test\KeywordHighlighterTest.cs" />
     <Compile Include="Test\DocumentTest.cs" />
     <Compile Include="View\ColorScheme.cs" />
     <Compile Include="View\PropView.cs" />

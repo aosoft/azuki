@@ -59,7 +59,7 @@
     <Compile Include="Highlighter\RubyHighlighter.cs" />
     <Compile Include="Highlighter\CSharpHighlighter.cs" />
     <Compile Include="IUserInterface.cs" />
-    <Compile Include="Test\BasicHighlighterTest.cs" />
+    <Compile Include="Test\KeywordHighlighterTest.cs" />
     <Compile Include="UiImpl.cs" />
     <Compile Include="UserPref.cs" />
     <Compile Include="DebugUtl.cs" />
@@ -73,7 +73,7 @@
     <Compile Include="Highlighter\IHighlighter.cs" />
     <Compile Include="Highlighter\Highlighters.cs" />
     <Compile Include="Highlighter\DummyHighlighter.cs" />
-    <Compile Include="Highlighter\BasicHighlighter.cs" />
+    <Compile Include="Highlighter\KeywordHighlighter.cs" />
     <Compile Include="Highlighter\CppHighlighter.cs" />
     <Compile Include="Highlighter\XmlHighlighter.cs" />
     <Compile Include="Test\DocumentTest.cs" />
