@@ -973,7 +973,20 @@ namespace Sgry.Azuki.Windows
 		/// <summary>
 		/// Gets or sets highlighter for currently active document.
 		/// Setting null to this property will disable highlighting.
+		/// See built-in highlighters for
+		/// <see cref="Sgry.Azuki.Highlighter.Highlighters">Highlighters</see>.
 		/// </summary>
+		/// <seealso cref="Sgry.Azuki.Highlighter.Highlighters"/>
+		/// <remarks>
+		/// Note that user can create and specify custom highlighter object.
+		/// If you want to create a keyword-based highlighter,
+		/// you can customize or extend
+		/// <see cref="Sgry.Azuki.Highlighter.KeywordHighlighter">KeywordHighlighter</see>.
+		/// If you want ot create not a keyword based one,
+		/// create a class which implements
+		/// <see cref="Sgry.Azuki.Highlighter.IHighlighter">IHighlighter</see>
+		/// and write your own highlighting logic.
+		/// </remarks>
 #		if !PocketPC
 		[Browsable(false)]
 		[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
