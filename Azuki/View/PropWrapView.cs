@@ -2,7 +2,7 @@
 // brief: Platform independent view (propotional, line-wrap).
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-08-15
+// update: 2008-11-03
 //=========================================================
 //DEBUG//#define PLHI_DEBUG
 //DEBUG//#define DRAW_SLOWLY
@@ -777,7 +777,7 @@ namespace Sgry.Azuki
 				if( pos.X < TextAreaX )
 					pos.X = TextAreaX;
 				_Gra.BackColor = ColorScheme.BackColor;
-				_Gra.FillRectangle( pos.X, pos.Y, physTextAreaRight-pos.X-1, LineSpacing );
+				_Gra.FillRectangle( pos.X, pos.Y, physTextAreaRight-pos.X, LineSpacing );
 			}
 
 #			if !DRAW_SLOWLY
