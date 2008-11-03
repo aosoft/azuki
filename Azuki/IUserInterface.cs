@@ -2,7 +2,7 @@
 // brief: interface of user interface module (platform dependent)
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-10-04
+// update: 2008-11-03
 //=========================================================
 using System;
 using System.Drawing;
@@ -83,6 +83,14 @@ namespace Sgry.Azuki
 		/// Color set used for displaying text.
 		/// </summary>
 		ColorScheme ColorScheme
+		{
+			get; set;
+		}
+
+		/// <summary>
+		/// Gets or sets drawing options.
+		/// </summary>
+		DrawingOption DrawingOption
 		{
 			get; set;
 		}

@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-11-01
+// update: 2008-11-03
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -318,6 +318,18 @@ namespace Sgry.Azuki.Windows
 		{
 			get{ return View.ColorScheme; }
 			set{ View.ColorScheme = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets drawing options.
+		/// </summary>
+#		if !PocketPC
+		[Browsable(false)]
+#		endif
+		public DrawingOption DrawingOption
+		{
+			get{ return View.DrawingOption; }
+			set{ View.DrawingOption = value; }
 		}
 
 		/// <summary>

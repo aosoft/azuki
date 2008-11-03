@@ -7,6 +7,9 @@ using System;
 
 namespace Sgry.Azuki
 {
+	/// <summary>
+	/// Option flags to specify how Azuki draws text area.
+	/// </summary>
 	[Flags]
 	public enum DrawingOption : int
 	{
