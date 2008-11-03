@@ -1,7 +1,7 @@
 ﻿// file: UiImpl.cs
 // brief: User interface logic that independent from platform.
 // author: YAMAMOTO Suguru
-// update: 2008-10-28
+// update: 2008-11-03
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -375,8 +375,19 @@ namespace Sgry.Azuki
 				}
 
 				// highlight and refresh view
-				doc.Highlighter.Highlight( doc, ref dirtyBegin, ref dirtyEnd );
-				View.Invalidate( dirtyBegin, dirtyEnd );
+				try
+				{
+					doc.Highlighter.Highlight( doc, ref dirtyBegin, ref dirtyEnd );
+					View.Invalidate( dirtyBegin, dirtyEnd );
+				}
+				catch
+				{
+					// For example, contents could be shorten just during highlighting
+					// because Azuki design does not lock buffers for thread safety.
+					// It is very hard to take care of such cases in highlighters (including user-made ones)
+					// so here I trap any exception and invalidate whole view in that case.
+					View.Invalidate();
+				}
 
 				// prepare for next loop
 				_DirtyRangeBegin = -1;
