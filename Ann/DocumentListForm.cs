@@ -64,7 +64,7 @@ namespace Sgry.Ann
 				{
 					// add item for ths document
 					ListViewItem lvItem = new ListViewItem();
-					lvItem.Text = Path.GetFileName( doc.DisplayName );
+					lvItem.Text = Path.GetFileName( doc.DisplayNameWithFlags );
 					lvItem.Tag = doc;
 					_ListView.Items.Add( lvItem );
 

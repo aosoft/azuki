@@ -38,7 +38,7 @@ namespace Sgry.Ann
 		}
 
 		/// <summary>
-		/// Gets associated file type object.
+		/// Gets or sets name for display.
 		/// </summary>
 		public string DisplayName
 		{
@@ -46,10 +46,7 @@ namespace Sgry.Ann
 			{
 				if( _FilePath != null )
 				{
-					if( AzukiDoc.IsDirty )
-						return Path.GetFileName( _FilePath ) + "*";
-					else
-						return Path.GetFileName( _FilePath );
+					return Path.GetFileName( _FilePath );
 				}
 				else
 				{
@@ -59,6 +56,20 @@ namespace Sgry.Ann
 			set
 			{
 				_DisplayName = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets name for display with flags.
+		/// </summary>
+		public string DisplayNameWithFlags
+		{
+			get
+			{
+				if( AzukiDoc.IsDirty )
+					return DisplayName + '*';
+				else
+					return DisplayName;
 			}
 		}
 
@@ -111,7 +122,7 @@ namespace Sgry.Ann
 		/// </summary>
 		public override string ToString()
 		{
-			return DisplayName;
+			return DisplayNameWithFlags;
 		}
 #		endif
 		#endregion

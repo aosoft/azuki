@@ -60,7 +60,7 @@ namespace Sgry.Ann
 		{
 			Document doc = _App.ActiveDocument;
 			base.Text = String.Format( "Ann - {0} [{1}, {2}]",
-				Path.GetFileName(doc.DisplayName),
+				doc.DisplayNameWithFlags,
 				doc.Encoding.WebName,
 				doc.FileType.Name );
 		}
@@ -219,7 +219,6 @@ namespace Sgry.Ann
 			_MI_Window.MenuItems.Add( _MI_Window_Next );
 			_MI_Window.MenuItems.Add( _MI_Window_Prev );
 			_MI_Window.MenuItems.Add( _MI_Window_List );
-			_MI_Window.MenuItems.Add( _MI_Window_Sep1 );
 
 			_MI_Help.MenuItems.Add( _MI_Help_About );
 
@@ -250,8 +249,7 @@ namespace Sgry.Ann
 			_MI_Window.Text = "&Window";
 			_MI_Window_Next.Text = "&Next window";
 			_MI_Window_Prev.Text = "&Previous window";
-			_MI_Window_List.Text = "List &windows...";
-			_MI_Window_Sep1.Text = "-";
+			_MI_Window_List.Text = "Show &window list...";
 			_MI_Help.Text = "&Help";
 			_MI_Help_About.Text = "&About";
 
@@ -338,7 +336,6 @@ namespace Sgry.Ann
 		MenuItem _MI_Window_Next	= new MenuItem();
 		MenuItem _MI_Window_Prev	= new MenuItem();
 		MenuItem _MI_Window_List	= new MenuItem();
-		MenuItem _MI_Window_Sep1	= new MenuItem();
 		MenuItem _MI_Help			= new MenuItem();
 		MenuItem _MI_Help_About		= new MenuItem();
 		AzukiControl _Azuki;

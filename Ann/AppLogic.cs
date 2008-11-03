@@ -15,6 +15,22 @@ namespace Sgry.Ann
 	class AppLogic
 	{
 		#region Fields
+		const string OpenFileFilter = "All files(*.*)|*.*|Text files(*.txt, *.c, ...)|*.txt;*.tex;*.java;*.rb;*.pl;*.py;*.c;*.cpp;*.cxx;*.cs;*.h;*.hpp;*.hxx;*.vbs;*.bat;*.log;*.ini;*.inf;*.js;*.htm;*.html;*.xml";
+		const string SaveFileFilter = 
+			"Text file(*.txt, *.log, *.ini, ...)|*.txt;*.log;*.ini;*.inf;*.tex"
+			+ "|HTML file(*.htm, *.html)|*.htm;*.html"
+			+ "|CSS file(*.css)|*.css"
+			+ "|Javascript file(*.js)|*.js"
+			+ "|XML file(*.xml)|*.xml"
+			+ "|C/C++ source(*.c, *.h, ...)|*.c;*.cpp;*.cxx;*.h;*.hpp;*.hxx"
+			+ "|C# source(*.cs)|*.cs"
+			+ "|Java source(*.java)|*.java"
+			+ "|Python script(*.py)|*.py"
+			+ "|Ruby script(*.rb)|*.rb"
+			+ "|Perl script(*.pl)|*.pl"
+			+ "|VB script(*.vbs)|*.vbs"
+			+ "|Batch file(*.bat)|*.bat";
+
 		AnnForm _MainForm = null;
 		List<Document> _DAD_Documents = new List<Document>(); // Dont Access Directly
 		Document _DAD_ActiveDocument = null; // Dont Access Directly
@@ -247,18 +263,104 @@ namespace Sgry.Ann
 		}
 
 		/// <summary>
-		/// Save file.
+		/// Open existing file.
+		/// </summary>
+		public void OpenDocument()
+		{
+			OpenFileDialog dialog = null;
+			DialogResult result;
+			Document doc;
+			
+			using( dialog = new OpenFileDialog() )
+			{
+				// setup dialog
+				if( ActiveDocument.FilePath != null )
+				{
+					// set initial directory to directory containing currently active file if exists
+					string dirPath = Path.GetDirectoryName( ActiveDocument.FilePath );
+					if( Directory.Exists(dirPath) )
+					{
+						dialog.InitialDirectory = dirPath;
+					}
+				}
+				dialog.Filter = OpenFileFilter;
+
+				// show dialog
+				result = dialog.ShowDialog();
+				if( result != DialogResult.OK )
+				{
+					return;
+				}
+
+				// load the file
+				doc = OpenFile( dialog.FileName, null, false );
+				AddDocument( doc );
+
+				// activate it
+				ActiveDocument = doc;
+				MainForm.Azuki.SetSelection( 0, 0 );
+				MainForm.Azuki.ScrollToCaret();
+			}
+		}
+
+		/// <summary>
+		/// Save document.
 		/// </summary>
 		public void SaveDocument( Document doc )
 		{
-			Debug.Assert( doc.FilePath != null, "associate file path to the document before calling SaveDocument." );
 			StreamWriter writer = null;
 
+			// if no file path was associated, switch to SaveAs action
+			if( doc.FilePath == null )
+			{
+				SaveDocumentAs( doc );
+				return;
+			}
+
+			// overwrite
 			using( writer = new StreamWriter(doc.FilePath, false, doc.Encoding) )
 			{
 				writer.Write( doc.Text );
 			}
 			doc.AzukiDoc.IsDirty = false;
+		}
+
+		/// <summary>
+		/// Save document content as another file.
+		/// </summary>
+		public void SaveDocumentAs( Document doc )
+		{
+			Debug.Assert( doc != null );
+			SaveFileDialog dialog = null;
+			DialogResult result;
+			
+			using( dialog = new SaveFileDialog() )
+			{
+				// setup dialog
+				if( doc.FilePath != null )
+				{
+					// set initial directory to that containing currently active file if exists
+					string dirPath = Path.GetDirectoryName( doc.FilePath );
+					if( Directory.Exists(dirPath) )
+					{
+						dialog.InitialDirectory = dirPath;
+					}
+				}
+				dialog.Filter = SaveFileFilter;
+
+				// show dialog
+				result = dialog.ShowDialog();
+				if( result != DialogResult.OK )
+				{
+					return;
+				}
+
+				// associate the file path
+				doc.FilePath = dialog.FileName;
+			}
+
+			// delegate to overwrite logic
+			SaveDocument( doc );
 		}
 
 		/// <summary>
@@ -272,7 +374,11 @@ namespace Sgry.Ann
 			if( doc.AzukiDoc.IsDirty )
 			{
 				result = AlertDiscardModification( doc );
-				if( result != DialogResult.OK )
+				if( result == DialogResult.Yes )
+				{
+					SaveDocument( doc );
+				}
+				else if( result == DialogResult.Cancel )
 				{
 					return;
 				}
@@ -280,12 +386,17 @@ namespace Sgry.Ann
 
 			// close
 			RemoveDocument( doc );
+			if( Documents.Count == 0 )
+			{
+				MainForm.Close();
+			}
 		}
 
 		public DialogResult AlertDiscardModification( Document doc )
 		{
-			return Utl.AlertWarning(
-					Path.GetFileName(doc.FilePath) + " is modified but not saved. Close anyway?",
+			return MessageBox.Show(
+					doc.DisplayName + " is modified but not saved. Save changes?",
+					"Ann",
 					MessageBoxButtons.YesNoCancel,
 					MessageBoxIcon.Exclamation,
 					MessageBoxDefaultButton.Button2
@@ -308,6 +419,12 @@ namespace Sgry.Ann
 					if( result == DialogResult.Yes )
 					{
 						SaveDocument( doc );
+						if( doc.AzukiDoc.IsDirty )
+						{
+							// canceled or failed. cancel closing
+							e.Cancel = true;
+							return;
+						}
 					}
 					else if( result == DialogResult.Cancel )
 					{
@@ -317,7 +434,6 @@ namespace Sgry.Ann
 				}
 			}
 		}
-
 		#endregion
 
 		#region Utilities
@@ -356,11 +472,6 @@ namespace Sgry.Ann
 					encoding = Encoding.Default;
 					withBom = false;
 				}
-			}
-
-			public static DialogResult AlertWarning( string message, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton )
-			{
-				return MessageBox.Show( message, "Ann", buttons, icon, defaultButton );
 			}
 		}
 		#endregion
