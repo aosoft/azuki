@@ -2,7 +2,7 @@
 // brief: Logics to manipulate line/column in a string.
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-10-28
+// update: 2008-11-03
 //=========================================================
 using System;
 using System.Collections;
@@ -185,7 +185,7 @@ namespace Sgry.Azuki
 
 			// if the inserting divides a CR+LF, insert an entry for the CR separated
 			if( 0 < insertIndex && text[insertIndex-1] == '\r'
-				&& text[insertIndex] == '\n' )
+				&& insertIndex < text.Count && text[insertIndex] == '\n' )
 			{
 				lhi.Insert( insTargetLine+1, insertIndex );
 				insTargetLine++;
@@ -194,7 +194,7 @@ namespace Sgry.Azuki
 			// if inserted text begins with LF and is inserted just after a CR,
 			// remove this CR's entry
 			if( 0 < insertIndex && text[insertIndex-1] == '\r'
-				&& insertText[0] == '\n' )
+				&& 0 < insertText.Length && insertText[0] == '\n' )
 			{
 				lhi.Delete( insTargetLine, insTargetLine+1 );
 				insTargetLine--;
@@ -223,8 +223,8 @@ namespace Sgry.Azuki
 
 			// if inserted text is ending with CR and is inserted just before a LF,
 			// remove this CR's entry
-			if( insertText[insertText.Length - 1] == '\r'
-				&& text[insertIndex] == '\n' )
+			if( 0 < insertText.Length && insertText[insertText.Length - 1] == '\r'
+				&& insertIndex < text.Count && text[insertIndex] == '\n' )
 			{
 				int lastInsertedLine = insTargetLine + insLineCount - 1;
 				lhi.Delete( lastInsertedLine, lastInsertedLine+1 );
