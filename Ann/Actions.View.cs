@@ -1,4 +1,4 @@
-// 2008-10-26
+// 2008-11-03
 using System;
 using System.Windows.Forms;
 using Sgry.Azuki;
@@ -14,16 +14,21 @@ namespace Sgry.Ann
 		public static AnnAction SelectSpecialCharVisibility
 			= delegate( AppLogic app )
 		{
-			Form dialog;
+			DrawingOptionForm dialog;
 			DialogResult result;
+			AzukiControl azuki = app.MainForm.Azuki;
 
 			using( dialog = new DrawingOptionForm() )
 			{
+				dialog.DrawingOption = azuki.DrawingOption;
+				dialog.TabWidth = azuki.TabWidth;
 				result = dialog.ShowDialog();
 				if( result != DialogResult.OK )
 				{
 					return;
 				}
+				azuki.TabWidth = dialog.TabWidth;
+				azuki.DrawingOption = dialog.DrawingOption;
 			}
 		};
 
