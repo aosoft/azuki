@@ -380,12 +380,19 @@ namespace Sgry.Azuki
 					doc.Highlighter.Highlight( doc, ref dirtyBegin, ref dirtyEnd );
 					View.Invalidate( dirtyBegin, dirtyEnd );
 				}
-				catch
+				catch( Exception ex )
 				{
+					// exit if the exception is ThreadAbortException
+					if( ex is ThreadAbortException )
+					{
+						break;
+					}
+
 					// For example, contents could be shorten just during highlighting
 					// because Azuki design does not lock buffers for thread safety.
 					// It is very hard to take care of such cases in highlighters (including user-made ones)
-					// so here I trap any exception and invalidate whole view in that case.
+					// so here I trap any exception (except ThreadAbortException)
+					// and invalidate whole view in that case.
 					View.Invalidate();
 				}
 
