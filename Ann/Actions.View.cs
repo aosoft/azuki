@@ -42,6 +42,7 @@ namespace Sgry.Ann
 			if( azuki.ViewType == ViewType.Propotional )
 			{
 				azuki.ViewType = ViewType.WrappedPropotional;
+				azuki.ViewWidth = azuki.ClientSize.Width;
 			}
 			else
 			{
