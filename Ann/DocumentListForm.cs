@@ -34,9 +34,16 @@ namespace Sgry.Ann
 
 		void Form_Load( object sender, EventArgs e )
 		{
-			Debug.Assert( _SelectedIndex < _ListView.Items.Count );
-			_ListView.Items[ _SelectedIndex ].Focused = true;
-			_ListView.Items[ _SelectedIndex ].Selected = true;
+			Document activeDoc = _Documents[ _SelectedIndex ];
+			foreach( ListViewItem lvItem in _ListView.Items )
+			{
+				if( lvItem.Tag == activeDoc )
+				{
+					lvItem.Focused = true;
+					lvItem.Selected = true;
+					break;
+				}
+			}
 		}
 		#endregion
 
@@ -58,6 +65,7 @@ namespace Sgry.Ann
 					// add item for ths document
 					ListViewItem lvItem = new ListViewItem();
 					lvItem.Text = Path.GetFileName( doc.DisplayName );
+					lvItem.Tag = doc;
 					_ListView.Items.Add( lvItem );
 
 					// set directory column value
@@ -92,10 +100,8 @@ namespace Sgry.Ann
 			}
 			set
 			{
-				int selectedIndex = _Documents.IndexOf( value );
-				Debug.Assert( selectedIndex != -1 );
-				Debug.Assert( selectedIndex < _ListView.Items.Count );
-				_SelectedIndex = selectedIndex;
+				_SelectedIndex = _Documents.IndexOf( value );
+				Debug.Assert( 0 <= _SelectedIndex, "Specified document was not found in list view" );
 			}
 		}
 		#endregion
@@ -123,7 +129,7 @@ namespace Sgry.Ann
 		{
 			if( DialogResult == DialogResult.OK )
 			{
-				_SelectedIndex = _ListView.FocusedItem.Index;
+				_SelectedIndex = _Documents.IndexOf( (Document)_ListView.FocusedItem.Tag );
 			}
 
 			base.OnClosed( e );

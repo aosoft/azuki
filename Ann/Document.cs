@@ -103,5 +103,17 @@ namespace Sgry.Ann
 			set{ _AzukiDoc.Text = value; }
 		}
 		#endregion
+
+		#region Utilities
+#		if DEBUG
+		/// <summary>
+		/// ToString for debug.
+		/// </summary>
+		public override string ToString()
+		{
+			return DisplayName;
+		}
+#		endif
+		#endregion
 	}
 }

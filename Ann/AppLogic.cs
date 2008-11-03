@@ -90,7 +90,13 @@ namespace Sgry.Ann
 				doc.DisplayName = "Untitled" + _UntitledFileCount;
 				_UntitledFileCount++;
 			}
+			doc.AzukiDoc.DirtyStateChanged += Doc_DirtyStateChanged;
 			_DAD_Documents.Add( doc );
+		}
+
+		void Doc_DirtyStateChanged( object sender, EventArgs e )
+		{
+			MainForm.ResetText();
 		}
 
 		/// <summary>
