@@ -84,6 +84,7 @@
     <Compile Include="LineLogic.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="UserPref.cs" />
+    <Compile Include="View\DrawingOption.cs" />
     <Compile Include="WordLogic.cs" />
     <Compile Include="Document\CharClass.cs" />
     <Compile Include="Document\Document.cs" />
@@ -109,7 +110,6 @@
     <Compile Include="View\View.cs" />
     <Compile Include="View\View.Paint.cs" />
     <Compile Include="View\ViewType.cs" />
-    <Compile Include="View\ViewOptions.cs" />
     <Compile Include="Windows\PlatWin.cs" />
     <Compile Include="Windows\WinApi.cs" />
     <Compile Include="Windows\AzukiControl.cs">
@@ -132,9 +132,6 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
