@@ -36,7 +36,7 @@ namespace Sgry.Azuki.Highlighter
 		/// <returns>Index of next parse point if a pair was highlighted or 'begin' index</returns>
 		public static int TryHighlightNumberToken( Document doc, int startIndex, int endIndex )
 		{
-			DebugUtl.Assert( endIndex <= doc.Length );
+			DebugUtl.Assert( endIndex <= doc.Length, "param endIndex is out of range (endIndex:"+endIndex+", doc.Length:"+doc.Length+")" );
 			int begin = startIndex;
 			int end = begin;
 			char postfixCh;

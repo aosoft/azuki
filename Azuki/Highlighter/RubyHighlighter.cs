@@ -1,7 +1,7 @@
 ﻿// file: RubyHighlighter.cs
 // brief: Ruby highlighter.
 // author: YAMAMOTO Suguru
-// update: 2008-10-28
+// update: 2008-11-03
 //=========================================================
 using System;
 using Color = System.Drawing.Color;
@@ -11,7 +11,7 @@ namespace Sgry.Azuki.Highlighter
 	/// <summary>
 	/// Highlighter for Ruby language based on keyword matching.
 	/// </summary>
-	public class RubyHighlighter : KeywordHighlighter
+	class RubyHighlighter : KeywordHighlighter
 	{
 		/// <summary>
 		/// Creates a new instance.

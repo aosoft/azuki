@@ -1,7 +1,7 @@
 ﻿// file: CSharpHighlighter.cs
 // brief: C# highlighter.
 // author: YAMAMOTO Suguru
-// update: 2008-11-01
+// update: 2008-11-03
 //=========================================================
 using System;
 using Color = System.Drawing.Color;
@@ -11,7 +11,7 @@ namespace Sgry.Azuki.Highlighter
 	/// <summary>
 	/// Highlighter for C# language based on keyword matching.
 	/// </summary>
-	public class CSharpHighlighter : KeywordHighlighter
+	class CSharpHighlighter : KeywordHighlighter
 	{
 		/// <summary>
 		/// Creates a new instance.
@@ -51,8 +51,8 @@ namespace Sgry.Azuki.Highlighter
 			AddEnclosure( "\"", "\"", CharClass.String, '\\' );
 			AddEnclosure( "/**", "*/", CharClass.DocComment );
 			AddEnclosure( "/*", "*/", CharClass.Comment );
-			AddLineHighlight( "//", CharClass.Comment );
 			AddLineHighlight( "///", CharClass.DocComment );
+			AddLineHighlight( "//", CharClass.Comment );
 		}
 	}
 }

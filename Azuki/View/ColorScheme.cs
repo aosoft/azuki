@@ -2,7 +2,7 @@
 // brief: color set
 // author: YAMAMOTO Suguru
 // encoding: UTF-8
-// update: 2008-10-12
+// update: 2008-11-03
 //=========================================================
 using System.Collections.Generic;
 using System.Drawing;
@@ -126,7 +126,7 @@ namespace Sgry.Azuki
 			this[ CharClass.Keyword3 ] = new ColorPair( Color.Navy, bgcolor );
 			this[ CharClass.PreProcessor ] = new ColorPair( Color.Purple, bgcolor );
 			this[ CharClass.Comment ] = new ColorPair( Color.Green, bgcolor );
-			this[ CharClass.DocComment ] = new ColorPair( Color.DarkGreen, bgcolor );
+			this[ CharClass.DocComment ] = new ColorPair( Color.Gray, bgcolor );
 
 			this.SelectionFore = Color.White;
 			this.SelectionBack = azuki;

@@ -1,14 +1,14 @@
 ﻿// file: Highlighters.cs
-// brief: Class factory of highlighters.
+// brief: highlighter object repository.
 // author: YAMAMOTO Suguru
-// update: 2008-11-01
+// update: 2008-11-03
 //=========================================================
 using System;
 
 namespace Sgry.Azuki.Highlighter
 {
 	/// <summary>
-	/// Class factory to create build-in highlighter by name.
+	/// Repository to serve built-in highlighter objects.
 	/// </summary>
 	public static class Highlighters
 	{

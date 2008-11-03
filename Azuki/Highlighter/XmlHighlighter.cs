@@ -1,7 +1,7 @@
 // file: XmlHighlighter.cs
 // brief: Highlighter for XML.
 // author: YAMAMOTO Suguru
-// update: 2008-10-13
+// update: 2008-11-03
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace Sgry.Azuki.Highlighter
 	/// <summary>
 	/// A highlighter to highlight XML.
 	/// </summary>
-	public class XmlHighlighter : IHighlighter
+	class XmlHighlighter : IHighlighter
 	{
 		#region Fields
 		List<Enclosure> _Enclosures = new List<Enclosure>();

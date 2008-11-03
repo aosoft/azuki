@@ -1,7 +1,7 @@
 ﻿// file: DummyHighlighter.cs
 // brief: Dummy highlighter which executes nothing.
 // author: YAMAMOTO Suguru
-// update: 2008-10-13
+// update: 2008-11-03
 //=========================================================
 using System;
 
@@ -10,7 +10,7 @@ namespace Sgry.Azuki.Highlighter
 	/// <summary>
 	/// Dummy highlighter which does nothing.
 	/// </summary>
-	public class DummyHighlighter : IHighlighter
+	class DummyHighlighter : IHighlighter
 	{
 		/// <summary>
 		/// Does nothing.
