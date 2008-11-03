@@ -4,9 +4,9 @@
     </assemblies>
     <namespaceSummaries>
         <namespaceSummaryItem name="" isDocumented="False" />
-        <namespaceSummaryItem name="Sgry" isDocumented="True" />
+        <namespaceSummaryItem name="Sgry" isDocumented="False" />
         <namespaceSummaryItem name="Sgry.Azuki" isDocumented="True">This namespace contains platform-independent classes of Azuki.</namespaceSummaryItem>
-        <namespaceSummaryItem name="Sgry.Azuki.Highlighter" isDocumented="True" />
+        <namespaceSummaryItem name="Sgry.Azuki.Highlighter" isDocumented="True">This namespace contains classes for syntax highlighter.</namespaceSummaryItem>
         <namespaceSummaryItem name="Sgry.Azuki.Windows" isDocumented="True">This namespace contains Windows specific classes.</namespaceSummaryItem>
     </namespaceSummaries>
     <apiFilter>
