@@ -1,4 +1,4 @@
-// 2008-11-01
+// 2008-11-03
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,6 +31,7 @@ namespace Sgry.Ann
 			InitKeyMap();
 			ResetShortcutInMenu();
 #			if !PocketPC
+			this._Azuki.UseCtrlTabToMoveFocus = false;
 			Font = SystemInformation.MenuFont;
 #			endif
 
@@ -59,7 +60,7 @@ namespace Sgry.Ann
 		{
 			Document doc = _App.ActiveDocument;
 			base.Text = String.Format( "Ann - {0} [{1}, {2}]",
-				Path.GetFileName(doc.FilePath),
+				Path.GetFileName(doc.DisplayName),
 				doc.Encoding.WebName,
 				doc.FileType.Name );
 		}
@@ -95,6 +96,8 @@ namespace Sgry.Ann
 		void InitMenuMap()
 		{
 			_MenuMap[ _MI_File_Open ]		= Actions.OpenDocument;
+			_MenuMap[ _MI_File_Save ]		= Actions.SaveDocument;
+			_MenuMap[ _MI_File_SaveAs ]		= Actions.SaveDocumentAs;
 			_MenuMap[ _MI_File_Close ]		= Actions.CloseDocument;
 			_MenuMap[ _MI_File_Exit ]		= Actions.Exit;
 
@@ -122,6 +125,7 @@ namespace Sgry.Ann
 		{
 			_KeyMap[ Keys.O|Keys.Control ]	= Actions.OpenDocument;
 			_KeyMap[ Keys.S|Keys.Control ]	= Actions.SaveDocument;
+			_KeyMap[ Keys.S|Keys.Control|Keys.Shift ]	= Actions.SaveDocumentAs;
 			_KeyMap[ Keys.W|Keys.Control ]	= Actions.CloseDocument;
 			_KeyMap[ Keys.Q|Keys.Control ]	= Actions.Exit;
 
@@ -133,6 +137,9 @@ namespace Sgry.Ann
 			_KeyMap[ Keys.PageDown|Keys.Control ]	= Actions.ActivateNextDocument;
 			_KeyMap[ Keys.PageUp|Keys.Control ]		= Actions.ActivatePrevDocument;
 			_KeyMap[ Keys.D|Keys.Control ]			= Actions.ShowDocumentList;
+
+			_KeyMap[ Keys.Tab|Keys.Control ]			= Actions.ActivateNextDocument;
+			_KeyMap[ Keys.Tab|Keys.Control|Keys.Shift ]	= Actions.ActivatePrevDocument;
 		}
 		#endregion
 
@@ -188,7 +195,9 @@ namespace Sgry.Ann
 
 			_MI_File.MenuItems.Add( _MI_File_Open );
 			_MI_File.MenuItems.Add( _MI_File_Save );
+			_MI_File.MenuItems.Add( _MI_File_SaveAs );
             _MI_File.MenuItems.Add( _MI_File_Close );
+            _MI_File.MenuItems.Add( _MI_File_Sep1 );
             _MI_File.MenuItems.Add( _MI_File_Exit );
 
 			_MI_Edit.MenuItems.Add( _MI_Edit_Cut );
@@ -218,7 +227,9 @@ namespace Sgry.Ann
 			_MI_File.Text = "&File";
 			_MI_File_Open.Text = "&Open...";
 			_MI_File_Save.Text = "&Save";
+			_MI_File_SaveAs.Text = "Save &as...";
 			_MI_File_Close.Text = "&Close";
+			_MI_File_Sep1.Text = "-";
 			_MI_File_Exit.Text = "E&xit";
 			_MI_Edit.Text = "&Edit";
 			_MI_Edit_Cut.Text = "Cu&t";
@@ -245,16 +256,16 @@ namespace Sgry.Ann
 			_MI_Help_About.Text = "&About";
 
 			// bind menu actions
-			EventHandler handler = new EventHandler( this.HandleMenuAction );
+			EventHandler menuActionHandler = new EventHandler( this.HandleMenuAction );
 			foreach( MenuItem mi in _MainMenu.MenuItems )
 			{
 				foreach( MenuItem mi2 in mi.MenuItems )
 				{
 					foreach( MenuItem mi3 in mi2.MenuItems )
 					{
-						mi3.Click += handler;
+						mi3.Click += menuActionHandler;
 					}
-					mi2.Click += handler;
+					mi2.Click += menuActionHandler;
 				}
 			}
 
@@ -288,7 +299,7 @@ namespace Sgry.Ann
 					}
 					else
 					{
-						newText = mi.Text.Substring(0, tabPos) + "\t" + keyEntry.Key;
+						newText = mi.Text.Substring(0, tabPos) + "\t" + Utl.ToString( keyEntry.Key );
 					}
 					mi.Text = newText;
 
@@ -303,7 +314,9 @@ namespace Sgry.Ann
 		MenuItem _MI_File			= new MenuItem();
 		MenuItem _MI_File_Open		= new MenuItem();
 		MenuItem _MI_File_Save		= new MenuItem();
+		MenuItem _MI_File_SaveAs	= new MenuItem();
 		MenuItem _MI_File_Close		= new MenuItem();
+		MenuItem _MI_File_Sep1		= new MenuItem();
 		MenuItem _MI_File_Exit		= new MenuItem();
 		MenuItem _MI_Edit			= new MenuItem();
 		MenuItem _MI_Edit_Cut		= new MenuItem();

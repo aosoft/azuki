@@ -1,4 +1,4 @@
-// 2008-11-01
+// 2008-11-03
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,14 +8,18 @@ using Sgry.Azuki;
 using Sgry.Azuki.Windows;
 using Debug = System.Diagnostics.Debug;
 using AzukiDocument = Sgry.Azuki.Document;
+using CancelEventArgs = System.ComponentModel.CancelEventArgs;
 
 namespace Sgry.Ann
 {
 	class AppLogic
 	{
+		#region Fields
 		AnnForm _MainForm = null;
 		List<Document> _DAD_Documents = new List<Document>(); // Dont Access Directly
 		Document _DAD_ActiveDocument = null; // Dont Access Directly
+		int _UntitledFileCount = 1;
+		#endregion
 
 		#region Properties
 		/// <summary>
@@ -27,9 +31,14 @@ namespace Sgry.Ann
 			set
 			{
 				_MainForm = value;
+				_MainForm.Closing += MainForm_Closing;
+
+				// handle initially set document
 				Document doc = new Document( value.Azuki.Document );
 				AddDocument( doc );
 				ActiveDocument = doc;
+
+				// apply config
 				MainForm.Azuki.Font = AppConfig.Font;
 			}
 		}
@@ -76,6 +85,11 @@ namespace Sgry.Ann
 		public void AddDocument( Document doc )
 		{
 			Debug.Assert( _DAD_Documents.Contains(doc) == false );
+			if( doc.FilePath == null )
+			{
+				doc.DisplayName = "Untitled" + _UntitledFileCount;
+				_UntitledFileCount++;
+			}
 			_DAD_Documents.Add( doc );
 		}
 
@@ -151,6 +165,7 @@ namespace Sgry.Ann
 				// prepare to show dialog
 				dialog.Size = MainForm.Size;
 				dialog.Documents = Documents;
+				dialog.SelectedDocument = ActiveDocument;
 
 				// show document list dialog
 				result = dialog.ShowDialog();
@@ -219,6 +234,7 @@ namespace Sgry.Ann
 			}
 			file.Close();
 			doc.AzukiDoc.ClearHistory();
+			doc.AzukiDoc.IsDirty = false;
 			doc.FilePath = filePath;
 
 			return doc;
@@ -227,9 +243,9 @@ namespace Sgry.Ann
 		/// <summary>
 		/// Save file.
 		/// </summary>
-		public void SaveFile( Document doc )
+		public void SaveDocument( Document doc )
 		{
-			Debug.Assert( doc.FilePath != null, "associate file path to the document before calling SaveFile." );
+			Debug.Assert( doc.FilePath != null, "associate file path to the document before calling SaveDocument." );
 			StreamWriter writer = null;
 
 			using( writer = new StreamWriter(doc.FilePath, false, doc.Encoding) )
@@ -237,21 +253,6 @@ namespace Sgry.Ann
 				writer.Write( doc.Text );
 			}
 			doc.AzukiDoc.IsDirty = false;
-		}
-
-		/// <summary>
-		/// Save file with another file name.
-		/// </summary>
-		public void SaveAsFile( Document doc, string filePath )
-		{
-			StreamWriter writer = null;
-
-			using( writer = new StreamWriter(filePath, false, doc.Encoding) )
-			{
-				writer.Write( doc.Text );
-			}
-			doc.AzukiDoc.IsDirty = false;
-			doc.FilePath = filePath;
 		}
 
 		/// <summary>
@@ -264,12 +265,7 @@ namespace Sgry.Ann
 			// confirm to discard modification
 			if( doc.AzukiDoc.IsDirty )
 			{
-				result = Utl.AlertWarning(
-					Path.GetFileName(doc.FilePath) + " is modified but not saved. Close anyway?",
-					MessageBoxButtons.YesNoCancel,
-					MessageBoxIcon.Exclamation,
-					MessageBoxDefaultButton.Button2
-				);
+				result = AlertDiscardModification( doc );
 				if( result != DialogResult.OK )
 				{
 					return;
@@ -279,6 +275,43 @@ namespace Sgry.Ann
 			// close
 			RemoveDocument( doc );
 		}
+
+		public DialogResult AlertDiscardModification( Document doc )
+		{
+			return Utl.AlertWarning(
+					Path.GetFileName(doc.FilePath) + " is modified but not saved. Close anyway?",
+					MessageBoxButtons.YesNoCancel,
+					MessageBoxIcon.Exclamation,
+					MessageBoxDefaultButton.Button2
+				);
+		}
+		#endregion
+
+		#region UI Event Handlers
+		void MainForm_Closing( object sender, CancelEventArgs e )
+		{
+			DialogResult result;
+
+			// confirm all document's discard
+			foreach( Document doc in Documents )
+			{
+				// if it's modified, ask to save the document
+				if( doc.AzukiDoc.IsDirty )
+				{
+					result = AlertDiscardModification( doc );
+					if( result == DialogResult.Yes )
+					{
+						SaveDocument( doc );
+					}
+					else if( result == DialogResult.Cancel )
+					{
+						e.Cancel = true;
+						return;
+					}
+				}
+			}
+		}
+
 		#endregion
 
 		#region Utilities

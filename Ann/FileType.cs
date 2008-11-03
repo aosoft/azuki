@@ -1,4 +1,4 @@
-// 2008-11-01
+// 2008-11-03
 using System;
 using Sgry.Azuki;
 using IHighlighter = Sgry.Azuki.Highlighter.IHighlighter;
@@ -126,6 +126,7 @@ namespace Sgry.Ann
 		}
 		#endregion
 
+		#region Properties
 		/// <summary>
 		/// Gets highlighter.
 		/// </summary>
@@ -141,5 +142,6 @@ namespace Sgry.Ann
 		{
 			get{ return _Name; }
 		}
+		#endregion
 	}
 }
