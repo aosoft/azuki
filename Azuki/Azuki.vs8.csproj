@@ -65,6 +65,7 @@
     <Compile Include="DebugUtl.cs" />
     <Compile Include="LineLogic.cs" />
     <Compile Include="Platform.cs" />
+    <Compile Include="View\DrawingOption.cs" />
     <Compile Include="WordLogic.cs" />
     <Compile Include="Document\Document.cs" />
     <Compile Include="Document\EditAction.cs" />

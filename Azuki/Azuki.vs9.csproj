@@ -109,6 +109,7 @@
     <Compile Include="View\View.cs" />
     <Compile Include="View\View.Paint.cs" />
     <Compile Include="View\ViewType.cs" />
+    <Compile Include="View\ViewOptions.cs" />
     <Compile Include="Windows\PlatWin.cs" />
     <Compile Include="Windows\WinApi.cs" />
     <Compile Include="Windows\AzukiControl.cs">
