@@ -1,7 +1,7 @@
 ﻿// file: KeywordHighlighter.cs
 // brief: Keyword based highlighter.
 // author: YAMAMOTO Suguru
-// update: 2008-10-13
+// update: 2008-11-23
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -481,13 +481,18 @@ dirtyEnd = doc.Length;
 				_EPI.Delete( epiIndex, _EPI.Count );
 			}
 
+			// find pairs
 			for( int i=begin; i<end; i++ )
 			{
 				// ensure a pair begins from here
 				pair = HighlighterUtl.StartsWith( doc, _Enclosures, i );
 				if( pair == null )
 				{
-					continue; // no pair matched
+					pair = HighlighterUtl.StartsWith( doc, _LineHighlights, i );
+					if( pair == null )
+					{
+						continue; // no pair matched
+					}
 				}
 
 				// remember opener index
@@ -502,7 +507,10 @@ dirtyEnd = doc.Length;
 				}
 
 				// remember closer index
-				_EPI.Insert( epiIndex, closePos + pair.closer.Length );
+				if( pair.closer != null )
+					_EPI.Insert( epiIndex, closePos + pair.closer.Length );
+				else
+					_EPI.Insert( epiIndex, closePos );
 				epiIndex++;
 
 				// skip this pair
