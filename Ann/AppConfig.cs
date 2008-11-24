@@ -1,4 +1,4 @@
-﻿// 2008-11-01
+﻿// 2008-11-24
 using System;
 using System.Drawing;
 using System.IO;
@@ -19,11 +19,11 @@ namespace Sgry.Ann
 		{
 			string str;
 			Ini ini = new Ini();
-			ini.LoadFromFile( IniFilePath );
 			
-			// font
 			try
 			{
+				ini.LoadFromFile( IniFilePath );
+
 				int fontSize = ini.TryGetInt( "Default", "FontSize", 11 );
 				str = ini.TryGetString( "Default", "Font", null );
 				AppConfig.Font = new Font( str, fontSize, FontStyle.Regular );

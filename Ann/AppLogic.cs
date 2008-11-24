@@ -241,11 +241,14 @@ namespace Sgry.Ann
 		/// Opens a file with specified encoding and create a Document object.
 		/// Give null as 'encoding' parameter to detect encoding automatically.
 		/// </summary>
+		/// <exception cref="DirectoryNotFoundException">The specified path is invalid, such as being on an unmapped drive.</exception>
+		/// <exception cref="FileNotFoundException">The file cannot be found.</exception>
+		/// <exception cref="IOException">Other I/O error has occured.</exception>
 		Document CreateDocumentFromFile( string filePath, Encoding encoding, bool withBom )
 		{
 			Document doc;
 			StreamReader file = null;
-			char[] buf = new char[ 1024 ];
+			char[] buf = new char[ 4096 ];
 			int readCount = 0;
 
 			// if specified file was already opened, just return the document
@@ -259,7 +262,7 @@ namespace Sgry.Ann
 
 			// create new document
 			doc = new Document( new AzukiDocument() );
-
+			
 			// analyze encoding
 			if( encoding == null )
 			{
@@ -268,20 +271,23 @@ namespace Sgry.Ann
 			doc.Encoding = encoding;
 
 			// load file content
-			file = new StreamReader( filePath, encoding );
-			while( !file.EndOfStream )
+			using( file = new StreamReader(filePath, encoding) )
 			{
-				readCount = file.Read( buf, 0, buf.Length-1 );
-				buf[ readCount ] = '\0';
-				unsafe
+				while( !file.EndOfStream )
 				{
-					fixed( char* p = buf )
+					readCount = file.Read( buf, 0, buf.Length-1 );
+					buf[ readCount ] = '\0';
+					unsafe
 					{
-						doc.AzukiDoc.Replace( new String(p), doc.AzukiDoc.Length, doc.AzukiDoc.Length );
+						fixed( char* p = buf )
+						{
+							doc.AzukiDoc.Replace( new String(p), doc.AzukiDoc.Length, doc.AzukiDoc.Length );
+						}
 					}
 				}
 			}
-			file.Close();
+
+			// set document properties
 			doc.AzukiDoc.ClearHistory();
 			doc.AzukiDoc.IsDirty = false;
 			doc.FilePath = filePath;
@@ -331,16 +337,23 @@ namespace Sgry.Ann
 			Document doc;
 
 			// load the file
-			doc = CreateDocumentFromFile( filePath, null, false );
-			if( Documents.Contains(doc) == false )
+			try
 			{
-				AddDocument( doc );
-			}
+				doc = CreateDocumentFromFile( filePath, null, false );
+				if( Documents.Contains(doc) == false )
+				{
+					AddDocument( doc );
+				}
 
-			// activate it
-			ActiveDocument = doc;
-			MainForm.Azuki.SetSelection( 0, 0 );
-			MainForm.Azuki.ScrollToCaret();
+				// activate it
+				ActiveDocument = doc;
+				MainForm.Azuki.SetSelection( 0, 0 );
+				MainForm.Azuki.ScrollToCaret();
+			}
+			catch( IOException ex )
+			{
+				AlertException( ex );
+			}
 		}
 
 		/// <summary>
@@ -395,6 +408,11 @@ namespace Sgry.Ann
 			{
 				// case example: target file is readonly.
 				// case example: target file was deleted and now there is a directory having same name
+				AlertException( ex );
+			}
+			catch( IOException ex )
+			{
+				// case example: another process is opening the file and does not allow to write
 				AlertException( ex );
 			}
 		}
@@ -468,7 +486,13 @@ namespace Sgry.Ann
 
 		void AlertException( Exception ex )
 		{
-			MessageBox.Show( ex.Message, "Ann", MessageBoxButtons.OK, MessageBoxIcon.Exclamation );
+			MessageBox.Show(
+					ex.Message,
+					"Ann",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Exclamation,
+					MessageBoxDefaultButton.Button1
+				);
 		}
 
 		public DialogResult AlertDiscardModification( Document doc )
