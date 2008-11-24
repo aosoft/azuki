@@ -1,4 +1,4 @@
-// 2008-11-03
+// 2008-11-23
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -216,6 +216,7 @@ namespace Sgry.Ann
 
 			if( doc == ActiveDocument )
 			{
+				_MainForm.Azuki.AutoIndentHook = fileType.AutoIndentHook;
 				_MainForm.ResetText();
 				_MainForm.Azuki.Invalidate();
 			}
@@ -224,15 +225,40 @@ namespace Sgry.Ann
 
 		#region I/O
 		/// <summary>
-		/// Opens a file with specified encoding.
-		/// Specify null to encoding parameter estimates encoding automatically.
+		/// Creates a new document.
 		/// </summary>
-		public Document OpenFile( string filePath, Encoding encoding, bool withBom )
+		public void CreateNewDocument()
 		{
+			// create a document
 			Document doc = new Document( new AzukiDocument() );
+			AddDocument( doc );
+
+			// activate it
+			ActiveDocument = doc;
+		}
+
+		/// <summary>
+		/// Opens a file with specified encoding and create a Document object.
+		/// Give null as 'encoding' parameter to detect encoding automatically.
+		/// </summary>
+		Document CreateDocumentFromFile( string filePath, Encoding encoding, bool withBom )
+		{
+			Document doc;
 			StreamReader file = null;
 			char[] buf = new char[ 1024 ];
 			int readCount = 0;
+
+			// if specified file was already opened, just return the document
+			foreach( Document d in Documents )
+			{
+				if( String.Compare(d.FilePath, filePath, true) == 0 )
+				{
+					return d;
+				}
+			}
+
+			// create new document
+			doc = new Document( new AzukiDocument() );
 
 			// analyze encoding
 			if( encoding == null )
@@ -270,7 +296,6 @@ namespace Sgry.Ann
 		{
 			OpenFileDialog dialog = null;
 			DialogResult result;
-			Document doc;
 			
 			using( dialog = new OpenFileDialog() )
 			{
@@ -293,15 +318,29 @@ namespace Sgry.Ann
 					return;
 				}
 
-				// load the file
-				doc = OpenFile( dialog.FileName, null, false );
-				AddDocument( doc );
-
-				// activate it
-				ActiveDocument = doc;
-				MainForm.Azuki.SetSelection( 0, 0 );
-				MainForm.Azuki.ScrollToCaret();
+				// open the file
+				OpenDocument( dialog.FileName, null, false );
 			}
+		}
+
+		/// <summary>
+		/// Open existing file.
+		/// </summary>
+		public void OpenDocument( string filePath, Encoding encoding, bool withBom )
+		{
+			Document doc;
+
+			// load the file
+			doc = CreateDocumentFromFile( filePath, null, false );
+			if( Documents.Contains(doc) == false )
+			{
+				AddDocument( doc );
+			}
+
+			// activate it
+			ActiveDocument = doc;
+			MainForm.Azuki.SetSelection( 0, 0 );
+			MainForm.Azuki.ScrollToCaret();
 		}
 
 		/// <summary>
@@ -310,6 +349,7 @@ namespace Sgry.Ann
 		public void SaveDocument( Document doc )
 		{
 			StreamWriter writer = null;
+			string dirPath;
 
 			// if no file path was associated, switch to SaveAs action
 			if( doc.FilePath == null )
@@ -318,12 +358,45 @@ namespace Sgry.Ann
 				return;
 			}
 
-			// overwrite
-			using( writer = new StreamWriter(doc.FilePath, false, doc.Encoding) )
+			// ensure that destination directory exists
+			dirPath = Path.GetDirectoryName( doc.FilePath );
+			if( Directory.Exists(dirPath) == false )
 			{
-				writer.Write( doc.Text );
+				try
+				{
+					Directory.CreateDirectory( dirPath );
+				}
+				catch( IOException ex )
+				{
+					// case ex: opened file has been on a removable drive
+					// and the drive was ejected now
+					AlertException( ex );
+					return;
+				}
+				catch( UnauthorizedAccessException ex )
+				{
+					// case example: permission of parent directory was changed
+					// and current user lost right to create directory
+					AlertException( ex );
+					return;
+				}
 			}
-			doc.AzukiDoc.IsDirty = false;
+
+			// overwrite
+			try
+			{
+				using( writer = new StreamWriter(doc.FilePath, false, doc.Encoding) )
+				{
+					writer.Write( doc.Text );
+				}
+				doc.AzukiDoc.IsDirty = false;
+			}
+			catch( UnauthorizedAccessException ex )
+			{
+				// case example: target file is readonly.
+				// case example: target file was deleted and now there is a directory having same name
+				AlertException( ex );
+			}
 		}
 
 		/// <summary>
@@ -391,6 +464,11 @@ namespace Sgry.Ann
 			{
 				MainForm.Close();
 			}
+		}
+
+		void AlertException( Exception ex )
+		{
+			MessageBox.Show( ex.Message, "Ann", MessageBoxButtons.OK, MessageBoxIcon.Exclamation );
 		}
 
 		public DialogResult AlertDiscardModification( Document doc )

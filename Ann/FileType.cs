@@ -1,4 +1,4 @@
-// 2008-11-03
+// 2008-11-24
 using System;
 using Sgry.Azuki;
 using IHighlighter = Sgry.Azuki.Highlighter.IHighlighter;
@@ -18,6 +18,7 @@ namespace Sgry.Ann
 
 		string _Name = null;
 		IHighlighter _Highlighter = null;
+		AutoIndentHook _AutoIndentHook = null;
 		#endregion
 
 		private FileType()
@@ -51,6 +52,7 @@ namespace Sgry.Ann
 				{
 					_CppFileType = new FileType();
 					_CppFileType._Highlighter = Highlighters.Cpp;
+					_CppFileType._AutoIndentHook = AutoIndentLogic.CHook;
 					_CppFileType._Name = "C/C++";
 				}
 				return _CppFileType;
@@ -68,6 +70,7 @@ namespace Sgry.Ann
 				{
 					_CSharpFileType = new FileType();
 					_CSharpFileType._Highlighter = Highlighters.CSharp;
+					_CSharpFileType._AutoIndentHook = AutoIndentLogic.CHook;
 					_CSharpFileType._Name = "C#";
 				}
 				return _CSharpFileType;
@@ -85,6 +88,7 @@ namespace Sgry.Ann
 				{
 					_JavaFileType = new FileType();
 					_JavaFileType._Highlighter = Highlighters.Java;
+					_JavaFileType._AutoIndentHook = AutoIndentLogic.CHook;
 					_JavaFileType._Name = "Java";
 				}
 				return _JavaFileType;
@@ -102,6 +106,7 @@ namespace Sgry.Ann
 				{
 					_RubyFileType = new FileType();
 					_RubyFileType._Highlighter = Highlighters.Ruby;
+					_RubyFileType._AutoIndentHook = AutoIndentLogic.GenericHook;
 					_RubyFileType._Name = "Ruby";
 				}
 				return _RubyFileType;
@@ -133,6 +138,14 @@ namespace Sgry.Ann
 		public IHighlighter Highlighter
 		{
 			get{ return _Highlighter; }
+		}
+
+		/// <summary>
+		/// Gets key-hook procedure for Azuki's auto-indent associated with this file-type.
+		/// </summary>
+		public AutoIndentHook AutoIndentHook
+		{
+			get{ return _AutoIndentHook; }
 		}
 
 		/// <summary>

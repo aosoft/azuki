@@ -1,4 +1,4 @@
-// 2008-11-03
+// 2008-11-23
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using Sgry.Azuki;
 using Sgry.Azuki.Windows;
 using Path = System.IO.Path;
+using File = System.IO.File;
+using Directory = System.IO.Directory;
 using Debug = System.Diagnostics.Debug;
 
 namespace Sgry.Ann
@@ -31,8 +33,11 @@ namespace Sgry.Ann
 			InitKeyMap();
 			ResetShortcutInMenu();
 #			if !PocketPC
-			this._Azuki.UseCtrlTabToMoveFocus = false;
+			_Azuki.UseCtrlTabToMoveFocus = false;
 			Font = SystemInformation.MenuFont;
+			AllowDrop = true;
+			DragEnter += Form_DragEnter;
+			DragDrop += Form_DragDrop;
 #			endif
 
 			// set shortcut-key hook
@@ -95,6 +100,7 @@ namespace Sgry.Ann
 
 		void InitMenuMap()
 		{
+			_MenuMap[ _MI_File_New ]		= Actions.CreateNewDocument;
 			_MenuMap[ _MI_File_Open ]		= Actions.OpenDocument;
 			_MenuMap[ _MI_File_Save ]		= Actions.SaveDocument;
 			_MenuMap[ _MI_File_SaveAs ]		= Actions.SaveDocumentAs;
@@ -123,6 +129,7 @@ namespace Sgry.Ann
 
 		void InitKeyMap()
 		{
+			_KeyMap[ Keys.N|Keys.Control ]	= Actions.CreateNewDocument;
 			_KeyMap[ Keys.O|Keys.Control ]	= Actions.OpenDocument;
 			_KeyMap[ Keys.S|Keys.Control ]	= Actions.SaveDocument;
 			_KeyMap[ Keys.S|Keys.Control|Keys.Shift ]	= Actions.SaveDocumentAs;
@@ -141,6 +148,56 @@ namespace Sgry.Ann
 			_KeyMap[ Keys.Tab|Keys.Control ]			= Actions.ActivateNextDocument;
 			_KeyMap[ Keys.Tab|Keys.Control|Keys.Shift ]	= Actions.ActivatePrevDocument;
 		}
+		#endregion
+
+		#region Drag & Drop handler
+#		if !PocketPC
+		void Form_DragDrop( object sender, DragEventArgs e )
+		{
+			object dropData;
+
+			// if dragging data is not file, ignore
+			dropData = e.Data.GetData( DataFormats.FileDrop );
+			if( dropData == null )
+			{
+				return;
+			}
+
+			// if there is a file in the data, prepare to accept dropping data
+			foreach( string filePath in (string[])dropData )
+			{
+				if( !Directory.Exists(filePath) )
+				{
+					// load the file
+					_App.OpenDocument( filePath, null, false );
+				}
+			}
+		}
+
+		void Form_DragEnter( object sender, DragEventArgs e )
+		{
+			object dropData;
+
+			e.Effect = DragDropEffects.None;
+
+			// if dragging data is not file, ignore
+			dropData = e.Data.GetData( DataFormats.FileDrop );
+			if( dropData == null )
+			{
+				return;
+			}
+
+			// if there is a file in the data, prepare to accept dropping data
+			foreach( string filePath in (string[])dropData )
+			{
+				if( !Directory.Exists(filePath) )
+				{
+					e.Effect = DragDropEffects.Copy;
+					break;
+				}
+			}
+		}
+#		endif
 		#endregion
 
 		#region UI Component Initialization
@@ -193,6 +250,7 @@ namespace Sgry.Ann
             _MainMenu.MenuItems.Add( _MI_Help );
 #			endif
 
+			_MI_File.MenuItems.Add( _MI_File_New );
 			_MI_File.MenuItems.Add( _MI_File_Open );
 			_MI_File.MenuItems.Add( _MI_File_Save );
 			_MI_File.MenuItems.Add( _MI_File_SaveAs );
@@ -224,6 +282,7 @@ namespace Sgry.Ann
 
 			// menu labels
 			_MI_File.Text = "&File";
+			_MI_File_New.Text = "&New...";
 			_MI_File_Open.Text = "&Open...";
 			_MI_File_Save.Text = "&Save";
 			_MI_File_SaveAs.Text = "Save &as...";
@@ -310,6 +369,7 @@ namespace Sgry.Ann
 		#region UI Components
 		MainMenu _MainMenu			= new MainMenu();
 		MenuItem _MI_File			= new MenuItem();
+		MenuItem _MI_File_New		= new MenuItem();
 		MenuItem _MI_File_Open		= new MenuItem();
 		MenuItem _MI_File_Save		= new MenuItem();
 		MenuItem _MI_File_SaveAs	= new MenuItem();

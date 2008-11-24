@@ -1,4 +1,4 @@
-// 2008-11-03
+// 2008-11-23
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -10,6 +10,15 @@ namespace Sgry.Ann
 	static partial class Actions
 	{
 		#region Document
+		/// <summary>
+		/// Creates a new empty document.
+		/// </summary>
+		public static AnnAction CreateNewDocument
+			= delegate( AppLogic app )
+		{
+			app.CreateNewDocument();
+		};
+
 		/// <summary>
 		/// Shows a dialog and opens a file.
 		/// </summary>
