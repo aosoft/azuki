@@ -1,7 +1,7 @@
 ﻿// file: AzukiControl.cs
 // brief: User interface for Windows platform (both Desktop and CE).
 // author: YAMAMOTO Suguru
-// update: 2008-11-03
+// update: 2008-11-30
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -37,6 +37,7 @@ namespace Sgry.Azuki.Windows
 #		if !PocketPC
 		bool _UseCtrlTabToMoveFocus = true;
 #		endif
+		int _WheelPos = 0;
 		
 		InvalidateProc1 _invalidateProc1 = null;
 		InvalidateProc2 _invalidateProc2 = null;
@@ -51,6 +52,18 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 		public AzukiControl()
 		{
+			// check platform
+			try
+			{
+				// if this is a build for CF and called on FF platform,
+				// this must throw DllNotFoundException.
+				WinApi.IsKeyDown( Keys.A );
+			}
+			catch( DllNotFoundException ex )
+			{
+				throw new PlatformNotSupportedException( "Not supported platform", ex );
+			}
+
 			// rewrite window procedure at first
 			// (force to create window by accessing Handle property)
 			IntPtr dummy = this.Handle;
@@ -65,8 +78,8 @@ namespace Sgry.Azuki.Windows
 
 			// set default value for each scroll bar
 			// (setting scroll bar range forces the window to have style of WS_VSCROLL/WS_HSCROLL)
-			WinApi.SetScrollRange( Handle, false, 0, 1 );
-			WinApi.SetScrollRange( Handle, true, 0, 1 );
+			WinApi.SetScrollRange( Handle, false, 0, 1, 1 );
+			WinApi.SetScrollRange( Handle, true, 0, 1, 1 );
 			
 			this.Font = base.Font;
 			WinApi.CreateCaret( Handle, _CaretSize );
@@ -940,24 +953,35 @@ namespace Sgry.Azuki.Windows
 		/// </summary>
 		public void UpdateScrollBarRange()
 		{
-			int vRange, hRange;
+			int vMax, hMax;
+			int vPageSize, hPageSize;
+			int visibleLineCount;
 
-			// calculate range
-			vRange = View.LineCount - 1;
-			if( vRange <= 1 )
+			// calculate vertical range and page size
+			visibleLineCount = View.VisibleSize.Height / View.LineSpacing;
+			if( View.LineCount >> 3 <= visibleLineCount )
 			{
-				vRange = 1;
+				vPageSize = visibleLineCount;
 			}
-			hRange = View.TextAreaWidth;
+			else
+			{
+				vPageSize = View.LineCount >> 3;
+			}
+			vMax = View.LineCount - 1;
+			vMax += vPageSize - 1;
+
+			// calculate horizontal range and page size
+			hMax = View.TextAreaWidth;
+			hPageSize = View.VisibleSize.Width;
 
 			// update the range of vertical scrollbar
-			WinApi.SetScrollRange( Handle, false, 0, vRange );
+			WinApi.SetScrollRange( Handle, false, 0, vMax, vPageSize );
 			
 			// update the range of horizontal scrollbar
 			if( ShowsHScrollBar == false )
-				WinApi.SetScrollRange( Handle, true, 0, 0 ); // bar will be hidden
+				WinApi.SetScrollRange( Handle, true, 0, 0, hPageSize ); // bar will be hidden
 			else
-				WinApi.SetScrollRange( Handle, true, 0, hRange );
+				WinApi.SetScrollRange( Handle, true, 0, hMax, hPageSize );
 		}
 		#endregion
 
@@ -1387,13 +1411,37 @@ namespace Sgry.Azuki.Windows
 				}
 				else if( message == WinApi.WM_MOUSEWHEEL )
 				{
-					// in x64 environment, wParam value can be larger than Int32.MaxValue.
-					// so here we calculate delta in 64bit
-					int delta = (int)( (wParam.ToInt64() >> 16) / 120 );
+					// [*] on Vista x64, wParam value SHOULD be signed 64 bit like next:
+					// 0xFFFFFFFFFF880000
+					// but sometimes invalid value like next will be sent for same scroll action:
+					// 0x00000000FE980000
+					// so we should get extract 3rd and 4th byte and make it 16-bit int
+
+					int linesPerWheel;
+					Int16 wheelDelta;
+
+					// get line count to scroll on each wheel event
 #					if !PocketPC
-					delta *= SystemInformation.MouseWheelScrollLines;
+					linesPerWheel = SystemInformation.MouseWheelScrollLines;
+#					else
+					linesPerWheel = 1;
 #					endif
-					HandleWheelEvent( -delta );
+
+					// calculate wheel position
+					wheelDelta = (Int16)( wParam.ToInt64() << 32 >> 48 ); // [*]
+					_WheelPos += wheelDelta;
+
+					// do scroll when the scroll position exceeds threashould
+					if( 120 <= _WheelPos )
+					{
+						_WheelPos -= 120;
+						HandleWheelEvent( -linesPerWheel );
+					}
+					else if( _WheelPos <= -120 )
+					{
+						_WheelPos += 120;
+						HandleWheelEvent( linesPerWheel );
+					}
 				}
 				else if( message == WinApi.WM_IME_STARTCOMPOSITION )
 				{

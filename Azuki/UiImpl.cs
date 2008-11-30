@@ -1,7 +1,7 @@
 ﻿// file: UiImpl.cs
 // brief: User interface logic that independent from platform.
 // author: YAMAMOTO Suguru
-// update: 2008-11-03
+// update: 2008-11-30
 //=========================================================
 using System;
 using System.Collections.Generic;
@@ -102,6 +102,7 @@ namespace Sgry.Azuki
 				// redraw graphic
 				_UI.Invalidate();
 				_UI.UpdateCaretGraphic();
+				_UI.UpdateScrollBarRange();
 			}
 		}
 
