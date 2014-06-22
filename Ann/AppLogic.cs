@@ -1048,6 +1048,7 @@ namespace Sgry.Ann
 			MainForm.Azuki.TopMargin				= AppConfig.TopMargin;
 			MainForm.Azuki.ViewType					= AppConfig.ViewType;
 			MainForm.Azuki.UsesTabForIndent			= AppConfig.UsesTabForIndent;
+			MainForm.Azuki.UnindentsWithBackspace	= AppConfig.UnindentsWithBackspace;
 			MainForm.Azuki.ConvertsFullWidthSpaceToSpace = AppConfig.ConvertsFullWidthSpaceToSpace;
 			MainForm.Azuki.HRulerIndicatorType		= AppConfig.HRulerIndicatorType;
 			MainForm.Azuki.ScrollsBeyondLastLine	= AppConfig.ScrollsBeyondLastLine;
@@ -1093,6 +1094,7 @@ namespace Sgry.Ann
 			AppConfig.TopMargin					= MainForm.Azuki.TopMargin;
 			AppConfig.ViewType					= MainForm.Azuki.ViewType;
 			AppConfig.UsesTabForIndent			= MainForm.Azuki.UsesTabForIndent;
+			AppConfig.UnindentsWithBackspace	= MainForm.Azuki.UnindentsWithBackspace;
 			AppConfig.ConvertsFullWidthSpaceToSpace = MainForm.Azuki.ConvertsFullWidthSpaceToSpace;
 			AppConfig.HRulerIndicatorType		= MainForm.Azuki.HRulerIndicatorType;
 			AppConfig.ScrollsBeyondLastLine		= MainForm.Azuki.ScrollsBeyondLastLine;
