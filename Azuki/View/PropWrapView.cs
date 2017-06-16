@@ -741,7 +741,10 @@ namespace Sgry.Azuki
 					}
 
 					// cut trailing extra
-					token = token.Substring( 0, visCharCount+peekingChar.Length );
+					if ( token.Length >= visCharCount + peekingChar.Length )
+					{
+						token = token.Substring(0, visCharCount + peekingChar.Length);
+					}
 					tokenEndPos.X = (peekingCharRight != 0) ? peekingCharRight : visPartRight;
 
 					// to terminate this loop, set token end position to invalid one
